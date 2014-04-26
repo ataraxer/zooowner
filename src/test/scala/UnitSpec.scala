@@ -1,4 +1,4 @@
-package com.ataraxer.patterns.test.akka
+package com.ataraxer.test
 
 import org.scalatest._
 
@@ -9,5 +9,8 @@ trait UnitSpec
   with OptionValues
   with Inside
   with Inspectors
+  with BeforeAndAfter
+  with BeforeAndAfterAll
+
 
 // vim: set ts=2 sw=2 et:

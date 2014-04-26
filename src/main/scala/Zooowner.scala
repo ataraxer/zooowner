@@ -15,11 +15,15 @@ object Zooowner {
 case class Zooowner(servers: String,
                     timeout: FiniteDuration,
                     pathPrefix: String)
+                   (onConnection: Zooowner => Unit)
 {
   private var client: ZooKeeper = null
 
   val watcher = Watcher {
-    case SyncConnected => assert { isConnected == true }
+    case SyncConnected => {
+      assert { isConnected == true }
+      onConnection(this)
+    }
 
     case Disconnected | Expired => connect()
   }

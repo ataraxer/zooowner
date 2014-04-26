@@ -11,13 +11,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # doesn't already exist on the user's system.
   config.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
-  config.vm.network "forwarded_port", guest: 2181, host: 9181
-
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
 
   config.vm.define "zookeeper" do |zookeeper|
     zookeeper.vm.provision "shell", path: "vagrant/provision.sh"
+    zookeeper.vm.network "forwarded_port", guest: 2181, host: 9181
   end
 end
