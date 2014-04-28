@@ -68,6 +68,15 @@ case class Zooowner(servers: String,
       case _: InterruptedException => ???
     }
   }
+
+  def exists(path: String) =
+    client.exists(pathPrefix + path, false) != null
+
+  def get(path: String) =
+    client.getData(pathPrefix + path, null, null).toString
+
+  def set(path: String, data: String) =
+    client.setData(pathPrefix + path, data.getBytes, -1)
 }
 
 
