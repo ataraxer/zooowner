@@ -17,7 +17,6 @@ object Zooowner {
 case class Zooowner(servers: String,
                     timeout: FiniteDuration,
                     pathPrefix: String)
-                   (onConnection: Zooowner => Unit)
 {
   private var client: ZooKeeper = null
 
@@ -25,10 +24,25 @@ case class Zooowner(servers: String,
   if (pathPrefix contains "/")
     throw new IllegalArgumentException
 
+  def absolutePath(path: String) =
+    "/" + pathPrefix + "/" + path
+
+  private var _onConnection: () => Unit = null
+
+  def onConnection(action: () => Unit) {
+    _onConnection = action
+    if (isConnected) {
+      _onConnection
+    }
+  }
+
   val watcher = Watcher {
     case SyncConnected => {
       assert { isConnected == true }
-      onConnection(this)
+      create("/" + pathPrefix, null)
+      if (_onConnection != null) {
+        _onConnection()
+      }
     }
 
     case Disconnected | Expired => connect()
@@ -44,16 +58,16 @@ case class Zooowner(servers: String,
     client = null
   }
 
+  def close() { disconnect() }
+
   def isConnected = client.getState == States.CONNECTED
 
   connect()
 
   def create(path: String, data: String,
              persisten: Boolean = false,
-             sequential: Boolean = false) =
+             sequential: Boolean = false)
   {
-    val absolutePath = pathPrefix + path
-
     val createMode = (persisten, sequential) match {
       case (true, true)   => PERSISTENT_SEQUENTIAL
       case (true, false)  => PERSISTENT
@@ -62,21 +76,21 @@ case class Zooowner(servers: String,
     }
 
     try {
-      client.create(absolutePath, data.getBytes, null, createMode)
+      client.create(absolutePath(path), data.getBytes, null, createMode)
     } catch {
-      case _: KeeperException => ???
-      case _: InterruptedException => ???
+      case e: KeeperException => println(e)
+      case e: InterruptedException => println(e)
     }
   }
 
   def exists(path: String) =
-    client.exists(pathPrefix + path, false) != null
+    client.exists(absolutePath(path), false) != null
 
   def get(path: String) =
-    client.getData(pathPrefix + path, null, null).toString
+    client.getData(absolutePath(path), null, null).toString
 
   def set(path: String, data: String) =
-    client.setData(pathPrefix + path, data.getBytes, -1)
+    client.setData(absolutePath(path), data.getBytes, -1)
 }
 
 
