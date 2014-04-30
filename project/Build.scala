@@ -28,7 +28,7 @@ object AkkaPattersBuild extends Build {
       // ScalaTest
       "org.scalatest"     %% "scalatest"    % scalatestVersion  % "test",
       // ZooKeeper
-      "org.apache.zookeeper" % "zookeeper" % "3.3.6" excludeAll (
+      "org.apache.zookeeper" % "zookeeper" % "3.4.6" excludeAll (
         ExclusionRule(organization = "com.sun.jdmk"),
         ExclusionRule(organization = "com.sun.jmx"),
         ExclusionRule(organization = "javax.jms")
