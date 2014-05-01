@@ -10,10 +10,10 @@ import scala.concurrent.duration._
 class ZooownerSpec extends UnitSpec with Eventually {
 
   implicit val eventuallyConfig =
-    PatienceConfig(timeout = 5.seconds)
+    PatienceConfig(timeout = 10.seconds)
 
   "Zooowner" should "connect to ZooKeeper" in {
-    var zk = Zooowner("localhost:9181", 15.seconds, "prefix")
+    val zk = Zooowner("localhost:9181", 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.close()
@@ -21,10 +21,12 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "create ephemeral nodes by default" in {
-    var zk = Zooowner("localhost:9181", 15.seconds, "prefix")
+    val zk = Zooowner("localhost:9181", 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.create("test", "value")
+
+    eventually { zk.exists("test") should be (true) }
 
     zk.close()
   }

@@ -7,6 +7,9 @@ import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.Watcher.Event.KeeperState._
 import org.apache.zookeeper.CreateMode._
 import org.apache.zookeeper.KeeperException
+import org.apache.zookeeper.ZooDefs.Ids
+
+import scala.collection.JavaConversions._
 
 
 object Zooowner {
@@ -39,7 +42,7 @@ case class Zooowner(servers: String,
   val watcher = Watcher {
     case SyncConnected => {
       assert { isConnected == true }
-      create("/" + pathPrefix, null)
+      client.create("/" + pathPrefix, null, Ids.OPEN_ACL_UNSAFE, PERSISTENT)
       if (_onConnection != null) {
         _onConnection()
       }
@@ -76,7 +79,10 @@ case class Zooowner(servers: String,
     }
 
     try {
-      client.create(absolutePath(path), data.getBytes, null, createMode)
+      client.create(absolutePath(path),
+                    data.getBytes("utf8"),
+                    Ids.OPEN_ACL_UNSAFE,
+                    createMode)
     } catch {
       case e: KeeperException => println(e)
       case e: InterruptedException => println(e)
