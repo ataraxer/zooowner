@@ -21,14 +21,22 @@ case class Zooowner(servers: String,
                     timeout: FiniteDuration,
                     pathPrefix: String)
 {
-  private var client: ZooKeeper = null
-
   // path prefix should be simple identifier
   if (pathPrefix contains "/")
     throw new IllegalArgumentException
 
-  def absolutePath(path: String) =
+  private var client: ZooKeeper = null
+
+  private def prefixedPath(path: String) = {
+    // path should always start from slash
+    if (path startsWith "/") {
+      throw new IllegalArgumentException
+    }
     "/" + pathPrefix + "/" + path
+  }
+
+  private def resolvePath(path: String) =
+    if (path startsWith "/") path else prefixedPath(path)
 
   private var _onConnection: () => Unit = null
 
@@ -42,7 +50,7 @@ case class Zooowner(servers: String,
   val watcher = Watcher {
     case SyncConnected => {
       assert { isConnected == true }
-      client.create("/" + pathPrefix, null, Ids.OPEN_ACL_UNSAFE, PERSISTENT)
+      create("/" + pathPrefix)
       if (_onConnection != null) {
         _onConnection()
       }
@@ -67,7 +75,8 @@ case class Zooowner(servers: String,
 
   connect()
 
-  def create(path: String, data: String,
+  def create(path: String,
+             maybeData: Option[String] = None,
              persisten: Boolean = false,
              sequential: Boolean = false)
   {
@@ -78,9 +87,10 @@ case class Zooowner(servers: String,
       case (false, false) => EPHEMERAL
     }
 
+    val data = maybeData.map( _.getBytes("utf8") ).getOrElse(null)
+
     try {
-      client.create(absolutePath(path),
-                    data.getBytes("utf8"),
+      client.create(resolvePath(path), data,
                     Ids.OPEN_ACL_UNSAFE,
                     createMode)
     } catch {
@@ -90,13 +100,13 @@ case class Zooowner(servers: String,
   }
 
   def exists(path: String) =
-    client.exists(absolutePath(path), false) != null
+    client.exists(resolvePath(path), false) != null
 
   def get(path: String) =
-    client.getData(absolutePath(path), null, null).toString
+    client.getData(resolvePath(path), null, null).toString
 
   def set(path: String, data: String) =
-    client.setData(absolutePath(path), data.getBytes, -1)
+    client.setData(resolvePath(path), data.getBytes, -1)
 }
 
 

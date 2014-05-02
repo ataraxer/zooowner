@@ -12,6 +12,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
   implicit val eventuallyConfig =
     PatienceConfig(timeout = 10.seconds)
 
+
   "Zooowner" should "connect to ZooKeeper" in {
     val zk = Zooowner("localhost:9181", 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
@@ -20,13 +21,11 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "create ephemeral nodes by default" in {
+  it should "create root node on connection" in {
     val zk = Zooowner("localhost:9181", 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
-    zk.create("test", "value")
-
-    eventually { zk.exists("test") should be (true) }
+    eventually { zk.exists("/prefix") should be (true) }
 
     zk.close()
   }
