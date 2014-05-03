@@ -30,6 +30,20 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zk.close()
   }
 
+
+  it should "get and set values of created nodes" in {
+    val zk = Zooowner("localhost:9181", 15.seconds, "prefix")
+    eventually { zk.isConnected should be (true) }
+
+    zk.create("node", Some("first value"))
+
+    zk.get("node") should be ("first value")
+    zk.set("node", "second value")
+    zk.get("node") should be ("second value")
+
+    zk.close()
+  }
+
 }
 
 

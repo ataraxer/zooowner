@@ -103,7 +103,7 @@ case class Zooowner(servers: String,
     client.exists(resolvePath(path), false) != null
 
   def get(path: String) =
-    client.getData(resolvePath(path), null, null).toString
+    new String(client.getData(resolvePath(path), null, null), "utf-8")
 
   def set(path: String, data: String) =
     client.setData(resolvePath(path), data.getBytes, -1)
