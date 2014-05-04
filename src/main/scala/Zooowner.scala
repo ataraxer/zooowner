@@ -49,7 +49,7 @@ case class Zooowner(servers: String,
     }
   }
 
-  val watcher = Watcher {
+  private val watcher = Watcher {
     case SyncConnected => {
       assert { isConnected == true }
       create("/" + pathPrefix)
@@ -73,7 +73,8 @@ case class Zooowner(servers: String,
 
   def close() { disconnect() }
 
-  def isConnected = client.getState == States.CONNECTED
+  def isConnected =
+    client.getState == States.CONNECTED
 
   connect()
 
