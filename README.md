@@ -1,4 +1,4 @@
 Zooowner
 ========
 
-ZooKeeper client that doesn't makes you cry.
+ZooKeeper client that doesn't make you cry.
