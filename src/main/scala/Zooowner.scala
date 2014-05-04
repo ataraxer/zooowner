@@ -13,7 +13,7 @@ import scala.collection.JavaConversions._
 
 
 object Zooowner {
-
+  val AnyVersion = -1
 }
 
 
@@ -21,6 +21,8 @@ case class Zooowner(servers: String,
                     timeout: FiniteDuration,
                     pathPrefix: String)
 {
+  import Zooowner._
+
   // path prefix should be simple identifier
   if (pathPrefix contains "/")
     throw new IllegalArgumentException
@@ -106,7 +108,10 @@ case class Zooowner(servers: String,
     new String(client.getData(resolvePath(path), null, null), "utf-8")
 
   def set(path: String, data: String) =
-    client.setData(resolvePath(path), data.getBytes, -1)
+    client.setData(resolvePath(path), data.getBytes, AnyVersion)
+
+  def delete(path: String) =
+    client.delete(resolvePath(path), AnyVersion)
 }
 
 

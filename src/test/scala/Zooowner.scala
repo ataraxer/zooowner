@@ -44,6 +44,19 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zk.close()
   }
 
+
+  it should "delete nodes" in {
+    val zk = Zooowner("localhost:9181", 15.seconds, "prefix")
+    eventually { zk.isConnected should be (true) }
+
+    zk.create("node", Some("first value"))
+    zk.delete("node")
+
+    eventually { zk.exists("node") should be (false) }
+
+    zk.close()
+  }
+
 }
 
 
