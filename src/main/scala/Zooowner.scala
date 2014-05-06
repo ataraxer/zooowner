@@ -7,9 +7,12 @@ import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.Watcher.Event.KeeperState._
 import org.apache.zookeeper.CreateMode._
 import org.apache.zookeeper.KeeperException
+import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.ZooDefs.Ids
 
 import scala.collection.JavaConversions._
+
+import scala.util.control.Exception._
 
 
 object Zooowner {
@@ -106,7 +109,9 @@ case class Zooowner(servers: String,
     client.exists(resolvePath(path), false) != null
 
   def get(path: String) =
-    new String(client.getData(resolvePath(path), null, null), "utf-8")
+    catching(classOf[NoNodeException]).opt {
+      new String(client.getData(resolvePath(path), null, null))
+    }
 
   def set(path: String, data: String) =
     client.setData(resolvePath(path), data.getBytes, AnyVersion)
