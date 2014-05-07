@@ -11,8 +11,9 @@ import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.ZooDefs.Ids
 
 import scala.collection.JavaConversions._
-
 import scala.util.control.Exception._
+
+import java.util.{List => JavaList}
 
 
 object Zooowner {
@@ -55,7 +56,11 @@ case class Zooowner(servers: String,
   private val watcher = Watcher {
     case SyncConnected => {
       assert { isConnected == true }
-      create("/" + pathPrefix)
+
+      ignoring(classOf[NodeExistsException]) {
+        create("/" + pathPrefix, persistent = true)
+      }
+
       if (_onConnection != null) {
         _onConnection()
       }
@@ -83,10 +88,10 @@ case class Zooowner(servers: String,
 
   def create(path: String,
              maybeData: Option[String] = None,
-             persisten: Boolean = false,
+             persistent: Boolean = false,
              sequential: Boolean = false)
   {
-    val createMode = (persisten, sequential) match {
+    val createMode = (persistent, sequential) match {
       case (true, true)   => PERSISTENT_SEQUENTIAL
       case (true, false)  => PERSISTENT
       case (false, true)  => EPHEMERAL_SEQUENTIAL
@@ -100,6 +105,7 @@ case class Zooowner(servers: String,
                     Ids.OPEN_ACL_UNSAFE,
                     createMode)
     } catch {
+      case e: NodeExistsException =>
       case e: KeeperException => println(e)
       case e: InterruptedException => println(e)
     }
@@ -116,8 +122,20 @@ case class Zooowner(servers: String,
   def set(path: String, data: String) =
     client.setData(resolvePath(path), data.getBytes, AnyVersion)
 
-  def delete(path: String) =
+  def delete(path: String, recursive: Boolean = false): Unit = {
+    if (recursive) {
+      for (child <- children(path)) {
+        val childPath = path + "/" + child
+        delete(childPath, recursive = true)
+      }
+    }
+
     client.delete(resolvePath(path), AnyVersion)
+  }
+
+  def children(path: String) =
+    client.getChildren(resolvePath(path), false)
+
 }
 
 

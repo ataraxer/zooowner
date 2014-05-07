@@ -32,7 +32,8 @@ object AkkaPattersBuild extends Build {
         ExclusionRule(organization = "com.sun.jdmk"),
         ExclusionRule(organization = "com.sun.jmx"),
         ExclusionRule(organization = "javax.jms")
-      )
+      ),
+      "org.apache.curator" % "curator-test" % "2.4.2" % "test"
     ),
 
     parallelExecution := false
