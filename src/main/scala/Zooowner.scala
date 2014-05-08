@@ -17,6 +17,8 @@ import java.util.{List => JavaList}
 
 
 object Zooowner {
+  type Action = () => Unit
+
   val AnyVersion = -1
 }
 
@@ -27,12 +29,25 @@ case class Zooowner(servers: String,
 {
   import Zooowner._
 
+  // ==== CONSTRUCTOR ==== //
+
   // path prefix should be simple identifier
   if (pathPrefix contains "/")
     throw new IllegalArgumentException
 
+  connect()
+
+  // ==== CONSTRUCTOR END ==== //
+
+  /**
+   * Internal ZooKeeper client, through which all interactions with ZK are
+   * being performed.
+   */
   private var client: ZooKeeper = null
 
+  /**
+   * Returns path prefixed with [[pathPrefix]]
+   */
   private def prefixedPath(path: String) = {
     // path should always start from slash
     if (path startsWith "/") {
@@ -41,18 +56,33 @@ case class Zooowner(servers: String,
     "/" + pathPrefix + "/" + path
   }
 
+  /**
+   * Path resolver, that distincts between absolute paths starting with `/`
+   * character and paths relative to [[pathPrefix]].
+   */
   private def resolvePath(path: String) =
     if (path startsWith "/") path else prefixedPath(path)
 
-  private var _onConnection: () => Unit = null
+  /*
+   * Hook-function, that will be called when connection to ZooKeeper
+   * server is established.
+   */
+  private var connectionHook: Action = null
 
-  def onConnection(action: () => Unit) {
-    _onConnection = action
+  /**
+   * Sets hook-function, that will be called when connection to ZooKeeper
+   * server is established.
+   */
+  def onConnection(action: Action) = {
+    connectionHook = action
     if (isConnected) {
-      _onConnection
+      connectionHook
     }
   }
 
+  /**
+   * Internal watcher, that controls ZooKeeper connection life-cycle.
+   */
   private val watcher = Watcher {
     case SyncConnected => {
       assert { isConnected == true }
@@ -61,31 +91,49 @@ case class Zooowner(servers: String,
         create("/" + pathPrefix, persistent = true)
       }
 
-      if (_onConnection != null) {
-        _onConnection()
+      if (connectionHook != null) {
+        connectionHook()
       }
     }
 
     case Disconnected | Expired => connect()
   }
 
+  /**
+   * Initiates connection to ZooKeeper server.
+   */
   private def connect() {
     if (client != null) disconnect()
     client = new ZooKeeper(servers, timeout.toMillis.toInt, watcher)
   }
 
+  /**
+   * Disconnects from ZooKeeper server.
+   */
   private def disconnect() {
     client.close()
     client = null
   }
 
+  /**
+   * Initiates disonnection from ZooKeeper server and performs clean up.
+   */
   def close() { disconnect() }
 
+  /**
+   * Tests whether the connection to ZooKeeper server is established.
+   */
   def isConnected =
     client.getState == States.CONNECTED
 
-  connect()
-
+  /**
+   * Creates new node.
+   *
+   * @param path path of node to be created.
+   * @param maybeData optional data that will be stored in created node.
+   * @param persistent specifies whether created node should be persistent.
+   * @param sequential specifies whether created node should be sequential.
+   */
   def create(path: String,
              maybeData: Option[String] = None,
              persistent: Boolean = false,
@@ -111,17 +159,29 @@ case class Zooowner(servers: String,
     }
   }
 
+  /**
+   * Tests whether the node exists.
+   */
   def exists(path: String) =
     client.exists(resolvePath(path), false) != null
 
+  /**
+   * Returns Some(value) of the node if exists, None otherwise.
+   */
   def get(path: String) =
     catching(classOf[NoNodeException]).opt {
       new String(client.getData(resolvePath(path), null, null))
     }
 
+  /**
+   * Sets a new value for the node.
+   */
   def set(path: String, data: String) =
     client.setData(resolvePath(path), data.getBytes, AnyVersion)
 
+  /**
+   * Deletes node.
+   */
   def delete(path: String, recursive: Boolean = false): Unit = {
     if (recursive) {
       for (child <- children(path)) {
@@ -133,9 +193,15 @@ case class Zooowner(servers: String,
     client.delete(resolvePath(path), AnyVersion)
   }
 
+  /**
+   * Returns list of children of the node
+   */
   def children(path: String) =
     client.getChildren(resolvePath(path), false)
 
+  /**
+   * Tests whether the node is ephemeral.
+   */
   def isEphemeral(path: String) = {
     val nodeState = client.exists(resolvePath(path), false)
     (nodeState != null) && (nodeState.getEphemeralOwner != 0)
