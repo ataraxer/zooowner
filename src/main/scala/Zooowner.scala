@@ -23,9 +23,17 @@ object Zooowner {
 }
 
 
-case class Zooowner(servers: String,
-                    timeout: FiniteDuration,
-                    pathPrefix: String)
+/**
+ * ZooKeeper client that doesn't make you cry.
+ *
+ * @param servers Connection string, consisting of comma separated host:port
+ * values.
+ * @param timeout Connection timeout.
+ * @param pathPrefix Default prefix for operations via that client instance.
+ */
+class Zooowner(servers: String,
+               timeout: FiniteDuration,
+               val pathPrefix: String)
 {
   import Zooowner._
 
@@ -129,10 +137,10 @@ case class Zooowner(servers: String,
   /**
    * Creates new node.
    *
-   * @param path path of node to be created.
-   * @param maybeData optional data that will be stored in created node.
-   * @param persistent specifies whether created node should be persistent.
-   * @param sequential specifies whether created node should be sequential.
+   * @param path Path of node to be created.
+   * @param maybeData Optional data that will be stored in created node.
+   * @param persistent Specifies whether created node should be persistent.
+   * @param sequential Specifies whether created node should be sequential.
    */
   def create(path: String,
              maybeData: Option[String] = None,
@@ -194,7 +202,7 @@ case class Zooowner(servers: String,
   }
 
   /**
-   * Returns list of children of the node
+   * Returns list of children of the node.
    */
   def children(path: String) =
     client.getChildren(resolvePath(path), false)
