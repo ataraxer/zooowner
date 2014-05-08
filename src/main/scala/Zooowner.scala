@@ -136,6 +136,11 @@ case class Zooowner(servers: String,
   def children(path: String) =
     client.getChildren(resolvePath(path), false)
 
+  def isEphemeral(path: String) = {
+    val nodeState = client.exists(resolvePath(path), false)
+    (nodeState != null) && (nodeState.getEphemeralOwner != 0)
+  }
+
 }
 
 

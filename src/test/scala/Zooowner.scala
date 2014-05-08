@@ -116,6 +116,20 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zk.close()
   }
 
+
+  it should "report if node is ephemeral" in {
+    val zk = Zooowner(zkAddress, 15.seconds, "prefix")
+    eventually { zk.isConnected should be (true) }
+
+    zk.create("persistent-node", persistent = true)
+    zk.create("ephemeral-node", persistent = false)
+
+    zk.isEphemeral("persistent-node") should be (false)
+    zk.isEphemeral("ephemeral-node") should be (true)
+
+    zk.close()
+  }
+
 }
 
 
