@@ -18,6 +18,7 @@ import java.util.{List => JavaList}
 
 object Zooowner {
   type Action = () => Unit
+  type Reaction[T] = PartialFunction[T, Unit]
 
   val AnyVersion = -1
 }
@@ -40,6 +41,31 @@ class Zooowner(servers: String,
   // path prefix should be simple identifier
   if (pathPrefix contains "/")
     throw new IllegalArgumentException
+
+  /*
+   * Hook-function, that will be called when connection to ZooKeeper
+   * server is established.
+   */
+  private var connectionHook: Action = null
+
+  /**
+   * Internal watcher, that controls ZooKeeper connection life-cycle.
+   */
+  private val watcher = StateWatcher {
+    case SyncConnected => {
+      assert { isConnected == true }
+
+      ignoring(classOf[NodeExistsException]) {
+        create("/" + pathPrefix, persistent = true)
+      }
+
+      if (connectionHook != null) {
+        connectionHook()
+      }
+    }
+
+    case Disconnected | Expired => connect()
+  }
 
   /**
    * Internal ZooKeeper client, through which all interactions with ZK are
@@ -65,42 +91,6 @@ class Zooowner(servers: String,
   private def resolvePath(path: String) =
     if (path startsWith "/") path else prefixedPath(path)
 
-  /*
-   * Hook-function, that will be called when connection to ZooKeeper
-   * server is established.
-   */
-  private var connectionHook: Action = null
-
-  /**
-   * Sets hook-function, that will be called when connection to ZooKeeper
-   * server is established.
-   */
-  def onConnection(action: Action) = {
-    connectionHook = action
-    if (isConnected) {
-      connectionHook
-    }
-  }
-
-  /**
-   * Internal watcher, that controls ZooKeeper connection life-cycle.
-   */
-  private val watcher = Watcher {
-    case SyncConnected => {
-      assert { isConnected == true }
-
-      ignoring(classOf[NodeExistsException]) {
-        create("/" + pathPrefix, persistent = true)
-      }
-
-      if (connectionHook != null) {
-        connectionHook()
-      }
-    }
-
-    case Disconnected | Expired => connect()
-  }
-
   /**
    * Initiates connection to ZooKeeper server.
    */
@@ -118,15 +108,26 @@ class Zooowner(servers: String,
   }
 
   /**
-   * Initiates disonnection from ZooKeeper server and performs clean up.
+   * Sets hook-function, that will be called when connection to ZooKeeper
+   * server is established.
    */
-  def close() { disconnect() }
+  def onConnection(action: Action) = {
+    connectionHook = action
+    if (isConnected) {
+      connectionHook
+    }
+  }
 
   /**
    * Tests whether the connection to ZooKeeper server is established.
    */
   def isConnected =
     client.getState == States.CONNECTED
+
+  /**
+   * Initiates disonnection from ZooKeeper server and performs clean up.
+   */
+  def close() { disconnect() }
 
   /**
    * Creates new node.
