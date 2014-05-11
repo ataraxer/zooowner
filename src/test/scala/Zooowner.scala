@@ -22,16 +22,21 @@ class ZooownerSpec extends UnitSpec with Eventually {
     PatienceConfig(timeout = 10.seconds)
 
   var zkServer: TestingServer = null
+  var zk: Zooowner = null
 
 
   before {
     zkServer = new TestingServer(port)
+    zk = new Zooowner(zkAddress, 15.seconds, "prefix")
+    eventually { zk.isConnected should be (true) }
   }
 
 
   after {
     zkServer.stop()
     zkServer = null
+    zk.close()
+    zk = null
   }
 
 
@@ -54,80 +59,52 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "return Some(value) if node exists" in {
-    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
-    eventually { zk.isConnected should be (true) }
-
     zk.create("node", Some("value"))
 
     zk.get("node") should be (Some("value"))
-
-    zk.close()
   }
 
 
   it should "return None if node doesn't exist" in {
-    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
-    eventually { zk.isConnected should be (true) }
-
     zk.get("non-existant-node") should be (None)
-
-    zk.close()
   }
 
 
   it should "change values of created nodes" in {
-    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
-    eventually { zk.isConnected should be (true) }
-
     zk.create("node", Some("first value"))
 
     zk.get("node") should be (Some("first value"))
-    zk.set("node", "second value")
-    zk.get("node") should be (Some("second value"))
 
-    zk.close()
+    zk.set("node", "second value")
+
+    zk.get("node") should be (Some("second value"))
   }
 
 
   it should "delete nodes" in {
-    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
-    eventually { zk.isConnected should be (true) }
-
     zk.create("node", Some("first value"))
     zk.delete("node")
 
     zk.exists("node") should be (false)
-
-    zk.close()
   }
 
 
   it should "delete nodes recursively" in {
-    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
-    eventually { zk.isConnected should be (true) }
-
     zk.create("node", Some("first value"), persistent = true)
     zk.create("node/child", Some("child value"), persistent = true)
     zk.delete("node", recursive = true)
 
     zk.exists("node") should be (false)
     zk.exists("node/child") should be (false)
-
-    zk.close()
   }
 
 
-  it should "report if node is ephemeral" in {
-    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
-    eventually { zk.isConnected should be (true) }
-
+  it should "test if node is ephemeral" in {
     zk.create("persistent-node", persistent = true)
     zk.create("ephemeral-node", persistent = false)
 
     zk.isEphemeral("persistent-node") should be (false)
     zk.isEphemeral("ephemeral-node") should be (true)
-
-    zk.close()
   }
 
 }
