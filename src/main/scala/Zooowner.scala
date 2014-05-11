@@ -37,15 +37,9 @@ class Zooowner(servers: String,
 {
   import Zooowner._
 
-  // ==== CONSTRUCTOR ==== //
-
   // path prefix should be simple identifier
   if (pathPrefix contains "/")
     throw new IllegalArgumentException
-
-  connect()
-
-  // ==== CONSTRUCTOR END ==== //
 
   /**
    * Internal ZooKeeper client, through which all interactions with ZK are
@@ -215,6 +209,7 @@ class Zooowner(servers: String,
     (nodeState != null) && (nodeState.getEphemeralOwner != 0)
   }
 
+  connect()
 }
 
 
