@@ -36,7 +36,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   "Zooowner" should "connect to ZooKeeper" in {
-    val zk = Zooowner(zkAddress, 15.seconds, "prefix")
+    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.close()
@@ -44,7 +44,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "create root node on connection" in {
-    val zk = Zooowner(zkAddress, 15.seconds, "prefix")
+    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.exists("/prefix") should be (true)
@@ -54,7 +54,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "return Some(value) if node exists" in {
-    val zk = Zooowner(zkAddress, 15.seconds, "prefix")
+    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.create("node", Some("value"))
@@ -66,7 +66,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "return None if node doesn't exist" in {
-    val zk = Zooowner(zkAddress, 15.seconds, "prefix")
+    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.get("non-existant-node") should be (None)
@@ -76,7 +76,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "change values of created nodes" in {
-    val zk = Zooowner(zkAddress, 15.seconds, "prefix")
+    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.create("node", Some("first value"))
@@ -90,7 +90,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "delete nodes" in {
-    val zk = Zooowner(zkAddress, 15.seconds, "prefix")
+    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.create("node", Some("first value"))
@@ -103,7 +103,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "delete nodes recursively" in {
-    val zk = Zooowner(zkAddress, 15.seconds, "prefix")
+    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.create("node", Some("first value"), persistent = true)
@@ -118,7 +118,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "report if node is ephemeral" in {
-    val zk = Zooowner(zkAddress, 15.seconds, "prefix")
+    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.create("persistent-node", persistent = true)
