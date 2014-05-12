@@ -4,7 +4,7 @@ import scala.concurrent.duration._
 
 import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.ZooKeeper.States
-import org.apache.zookeeper.Watcher.Event.KeeperState._
+import org.apache.zookeeper.Watcher.Event.{KeeperState, EventType}
 import org.apache.zookeeper.CreateMode._
 import org.apache.zookeeper.KeeperException
 import org.apache.zookeeper.KeeperException._
@@ -13,12 +13,14 @@ import org.apache.zookeeper.ZooDefs.Ids
 import scala.collection.JavaConversions._
 import scala.util.control.Exception._
 
-import java.util.{List => JavaList}
+import com.ataraxer.zooowner.event._
 
 
 object Zooowner {
   type Action = () => Unit
   type Reaction[T] = PartialFunction[T, Unit]
+
+  def default[T]: Reaction[T] = { case _ => }
 
   val AnyVersion = -1
 }
@@ -37,6 +39,7 @@ class Zooowner(servers: String,
                val pathPrefix: String)
 {
   import Zooowner._
+  import KeeperState._
 
   // path prefix should be simple identifier
   if (pathPrefix contains "/")
@@ -208,6 +211,38 @@ class Zooowner(servers: String,
   def isEphemeral(path: String) = {
     val nodeState = client.exists(resolvePath(path), false)
     (nodeState != null) && (nodeState.getEphemeralOwner != 0)
+  }
+
+  /**
+   * Sets up a callback for node events.
+   */
+  def watch(path: String, persistent: Boolean = true)
+           (reaction: Reaction[Event])
+  {
+    val react = reaction orElse default[Event]
+
+    val watcher = EventWatcher {
+      case EventType.NodeCreated => {
+        react { NodeCreated(path, get(path)) }
+        if (persistent) watch(path, true)(reaction)
+      }
+
+      case EventType.NodeDataChanged => {
+        react { NodeChanged(path, get(path)) }
+        if (persistent) watch(path, true)(reaction)
+      }
+
+      case EventType.NodeChildrenChanged => {
+        react { NodeChildrenChanged(path, children(path)) }
+        if (persistent) watch(path, true)(reaction)
+      }
+
+      case EventType.NodeDeleted => {
+        react { NodeDeleted(path) }
+      }
+    }
+
+    client.exists(resolvePath(path), watcher)
   }
 
   connect()
