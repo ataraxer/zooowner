@@ -11,8 +11,6 @@ sealed abstract class Watcher[T]
   (reaction: Reaction[T])
     extends ZKWatcher
 {
-  import Watcher._
-
   def process(event: WatchedEvent) = {
     (reaction orElse default[T]) {
       extract(event)

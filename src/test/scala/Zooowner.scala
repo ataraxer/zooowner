@@ -107,6 +107,33 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zk.isEphemeral("ephemeral-node") should be (true)
   }
 
+
+  it should "set persistent watches on nodes" in {
+    import com.ataraxer.zooowner.event._
+
+    var created = false
+    var changed = false
+    var deleted = false
+
+    zk.watch("some-node") {
+      case NodeCreated("some-node", Some("value")) =>
+        created = true
+      case NodeChanged("some-node", Some("new-value")) =>
+        changed = true
+      case NodeDeleted("some-node") =>
+        deleted = true
+    }
+
+    zk.create("some-node", Some("value"))
+    eventually { created should be (true) }
+
+    zk.set("some-node", "new-value")
+    eventually { changed should be (true) }
+
+    zk.delete("some-node")
+    eventually { deleted should be (true) }
+  }
+
 }
 
 
