@@ -8,7 +8,6 @@ import com.ataraxer.zooowner.Zooowner.{Reaction, default}
 
 
 sealed abstract class Watcher[T]
-  (reaction: Reaction[T])
     extends ZKWatcher
 {
   def process(event: WatchedEvent) = {
@@ -17,17 +16,32 @@ sealed abstract class Watcher[T]
     }
   }
 
+  def reaction: Reaction[T]
   def extract(event: WatchedEvent): T
 }
 
 
-case class StateWatcher(reaction: Reaction[KeeperState])
-    extends Watcher[KeeperState](reaction)
-{ def extract(event: WatchedEvent) = event.getState }
+abstract class StateWatcher extends Watcher[KeeperState] {
+  def extract(event: WatchedEvent) = event.getState
+}
 
-case class EventWatcher(reaction: Reaction[EventType])
-    extends Watcher[EventType](reaction)
-{ def extract(event: WatchedEvent) = event.getType }
+abstract class EventWatcher extends Watcher[EventType] {
+  def extract(event: WatchedEvent) = event.getType
+}
+
+
+object StateWatcher {
+  def apply(react: Reaction[KeeperState]) = {
+    new StateWatcher { def reaction = react }
+  }
+}
+
+object EventWatcher {
+  def apply(react: Reaction[EventType]) = {
+    new EventWatcher { def reaction = react }
+  }
+}
+
 
 
 // vim: set ts=2 sw=2 et:

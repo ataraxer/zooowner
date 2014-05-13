@@ -221,27 +221,36 @@ class Zooowner(servers: String,
   {
     val react = reaction orElse default[Event]
 
-    val watcher = EventWatcher {
-      case EventType.NodeCreated => {
-        react { NodeCreated(path, get(path)) }
-        if (persistent) watch(path, true)(reaction)
-      }
+    val watcher = new EventWatcher {
+      def reaction = {
+        case EventType.NodeCreated => {
+          react { NodeCreated(path, get(path)) }
+          if (persistent) watch(path, this)
+        }
 
-      case EventType.NodeDataChanged => {
-        react { NodeChanged(path, get(path)) }
-        if (persistent) watch(path, true)(reaction)
-      }
+        case EventType.NodeDataChanged => {
+          react { NodeChanged(path, get(path)) }
+          if (persistent) watch(path, this)
+        }
 
-      case EventType.NodeChildrenChanged => {
-        react { NodeChildrenChanged(path, children(path)) }
-        if (persistent) watch(path, true)(reaction)
-      }
+        case EventType.NodeChildrenChanged => {
+          react { NodeChildrenChanged(path, children(path)) }
+          if (persistent) watch(path, this)
+        }
 
-      case EventType.NodeDeleted => {
-        react { NodeDeleted(path) }
+        case EventType.NodeDeleted => {
+          react { NodeDeleted(path) }
+        }
       }
     }
 
+    watch(path, watcher)
+  }
+
+  /**
+   * Sets up a watcher on node events.
+   */
+  def watch(path: String, watcher: EventWatcher) {
     client.exists(resolvePath(path), watcher)
   }
 
