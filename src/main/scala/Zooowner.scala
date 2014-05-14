@@ -166,17 +166,29 @@ class Zooowner(servers: String,
   }
 
   /**
+   * Gets node state and optionally sets watcher.
+   */
+  def stat(path: String, maybeWatcher: Option[EventWatcher] = None) =
+    client.exists(resolvePath(path), maybeWatcher.getOrElse(null))
+
+  /**
    * Tests whether the node exists.
    */
   def exists(path: String) =
-    client.exists(resolvePath(path), false) != null
+    stat(path) != null
 
   /**
    * Returns Some(value) of the node if exists, None otherwise.
    */
-  def get(path: String) =
+  def get(path: String, maybeWatcher: Option[EventWatcher] = None) =
     catching(classOf[NoNodeException]).opt {
-      new String(client.getData(resolvePath(path), null, null))
+      new String(
+        client.getData(
+          resolvePath(path),
+          maybeWatcher.getOrElse(null),
+          null
+        )
+      )
     }
 
   /**
@@ -202,8 +214,8 @@ class Zooowner(servers: String,
   /**
    * Returns list of children of the node.
    */
-  def children(path: String) =
-    client.getChildren(resolvePath(path), false)
+  def children(path: String, maybeWatcher: Option[EventWatcher] = None) =
+    client.getChildren(resolvePath(path), maybeWatcher.getOrElse(null))
 
   /**
    * Tests whether the node is ephemeral.
@@ -222,25 +234,21 @@ class Zooowner(servers: String,
     val react = reaction orElse default[Event]
 
     val watcher = new EventWatcher {
+      val self: Option[EventWatcher] =
+        if (persistent) Some(this) else None
+
       def reaction = {
-        case EventType.NodeCreated => {
-          react { NodeCreated(path, get(path)) }
-          if (persistent) watch(path, this)
-        }
+        case EventType.NodeCreated =>
+          react { NodeCreated(path, get(path, self)) }
 
-        case EventType.NodeDataChanged => {
-          react { NodeChanged(path, get(path)) }
-          if (persistent) watch(path, this)
-        }
+        case EventType.NodeDataChanged =>
+          react { NodeChanged(path, get(path, self)) }
 
-        case EventType.NodeChildrenChanged => {
-          react { NodeChildrenChanged(path, children(path)) }
-          if (persistent) watch(path, this)
-        }
+        case EventType.NodeChildrenChanged =>
+          react { NodeChildrenChanged(path, children(path, self)) }
 
-        case EventType.NodeDeleted => {
+        case EventType.NodeDeleted =>
           react { NodeDeleted(path) }
-        }
       }
     }
 
@@ -251,7 +259,7 @@ class Zooowner(servers: String,
    * Sets up a watcher on node events.
    */
   def watch(path: String, watcher: EventWatcher) {
-    client.exists(resolvePath(path), watcher)
+    stat(path, Some(watcher))
   }
 
   connect()
