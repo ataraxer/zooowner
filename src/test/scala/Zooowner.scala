@@ -114,6 +114,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
     var created = false
     var changed = false
     var deleted = false
+    var childCreated = false
 
     zk.watch("some-node") {
       case NodeCreated("some-node", Some("value")) =>
@@ -122,15 +123,20 @@ class ZooownerSpec extends UnitSpec with Eventually {
         changed = true
       case NodeDeleted("some-node") =>
         deleted = true
+      case NodeChildrenChanged("some-node", Seq("child")) =>
+        childCreated = true
     }
 
-    zk.create("some-node", Some("value"))
+    zk.create("some-node", Some("value"), persistent = true)
     eventually { created should be (true) }
+
+    zk.create("some-node/child", Some("value"))
+    eventually { childCreated should be (true) }
 
     zk.set("some-node", "new-value")
     eventually { changed should be (true) }
 
-    zk.delete("some-node")
+    zk.delete("some-node", recursive = true)
     eventually { deleted should be (true) }
   }
 

@@ -23,6 +23,7 @@ object Zooowner {
   def default[T]: Reaction[T] = { case _ => }
 
   val AnyVersion = -1
+  val AnyACL = Ids.OPEN_ACL_UNSAFE
 }
 
 
@@ -155,11 +156,9 @@ class Zooowner(servers: String,
     val data = maybeData.map( _.getBytes("utf8") ).getOrElse(null)
 
     try {
-      client.create(resolvePath(path), data,
-                    Ids.OPEN_ACL_UNSAFE,
-                    createMode)
+      client.create(resolvePath(path), data, AnyACL, createMode)
     } catch {
-      case e: NodeExistsException =>
+      case e: NodeExistsException => //TODO: process me
       case e: KeeperException => println(e)
       case e: InterruptedException => println(e)
     }
@@ -168,28 +167,27 @@ class Zooowner(servers: String,
   /**
    * Gets node state and optionally sets watcher.
    */
-  def stat(path: String, maybeWatcher: Option[EventWatcher] = None) =
-    client.exists(resolvePath(path), maybeWatcher.getOrElse(null))
+  def stat(path: String, maybeWatcher: Option[EventWatcher] = None) = {
+    val watcher = maybeWatcher.getOrElse(null)
+    val result = client.exists(resolvePath(path), watcher)
+    Option(result)
+  }
 
   /**
    * Tests whether the node exists.
    */
-  def exists(path: String) =
-    stat(path) != null
+  def exists(path: String) = stat(path) != None
 
   /**
    * Returns Some(value) of the node if exists, None otherwise.
    */
-  def get(path: String, maybeWatcher: Option[EventWatcher] = None) =
-    catching(classOf[NoNodeException]).opt {
-      new String(
-        client.getData(
-          resolvePath(path),
-          maybeWatcher.getOrElse(null),
-          null
-        )
-      )
+  def get(path: String, maybeWatcher: Option[EventWatcher] = None) = {
+    val watcher = maybeWatcher.getOrElse(null)
+    val maybeData = catching(classOf[NoNodeException]).opt {
+      client.getData(resolvePath(path), watcher, null)
     }
+    maybeData map { new String(_) }
+  }
 
   /**
    * Sets a new value for the node.
@@ -220,10 +218,8 @@ class Zooowner(servers: String,
   /**
    * Tests whether the node is ephemeral.
    */
-  def isEphemeral(path: String) = {
-    val nodeState = client.exists(resolvePath(path), false)
-    (nodeState != null) && (nodeState.getEphemeralOwner != 0)
-  }
+  def isEphemeral(path: String) =
+    stat(path).map( _.getEphemeralOwner != 0).getOrElse(false)
 
   /**
    * Sets up a callback for node events.
@@ -231,24 +227,41 @@ class Zooowner(servers: String,
   def watch(path: String, persistent: Boolean = true)
            (reaction: Reaction[Event])
   {
-    val react = reaction orElse default[Event]
+    val reactOn = reaction orElse default[Event]
 
     val watcher = new EventWatcher {
       val self: Option[EventWatcher] =
         if (persistent) Some(this) else None
 
       def reaction = {
-        case EventType.NodeCreated =>
-          react { NodeCreated(path, get(path, self)) }
+        case EventType.NodeCreated => {
+          // child watcher isn't set yet for that node so
+          // we need to set it up if watcher is persistant
+          if (persistent) {
+            watch(path, this)
+          }
+          // since watch takes care of setting both data
+          // and children watches there is no need to
+          // set watcher again via `get`
+          reactOn { NodeCreated(path, get(path)) }
+        }
 
-        case EventType.NodeDataChanged =>
-          react { NodeChanged(path, get(path, self)) }
+        case EventType.NodeDataChanged => reactOn {
+          NodeChanged(path, get(path, self))
+        }
 
-        case EventType.NodeChildrenChanged =>
-          react { NodeChildrenChanged(path, children(path, self)) }
+        case EventType.NodeChildrenChanged => reactOn {
+          NodeChildrenChanged(path, children(path, self))
+        }
 
-        case EventType.NodeDeleted =>
-          react { NodeDeleted(path) }
+        case EventType.NodeDeleted => {
+          // after node deletion we still may be interested
+          // in watching it, in that case -- reset watcher
+          if (persistent) {
+            watch(path, this)
+          }
+          reactOn { NodeDeleted(path) }
+        }
       }
     }
 
@@ -260,6 +273,10 @@ class Zooowner(servers: String,
    */
   def watch(path: String, watcher: EventWatcher) {
     stat(path, Some(watcher))
+    // node may not exist yet, so we ignore NoNode exceptions
+    ignoring(classOf[NoNodeException]) {
+      children(path, Some(watcher))
+    }
   }
 
   connect()
