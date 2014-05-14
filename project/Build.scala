@@ -41,7 +41,7 @@ object AkkaPattersBuild extends Build {
 
   lazy val buildSettings = Defaults.defaultSettings ++ Seq(
     name         := "zooowner",
-    version      := "0.1.0",
+    version      := "0.1.1",
     scalaVersion := "2.10.3"
   )
 
