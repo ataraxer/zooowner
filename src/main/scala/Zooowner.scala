@@ -24,6 +24,11 @@ object Zooowner {
 
   val AnyVersion = -1
   val AnyACL = Ids.OPEN_ACL_UNSAFE
+  val Root = ""
+
+  implicit class SlashSeparatedPath(path: String) {
+    def / (subpath: String) = path + "/" + subpath
+  }
 }
 
 
@@ -60,7 +65,7 @@ class Zooowner(servers: String,
       assert { isConnected == true }
 
       ignoring(classOf[NodeExistsException]) {
-        create("/" + pathPrefix, persistent = true)
+        create(Root/pathPrefix, persistent = true)
       }
 
       if (connectionHook != null) {
@@ -85,7 +90,8 @@ class Zooowner(servers: String,
     if (path startsWith "/") {
       throw new IllegalArgumentException
     }
-    "/" + pathPrefix + "/" + path
+
+    Root/pathPrefix/path
   }
 
   /**
@@ -137,15 +143,31 @@ class Zooowner(servers: String,
    * Creates new node.
    *
    * @param path Path of node to be created.
-   * @param maybeData Optional data that will be stored in created node.
+   * @param maybeData Optional data that should be stored in created node.
    * @param persistent Specifies whether created node should be persistent.
    * @param sequential Specifies whether created node should be sequential.
+   * @param recursive Specifies whether path to the node should be created.
+   * @param filler Value with which path nodes should be created.
    */
   def create(path: String,
              maybeData: Option[String] = None,
              persistent: Boolean = false,
-             sequential: Boolean = false)
+             sequential: Boolean = false,
+             recursive: Boolean = false,
+             filler: Option[String] = None): Unit =
   {
+    if (recursive) {
+      val parts = path.split("/")
+
+      var parentPath = ""
+      for (nextPart <- parts) {
+        parentPath = (parentPath/nextPart).replaceAll("^/", "")
+        if (parentPath != path) {
+          create(parentPath, filler, persistent = true)
+        }
+      }
+    }
+
     val createMode = (persistent, sequential) match {
       case (true, true)   => PERSISTENT_SEQUENTIAL
       case (true, false)  => PERSISTENT
@@ -240,7 +262,7 @@ class Zooowner(servers: String,
           if (persistent) {
             watch(path, this)
           }
-          // since watch takes care of setting both data
+          // since `watch` takes care of setting both data
           // and children watches there is no need to
           // set watcher again via `get`
           reactOn { NodeCreated(path, get(path)) }
@@ -260,6 +282,7 @@ class Zooowner(servers: String,
           if (persistent) {
             watch(path, this)
           }
+
           reactOn { NodeDeleted(path) }
         }
       }
