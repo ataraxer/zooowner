@@ -1,6 +1,8 @@
 import sbt._
 import sbt.Keys._
 
+import scoverage._
+
 
 object AkkaPattersBuild extends Build {
 
@@ -39,11 +41,14 @@ object AkkaPattersBuild extends Build {
     parallelExecution := false
   )
 
-  lazy val buildSettings = Defaults.defaultSettings ++ Seq(
-    name         := "zooowner",
-    version      := "0.1.1",
-    scalaVersion := "2.10.3"
-  )
+  lazy val buildSettings =
+    Defaults.defaultSettings ++
+    ScoverageSbtPlugin.instrumentSettings ++
+    Seq(
+      name         := "zooowner",
+      version      := "0.1.1",
+      scalaVersion := "2.10.3"
+    )
 
   lazy val zooowner = Project(
     id = "zooowner",
