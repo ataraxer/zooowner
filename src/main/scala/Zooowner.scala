@@ -124,7 +124,7 @@ class Zooowner(servers: String,
   def onConnection(action: Action) = {
     connectionHook = action
     if (isConnected) {
-      connectionHook
+      connectionHook()
     }
   }
 

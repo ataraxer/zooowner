@@ -48,11 +48,49 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
+  it should "be initialized with simple path prefix " +
+            "without slashes" in
+  {
+    lazy val zkOne = new Zooowner(zkAddress, 15.seconds, "/prefix")
+    an [IllegalArgumentException] should be thrownBy zkOne
+
+    lazy val zkTwo = new Zooowner(zkAddress, 15.seconds, "prefix/")
+    an [IllegalArgumentException] should be thrownBy zkTwo
+
+    lazy val zkThree = new Zooowner(zkAddress, 15.seconds, "prefix/sub-prefix")
+    an [IllegalArgumentException] should be thrownBy zkThree
+  }
+
+
   it should "create root node on connection" in {
     val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
     zk.exists("/prefix") should be (true)
+
+    zk.close()
+  }
+
+
+  it should "accept connection hook, that will be run on connection" in {
+    var hookRan = false
+
+    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
+    zk.onConnection { () => hookRan = true }
+
+    eventually { hookRan should be (true) }
+    zk.close()
+  }
+
+
+  it should "run connection hook if connection already established" in {
+    var hookRan = false
+
+    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
+    eventually { zk.isConnected should be (true) }
+
+    zk.onConnection { () => hookRan = true }
+    eventually { hookRan should be (true) }
 
     zk.close()
   }
@@ -112,6 +150,44 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
     zk.isEphemeral("persistent-node") should be (false)
     zk.isEphemeral("ephemeral-node") should be (true)
+  }
+
+
+  it should "set one-time watches on nodes" in {
+    import com.ataraxer.zooowner.Zooowner.Reaction
+    import com.ataraxer.zooowner.event._
+
+    var created = false
+    var changed = false
+    var deleted = false
+    var childCreated = false
+
+    val reaction: Zooowner.Reaction[Event] = {
+      case NodeCreated("some-node", Some("value")) =>
+        created = true
+      case NodeChanged("some-node", Some("new-value")) =>
+        changed = true
+      case NodeDeleted("some-node") =>
+        deleted = true
+      case NodeChildrenChanged("some-node", Seq("child")) =>
+        childCreated = true
+    }
+
+    zk.watch("some-node", persistent = false)(reaction)
+    zk.create("some-node", Some("value"), persistent = true)
+    eventually { created should be (true) }
+
+    zk.watch("some-node", persistent = false)(reaction)
+    zk.create("some-node/child", Some("value"))
+    eventually { childCreated should be (true) }
+
+    zk.watch("some-node", persistent = false)(reaction)
+    zk.set("some-node", "new-value")
+    eventually { changed should be (true) }
+
+    zk.watch("some-node", persistent = false)(reaction)
+    zk.delete("some-node", recursive = true)
+    eventually { deleted should be (true) }
   }
 
 
