@@ -15,6 +15,8 @@ import scala.util.control.Exception._
 
 import com.ataraxer.zooowner.event._
 
+import scala.language.implicitConversions
+
 
 object Zooowner {
   type Action = () => Unit
@@ -25,6 +27,9 @@ object Zooowner {
   val AnyVersion = -1
   val AnyACL = Ids.OPEN_ACL_UNSAFE
   val Root = ""
+
+  implicit def durationToInt(duration: FiniteDuration) =
+    duration.toMillis.toInt
 
   implicit class SlashSeparatedPath(path: String) {
     def / (subpath: String) = path + "/" + subpath
@@ -48,14 +53,15 @@ class Zooowner(servers: String,
   import KeeperState._
 
   // path prefix should be simple identifier
-  if (pathPrefix contains "/")
+  if (pathPrefix contains "/") {
     throw new IllegalArgumentException
+  }
 
   /*
    * Hook-function, that will be called when connection to ZooKeeper
    * server is established.
    */
-  private var connectionHook: Action = null
+  private var connectionHook: Option[Action] = None
 
   /**
    * Internal watcher, that controls ZooKeeper connection life-cycle.
@@ -68,9 +74,7 @@ class Zooowner(servers: String,
         create(Root/pathPrefix, persistent = true)
       }
 
-      if (connectionHook != null) {
-        connectionHook()
-      }
+      connectionHook foreach { action => action() }
     }
 
     case Disconnected | Expired => connect()
@@ -80,7 +84,7 @@ class Zooowner(servers: String,
    * Internal ZooKeeper client, through which all interactions with ZK are
    * being performed.
    */
-  private var client: ZooKeeper = null
+  private var client: ZooKeeper = generateClient
 
   /**
    * Returns path prefixed with [[pathPrefix]]
@@ -104,28 +108,32 @@ class Zooowner(servers: String,
   /**
    * Initiates connection to ZooKeeper server.
    */
-  private def connect() {
-    if (client != null) disconnect()
-    client = new ZooKeeper(servers, timeout.toMillis.toInt, watcher)
+  private def connect(): Unit = {
+    disconnect()
+    client = generateClient
   }
+
+  /**
+   * Generates new ZooKeeper client.
+   */
+  def generateClient =
+    new ZooKeeper(servers, timeout.toMillis.toInt, watcher)
+
 
   /**
    * Disconnects from ZooKeeper server.
    */
-  private def disconnect() {
+  private def disconnect(): Unit = {
     client.close()
-    client = null
   }
 
   /**
    * Sets hook-function, that will be called when connection to ZooKeeper
    * server is established.
    */
-  def onConnection(action: Action) = {
-    connectionHook = action
-    if (isConnected) {
-      connectionHook()
-    }
+  def onConnection(action: Action): Unit = {
+    connectionHook = Some(action)
+    if (isConnected) action()
   }
 
   /**
@@ -137,7 +145,9 @@ class Zooowner(servers: String,
   /**
    * Initiates disonnection from ZooKeeper server and performs clean up.
    */
-  def close() { disconnect() }
+  def close(): Unit = {
+    disconnect()
+  }
 
   /**
    * Creates new node.
@@ -175,7 +185,7 @@ class Zooowner(servers: String,
       case (false, false) => EPHEMERAL
     }
 
-    val data = maybeData.map( _.getBytes("utf8") ).getOrElse(null)
+    val data = maybeData.map( _.getBytes("utf8") ).orNull
 
     try {
       client.create(resolvePath(path), data, AnyACL, createMode)
@@ -190,9 +200,8 @@ class Zooowner(servers: String,
    * Gets node state and optionally sets watcher.
    */
   def stat(path: String, maybeWatcher: Option[EventWatcher] = None) = {
-    val watcher = maybeWatcher.getOrElse(null)
-    val result = client.exists(resolvePath(path), watcher)
-    Option(result)
+    val watcher = maybeWatcher.orNull
+    Option { client.exists(resolvePath(path), watcher) }
   }
 
   /**
@@ -204,7 +213,7 @@ class Zooowner(servers: String,
    * Returns Some(value) of the node if exists, None otherwise.
    */
   def get(path: String, maybeWatcher: Option[EventWatcher] = None) = {
-    val watcher = maybeWatcher.getOrElse(null)
+    val watcher = maybeWatcher.orNull
     val maybeData = catching(classOf[NoNodeException]).opt {
       client.getData(resolvePath(path), watcher, null)
     }
@@ -214,8 +223,9 @@ class Zooowner(servers: String,
   /**
    * Sets a new value for the node.
    */
-  def set(path: String, data: String) =
+  def set(path: String, data: String): Unit = {
     client.setData(resolvePath(path), data.getBytes, AnyVersion)
+  }
 
   /**
    * Deletes node.
@@ -234,8 +244,10 @@ class Zooowner(servers: String,
   /**
    * Returns list of children of the node.
    */
-  def children(path: String, maybeWatcher: Option[EventWatcher] = None) =
-    client.getChildren(resolvePath(path), maybeWatcher.getOrElse(null))
+  def children(path: String, maybeWatcher: Option[EventWatcher] = None) = {
+    val watcher = maybeWatcher.orNull
+    client.getChildren(resolvePath(path), watcher)
+  }
 
   /**
    * Tests whether the node is ephemeral.
@@ -247,7 +259,7 @@ class Zooowner(servers: String,
    * Sets up a callback for node events.
    */
   def watch(path: String, persistent: Boolean = true)
-           (reaction: Reaction[Event])
+           (reaction: Reaction[Event]): Unit =
   {
     val reactOn = reaction orElse default[Event]
 
@@ -259,9 +271,8 @@ class Zooowner(servers: String,
         case EventType.NodeCreated => {
           // child watcher isn't set yet for that node so
           // we need to set it up if watcher is persistant
-          if (persistent) {
-            watch(path, this)
-          }
+          if (persistent) watch(path, this)
+
           // since `watch` takes care of setting both data
           // and children watches there is no need to
           // set watcher again via `get`
@@ -279,9 +290,7 @@ class Zooowner(servers: String,
         case EventType.NodeDeleted => {
           // after node deletion we still may be interested
           // in watching it, in that case -- reset watcher
-          if (persistent) {
-            watch(path, this)
-          }
+          if (persistent) watch(path, this)
 
           reactOn { NodeDeleted(path) }
         }
@@ -294,7 +303,7 @@ class Zooowner(servers: String,
   /**
    * Sets up a watcher on node events.
    */
-  def watch(path: String, watcher: EventWatcher) {
+  def watch(path: String, watcher: EventWatcher): Unit = {
     stat(path, Some(watcher))
     // node may not exist yet, so we ignore NoNode exceptions
     ignoring(classOf[NoNodeException]) {
@@ -302,7 +311,6 @@ class Zooowner(servers: String,
     }
   }
 
-  connect()
 }
 
 
