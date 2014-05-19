@@ -172,7 +172,9 @@ class Zooowner(servers: String,
       for (nextPart <- parts) {
         parentPath = (parentPath/nextPart).replaceAll("^/", "")
         if (parentPath != path) {
-          create(parentPath, filler, persistent = true)
+          ignoring(classOf[NodeExistsException]) {
+            create(parentPath, filler, persistent = true)
+          }
         }
       }
     }
@@ -186,13 +188,7 @@ class Zooowner(servers: String,
 
     val data = maybeData.map( _.getBytes("utf8") ).orNull
 
-    try {
-      client.create(resolvePath(path), data, AnyACL, createMode)
-    } catch {
-      case e: NodeExistsException => //TODO: process me
-      case e: KeeperException => println(e)
-      case e: InterruptedException => println(e)
-    }
+    client.create(resolvePath(path), data, AnyACL, createMode)
   }
 
   /**
