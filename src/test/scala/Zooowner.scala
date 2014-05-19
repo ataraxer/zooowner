@@ -223,6 +223,30 @@ class ZooownerSpec extends UnitSpec with Eventually {
     eventually { deleted should be (true) }
   }
 
+
+  it should "return cancellable watcher" in {
+    import com.ataraxer.zooowner.event._
+
+    var created = false
+    var deleted = false
+
+    val watcher = zk.watch("some-node") {
+      case NodeCreated("some-node", Some("value")) =>
+        created = true
+      case NodeDeleted("some-node") =>
+        deleted = true
+    }
+
+    zk.create("some-node", Some("value"))
+    eventually { created should be (true) }
+
+    watcher.stop()
+
+    zk.delete("some-node")
+    Thread.sleep(1000)
+    deleted should be (false)
+  }
+
 }
 
 

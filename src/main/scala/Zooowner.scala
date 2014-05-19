@@ -119,7 +119,6 @@ class Zooowner(servers: String,
   def generateClient =
     new ZooKeeper(servers, timeout.toMillis.toInt, watcher)
 
-
   /**
    * Disconnects from ZooKeeper server.
    */
@@ -259,12 +258,12 @@ class Zooowner(servers: String,
    * Sets up a callback for node events.
    */
   def watch(path: String, persistent: Boolean = true)
-           (reaction: Reaction[Event]): Unit =
+           (reaction: Reaction[Event]): EventWatcher =
   {
     val reactOn = reaction orElse default[Event]
 
     val watcher = new EventWatcher {
-      val self: Option[EventWatcher] =
+      def self: Option[EventWatcher] =
         if (persistent) Some(this) else None
 
       def reaction = {
@@ -303,12 +302,14 @@ class Zooowner(servers: String,
   /**
    * Sets up a watcher on node events.
    */
-  def watch(path: String, watcher: EventWatcher): Unit = {
+  def watch(path: String, watcher: EventWatcher): EventWatcher = {
     stat(path, Some(watcher))
     // node may not exist yet, so we ignore NoNode exceptions
     ignoring(classOf[NoNodeException]) {
       children(path, Some(watcher))
     }
+
+    watcher
   }
 
 }

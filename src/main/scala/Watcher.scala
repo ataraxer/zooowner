@@ -11,13 +11,21 @@ sealed abstract class Watcher[T]
     extends ZKWatcher
 {
   def process(event: WatchedEvent) = {
-    (reaction orElse default[T]) {
-      extract(event)
+    if (active) {
+      (reaction orElse default[T]) {
+        extract(event)
+      }
     }
   }
 
   def reaction: Reaction[T]
   def extract(event: WatchedEvent): T
+
+  private var active = true
+
+  def stop(): Unit = {
+    active = false
+  }
 }
 
 
