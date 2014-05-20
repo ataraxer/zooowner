@@ -196,6 +196,7 @@ class Zooowner(servers: String,
    */
   def stat(path: String, maybeWatcher: Option[EventWatcher] = None) = {
     val watcher = maybeWatcher.orNull
+    if (maybeWatcher.isDefined) activeWatchers :+= watcher
     Option { client.exists(resolvePath(path), watcher) }
   }
 
@@ -209,6 +210,7 @@ class Zooowner(servers: String,
    */
   def get(path: String, maybeWatcher: Option[EventWatcher] = None) = {
     val watcher = maybeWatcher.orNull
+    if (maybeWatcher.isDefined) activeWatchers :+= watcher
     val maybeData = catching(classOf[NoNodeException]).opt {
       client.getData(resolvePath(path), watcher, null)
     }
@@ -241,6 +243,7 @@ class Zooowner(servers: String,
    */
   def children(path: String, maybeWatcher: Option[EventWatcher] = None) = {
     val watcher = maybeWatcher.orNull
+    if (maybeWatcher.isDefined) activeWatchers :+= watcher
     client.getChildren(resolvePath(path), watcher)
   }
 
@@ -249,6 +252,16 @@ class Zooowner(servers: String,
    */
   def isEphemeral(path: String) =
     stat(path).map( _.getEphemeralOwner != 0).getOrElse(false)
+
+  /**
+   * Stores all active node watchers.
+   */
+  private var activeWatchers = List.empty[EventWatcher]
+
+  def removeAllWatchers(): Unit = {
+    activeWatchers foreach { _.stop() }
+    activeWatchers = Nil
+  }
 
   /**
    * Sets up a callback for node events.
@@ -300,6 +313,7 @@ class Zooowner(servers: String,
    */
   def watch(path: String, watcher: EventWatcher): EventWatcher = {
     stat(path, Some(watcher))
+
     // node may not exist yet, so we ignore NoNode exceptions
     ignoring(classOf[NoNodeException]) {
       children(path, Some(watcher))
