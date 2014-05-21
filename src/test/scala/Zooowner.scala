@@ -243,8 +243,48 @@ class ZooownerSpec extends UnitSpec with Eventually {
     watcher.stop()
 
     zk.delete("some-node")
-    Thread.sleep(1000)
+    Thread.sleep(500)
     deleted should be (false)
+  }
+
+
+  it should "cancell all watchers" in {
+    import com.ataraxer.zooowner.event._
+
+    var createdA = false
+    var deletedA = false
+    var createdB = false
+    var deletedB = false
+
+    val watcherA = zk.watch("some-node") {
+      case NodeCreated("some-node", Some("value")) =>
+        createdA = true
+      case NodeDeleted("some-node") =>
+        deletedA = true
+    }
+
+    val watcherB = zk.watch("other-node") {
+      case NodeCreated("other-node", Some("value")) =>
+        createdB = true
+      case NodeDeleted("other-node") =>
+        deletedB = true
+    }
+
+    zk.create("some-node", Some("value"))
+    eventually { createdA should be (true) }
+
+    zk.create("other-node", Some("value"))
+    eventually { createdB should be (true) }
+
+    zk.removeAllWatchers()
+
+    zk.delete("some-node")
+    Thread.sleep(500)
+    deletedA should be (false)
+
+    zk.delete("other-node")
+    Thread.sleep(500)
+    deletedB should be (false)
   }
 
 }
