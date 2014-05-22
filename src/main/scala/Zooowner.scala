@@ -156,7 +156,7 @@ class Zooowner(servers: String,
    * @param persistent Specifies whether created node should be persistent.
    * @param sequential Specifies whether created node should be sequential.
    * @param recursive Specifies whether path to the node should be created.
-   * @param filler Value with which path nodes should be created.
+   * @param filler Optional value with which path nodes should be created.
    */
   def create(path: String,
              maybeData: Option[String] = None,
@@ -169,11 +169,13 @@ class Zooowner(servers: String,
       val parts = path.split("/")
 
       var parentPath = ""
+
       for (nextPart <- parts) {
         parentPath = (parentPath/nextPart).replaceAll("^/", "")
+
         if (parentPath != path) {
           ignoring(classOf[NodeExistsException]) {
-            create(parentPath, filler, persistent = true)
+            create(parentPath, filler, persistent = true, recursive = false)
           }
         }
       }
@@ -211,10 +213,15 @@ class Zooowner(servers: String,
   def get(path: String, maybeWatcher: Option[EventWatcher] = None) = {
     val watcher = maybeWatcher.orNull
     if (maybeWatcher.isDefined) activeWatchers :+= watcher
+
     val maybeData = catching(classOf[NoNodeException]).opt {
       client.getData(resolvePath(path), watcher, null)
     }
-    maybeData map { new String(_) }
+
+    for {
+      data  <- maybeData
+      value <- Option(data)
+    } yield new String(value)
   }
 
   /**
