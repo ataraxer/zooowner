@@ -96,9 +96,24 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "create node with paths" in {
+  it should "create nodes with paths" in {
     zk.create("node/with/long/path", Some("value"), recursive = true)
 
+    zk.get("node/with/long") should be (None)
+    zk.get("node/with/long/path") should be (Some("value"))
+  }
+
+
+  it should "create nodes with paths filled with specified value" in {
+    zk.create(
+      "node/with/long/path",
+      Some("value"),
+      recursive = true,
+      filler = Some("filler")
+    )
+
+    zk.get("node") should be (Some("filler"))
+    zk.get("node/with/long") should be (Some("filler"))
     zk.get("node/with/long/path") should be (Some("value"))
   }
 
