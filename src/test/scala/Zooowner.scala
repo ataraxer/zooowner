@@ -302,6 +302,20 @@ class ZooownerSpec extends UnitSpec with Eventually {
     deletedB should be (false)
   }
 
+
+  it should "get node value asynchronously" in {
+    import Callback._
+
+    var result = Option.empty[String]
+    zk.create("some-node", Some("value"))
+
+    zk.async.get("some-node") {
+      case OK(value) => result = value
+    }
+
+    eventually { result should be (Some("value")) }
+  }
+
 }
 
 

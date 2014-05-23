@@ -2,6 +2,7 @@ package com.ataraxer.zooowner
 
 import scala.concurrent.duration._
 
+import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.Watcher.Event.{KeeperState, EventType}
@@ -327,6 +328,23 @@ class Zooowner(servers: String,
     }
 
     watcher
+  }
+
+
+  object async {
+    /**
+     * Asynchronous version of [[Zooowner.get]].
+     */
+    def get(path: String, maybeWatcher: Option[EventWatcher] = None)
+           (callback: Reaction[Callback.Response]) =
+    {
+      val watcher = maybeWatcher.orNull
+      if (maybeWatcher.isDefined) activeWatchers :+= watcher
+
+      val asyncCallback = DataResponse(callback)
+
+      client.getData(resolvePath(path), watcher, asyncCallback, null)
+    }
   }
 
 }
