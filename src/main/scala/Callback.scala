@@ -21,32 +21,44 @@ object Callback {
  * Callback class represents abstract callback for asynchronous ZooKeeper
  * operation.
  */
-sealed abstract class Callback extends AsyncCallback
-
-
-case class DataResponse(reaction: Reaction[Callback.Response])
-    extends DataCallback
+sealed abstract class Callback
+  (reaction: Reaction[Callback.Response])
+    extends AsyncCallback
 {
   import Callback._
 
-  private val reactOn = reaction orElse default[Response]
+  protected val reactOn = reaction orElse default[Response]
 
-  def processResult(returnCode: Int, path: String,
-                    context: Any, data: Array[Byte],
-                    stat: Stat) =
+  protected def processCode(codeNumber: Int)
+                           (process: PartialFunction[Code, Response]) =
   {
-    Code.get(returnCode) match {
-      case Code.OK => reactOn {
-        OK(Option(data) map { new String(_) })
-      }
-
-      case Code.NONODE => reactOn {
-        NoNode(path)
+    Code.get(codeNumber) match {
+      case code if process.isDefinedAt(code) => reactOn {
+        process(code)
       }
 
       case unexpectedCode => reactOn {
         Error(unexpectedCode)
       }
+    }
+  }
+}
+
+
+case class OnData(reaction: Reaction[Callback.Response])
+    extends Callback(reaction) with DataCallback
+{
+  import Callback._
+
+  def processResult(returnCode: Int, path: String, context: Any,
+                    data: Array[Byte], stat: Stat): Unit =
+  {
+    processCode(returnCode) {
+      case Code.OK =>
+        OK(Option(data) map { new String(_) })
+
+      case Code.NONODE =>
+        NoNode(path)
     }
   }
 }

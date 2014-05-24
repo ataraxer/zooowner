@@ -341,7 +341,7 @@ class Zooowner(servers: String,
       val watcher = maybeWatcher.orNull
       if (maybeWatcher.isDefined) activeWatchers :+= watcher
 
-      val asyncCallback = DataResponse(callback)
+      val asyncCallback = OnData(callback)
 
       client.getData(resolvePath(path), watcher, asyncCallback, null)
     }
