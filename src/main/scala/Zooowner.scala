@@ -337,11 +337,13 @@ class Zooowner(servers: String,
 
 
   object async {
+    import Callback.Response
+
     /**
      * Asynchronous version of [[Zooowner.stat]].
      */
     def stat(path: String, maybeWatcher: Option[EventWatcher] = None)
-            (callback: Reaction[Callback.Response]): Unit =
+            (callback: Reaction[Response]): Unit =
     {
       val watcher = maybeWatcher.orNull
       if (maybeWatcher.isDefined) activeWatchers :+= watcher
@@ -358,7 +360,7 @@ class Zooowner(servers: String,
                sequential: Boolean = false,
                recursive: Boolean = false,
                filler: Option[String] = None)
-              (callback: Reaction[Callback.Response]): Unit =
+              (callback: Reaction[Response]): Unit =
     {
       val data = maybeData.map( _.getBytes("utf8") ).orNull
 
@@ -372,9 +374,20 @@ class Zooowner(servers: String,
     /**
      * Asynchronous version of [[Zooowner.delete]].
      */
-    def delete(path: String)
-              (callback: Reaction[Callback.Response]): Unit =
+    def delete(path: String, recursive: Boolean = false)
+              (callback: Reaction[Response]): Unit =
     {
+      if (recursive) {
+        async.children(path) {
+          case Callback.NodeChildren(nodeChildren) => {
+            for (child <- nodeChildren) {
+              val childPath = path/child
+              async.delete(childPath, recursive = true)(Zooowner.default[Response])
+            }
+          }
+        }
+      }
+
       client.delete(resolvePath(path), AnyVersion, OnDeleted(callback), null)
     }
 
@@ -382,7 +395,7 @@ class Zooowner(servers: String,
      * Asynchronous version of [[Zooowner.set]].
      */
     def set(path: String, data: String)
-           (callback: Reaction[Callback.Response]): Unit =
+           (callback: Reaction[Response]): Unit =
     {
       client.setData(
         resolvePath(path), data.getBytes, AnyVersion,
@@ -394,7 +407,7 @@ class Zooowner(servers: String,
      * Asynchronous version of [[Zooowner.get]].
      */
     def get(path: String, maybeWatcher: Option[EventWatcher] = None)
-           (callback: Reaction[Callback.Response]): Unit =
+           (callback: Reaction[Response]): Unit =
     {
       val watcher = maybeWatcher.orNull
       if (maybeWatcher.isDefined) activeWatchers :+= watcher
@@ -406,7 +419,7 @@ class Zooowner(servers: String,
      * Asynchronous version of [[Zooowner.children]].
      */
     def children(path: String, maybeWatcher: Option[EventWatcher] = None)
-                (callback: Reaction[Callback.Response]): Unit =
+                (callback: Reaction[Response]): Unit =
     {
       val watcher = maybeWatcher.orNull
       if (maybeWatcher.isDefined) activeWatchers :+= watcher
