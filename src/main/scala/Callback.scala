@@ -67,7 +67,7 @@ sealed abstract class Callback
 /**
  * Fires up on node creation.
  */
-case class OnCreation(reaction: Reaction[Callback.Response])
+case class OnCreated(reaction: Reaction[Callback.Response])
   extends Callback(reaction) with StringCallback
 {
   import Callback._
@@ -85,7 +85,7 @@ case class OnCreation(reaction: Reaction[Callback.Response])
 /**
  * Fires up on node deletion.
  */
-case class OnDeletion(reaction: Reaction[Callback.Response])
+case class OnDeleted(reaction: Reaction[Callback.Response])
     extends Callback(reaction) with VoidCallback
 {
   import Callback._

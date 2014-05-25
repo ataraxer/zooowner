@@ -35,6 +35,15 @@ object Zooowner {
   implicit class SlashSeparatedPath(path: String) {
     def / (subpath: String) = path + "/" + subpath
   }
+
+  def createMode(persistent: Boolean, sequential: Boolean) = {
+    (persistent, sequential) match {
+      case (true, true)   => PERSISTENT_SEQUENTIAL
+      case (true, false)  => PERSISTENT
+      case (false, true)  => EPHEMERAL_SEQUENTIAL
+      case (false, false) => EPHEMERAL
+    }
+  }
 }
 
 
@@ -182,16 +191,12 @@ class Zooowner(servers: String,
       }
     }
 
-    val createMode = (persistent, sequential) match {
-      case (true, true)   => PERSISTENT_SEQUENTIAL
-      case (true, false)  => PERSISTENT
-      case (false, true)  => EPHEMERAL_SEQUENTIAL
-      case (false, false) => EPHEMERAL
-    }
-
     val data = maybeData.map( _.getBytes("utf8") ).orNull
 
-    client.create(resolvePath(path), data, AnyACL, createMode)
+    client.create(
+      resolvePath(path), data, AnyACL,
+      createMode(persistent, sequential)
+    )
   }
 
   /**
@@ -286,7 +291,7 @@ class Zooowner(servers: String,
       def reaction = {
         case EventType.NodeCreated => {
           // child watcher isn't set yet for that node so
-          // we need to set it up if watcher is persistant
+          // we need to set it up if watcher is persistent
           if (persistent) watch(path, this)
 
           // since `watch` takes care of setting both data
@@ -333,17 +338,47 @@ class Zooowner(servers: String,
 
   object async {
     /**
-     * Asynchronous version of [[Zooowner.get]].
+     * Asynchronous version of [[Zooowner.stat]]
      */
-    def get(path: String, maybeWatcher: Option[EventWatcher] = None)
-           (callback: Reaction[Callback.Response]) =
+    def stat(path: String, maybeWatcher: Option[EventWatcher] = None)
+            (callback: Reaction[Callback.Response]): Unit =
     {
       val watcher = maybeWatcher.orNull
       if (maybeWatcher.isDefined) activeWatchers :+= watcher
 
-      val asyncCallback = OnData(callback)
+      client.exists(resolvePath(path), watcher, OnStat(callback), null)
+    }
 
-      client.getData(resolvePath(path), watcher, asyncCallback, null)
+    /**
+     * Asynchronous version of [[Zooowner.create]]
+     */
+    def create(path: String,
+               maybeData: Option[String],
+               persistent: Boolean = false,
+               sequential: Boolean = false,
+               recursive: Boolean = false,
+               filler: Option[String] = None)
+              (callback: Reaction[Callback.Response]): Unit =
+    {
+      val data = maybeData.map( _.getBytes("utf8") ).orNull
+
+      client.create(
+        resolvePath(path), data, AnyACL,
+        createMode(persistent, sequential),
+        OnCreated(callback), null
+      )
+    }
+
+    /**
+     * Asynchronous version of [[Zooowner.get]].
+     */
+    def get(path: String, maybeWatcher: Option[EventWatcher] = None)
+           (callback: Reaction[Callback.Response]): Unit =
+    {
+      val watcher = maybeWatcher.orNull
+      if (maybeWatcher.isDefined) activeWatchers :+= watcher
+
+      client.getData(resolvePath(path), watcher, OnData(callback), null)
     }
   }
 
