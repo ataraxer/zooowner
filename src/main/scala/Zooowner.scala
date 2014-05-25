@@ -243,7 +243,7 @@ class Zooowner(servers: String,
   def delete(path: String, recursive: Boolean = false): Unit = {
     if (recursive) {
       for (child <- children(path)) {
-        val childPath = path + "/" + child
+        val childPath = path/child
         delete(childPath, recursive = true)
       }
     }
@@ -338,7 +338,7 @@ class Zooowner(servers: String,
 
   object async {
     /**
-     * Asynchronous version of [[Zooowner.stat]]
+     * Asynchronous version of [[Zooowner.stat]].
      */
     def stat(path: String, maybeWatcher: Option[EventWatcher] = None)
             (callback: Reaction[Callback.Response]): Unit =
@@ -350,7 +350,7 @@ class Zooowner(servers: String,
     }
 
     /**
-     * Asynchronous version of [[Zooowner.create]]
+     * Asynchronous version of [[Zooowner.create]].
      */
     def create(path: String,
                maybeData: Option[String],
@@ -370,6 +370,27 @@ class Zooowner(servers: String,
     }
 
     /**
+     * Asynchronous version of [[Zooowner.delete]].
+     */
+    def delete(path: String)
+              (callback: Reaction[Callback.Response]): Unit =
+    {
+      client.delete(resolvePath(path), AnyVersion, OnDeleted(callback), null)
+    }
+
+    /**
+     * Asynchronous version of [[Zooowner.set]].
+     */
+    def set(path: String, data: String)
+           (callback: Reaction[Callback.Response]): Unit =
+    {
+      client.setData(
+        resolvePath(path), data.getBytes, AnyVersion,
+        OnStat(callback), null
+      )
+    }
+
+    /**
      * Asynchronous version of [[Zooowner.get]].
      */
     def get(path: String, maybeWatcher: Option[EventWatcher] = None)
@@ -379,6 +400,18 @@ class Zooowner(servers: String,
       if (maybeWatcher.isDefined) activeWatchers :+= watcher
 
       client.getData(resolvePath(path), watcher, OnData(callback), null)
+    }
+
+    /**
+     * Asynchronous version of [[Zooowner.children]].
+     */
+    def children(path: String, maybeWatcher: Option[EventWatcher] = None)
+                (callback: Reaction[Callback.Response]): Unit =
+    {
+      val watcher = maybeWatcher.orNull
+      if (maybeWatcher.isDefined) activeWatchers :+= watcher
+
+      client.getChildren(resolvePath(path), watcher, OnChildren(callback), null)
     }
   }
 
