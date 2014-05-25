@@ -310,7 +310,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zk.create("some-node", Some("value"))
 
     zk.async.get("some-node") {
-      case OK(value) => result = value
+      case NodeData(value) => result = value
     }
 
     eventually { result should be (Some("value")) }
