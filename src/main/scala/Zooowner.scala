@@ -12,6 +12,7 @@ import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.ZooDefs.Ids
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ArrayBuffer
 import scala.util.control.Exception._
 
 import com.ataraxer.zooowner.event._
@@ -43,6 +44,18 @@ object Zooowner {
       case (false, true)  => EPHEMERAL_SEQUENTIAL
       case (false, false) => EPHEMERAL
     }
+  }
+
+  def parentPaths(path: String) = {
+    var parentPath = ""
+    var result = ArrayBuffer.empty[String]
+
+    for (nextPart <- path.split("/")) {
+      parentPath = (parentPath/nextPart).replaceAll("^/", "")
+      if (parentPath != path) result += parentPath
+    }
+
+    result
   }
 }
 
@@ -176,17 +189,9 @@ class Zooowner(servers: String,
              filler: Option[String] = None): Unit =
   {
     if (recursive) {
-      val parts = path.split("/")
-
-      var parentPath = ""
-
-      for (nextPart <- parts) {
-        parentPath = (parentPath/nextPart).replaceAll("^/", "")
-
-        if (parentPath != path) {
-          ignoring(classOf[NodeExistsException]) {
-            create(parentPath, filler, persistent = true, recursive = false)
-          }
+      for (parentPath <- parentPaths(path)) {
+        ignoring(classOf[NodeExistsException]) {
+          create(parentPath, filler, persistent = true, recursive = false)
         }
       }
     }
@@ -362,6 +367,15 @@ class Zooowner(servers: String,
                filler: Option[String] = None)
               (callback: Reaction[Response]): Unit =
     {
+      if (recursive) {
+        for (parentPath <- parentPaths(path)) {
+          ignoring(classOf[NodeExistsException]) {
+            create(parentPath, filler, persistent = true,
+                   recursive = false)(default[Response])
+          }
+        }
+      }
+
       val data = maybeData.map( _.getBytes("utf8") ).orNull
 
       client.create(
