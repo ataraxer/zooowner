@@ -391,18 +391,29 @@ class Zooowner(servers: String,
     def delete(path: String, recursive: Boolean = false)
               (callback: Reaction[Response]): Unit =
     {
-      if (recursive) {
-        async.children(path) {
-          case Callback.NodeChildren(nodeChildren) => {
-            for (child <- nodeChildren) {
-              val childPath = path/child
-              async.delete(childPath, recursive = true)(Zooowner.default[Response])
-            }
+      def deleteChildren(nodeChildren: List[String]): Unit = {
+        var counter = 0
+
+        for (child <- nodeChildren) {
+          val childPath = path/child
+
+          async.delete(childPath, recursive = true) {
+            case Callback.NodeDeleted(_) =>
+              if (counter == nodeChildren.size) {
+                client.delete(resolvePath(path), AnyVersion, OnDeleted(callback), null)
+              }
           }
         }
       }
 
-      client.delete(resolvePath(path), AnyVersion, OnDeleted(callback), null)
+      if (recursive) {
+        async.children(path) {
+          case Callback.NodeChildren(nodeChildren) =>
+            deleteChildren(nodeChildren)
+        }
+      } else {
+        client.delete(resolvePath(path), AnyVersion, OnDeleted(callback), null)
+      }
     }
 
     /**
