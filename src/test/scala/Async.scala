@@ -3,6 +3,7 @@ package com.ataraxer.zooowner
 import com.ataraxer.test.UnitSpec
 import com.ataraxer.zooowner.Callback._
 
+import org.apache.zookeeper.data.Stat
 import org.apache.curator.test.TestingServer
 
 import org.scalatest.concurrent.Eventually
@@ -73,6 +74,19 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     zk.get("node") should be (Some("filler"))
     zk.get("node/with/long") should be (Some("filler"))
     zk.get("node/with/long/path") should be (Some("value"))
+  }
+
+
+  it should "return stat of the node asynchronously" in {
+    zk.create("node", Some("value"))
+
+    var result = Option.empty[Stat]
+
+    zk.async.stat("node") {
+      case NodeStat(stat) => result = Option(stat)
+    }
+
+    eventually { result should not be (None) }
   }
 
 
