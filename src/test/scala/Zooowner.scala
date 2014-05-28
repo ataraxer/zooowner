@@ -141,6 +141,15 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
+  it should "return a list of nodes children" in {
+    zk.create("node", Some("value"), persistent = true)
+    zk.create("node/foo", Some("foo-value"))
+    zk.create("node/bar", Some("bar-value"))
+
+    zk.children("node") should be (List("foo", "bar"))
+  }
+
+
   it should "delete nodes" in {
     zk.create("node", Some("first value"))
     zk.delete("node")

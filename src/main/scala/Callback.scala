@@ -21,7 +21,7 @@ object Callback {
   case class NodeData(data: Option[String]) extends Response
   case class NodeChildren(children: List[String]) extends Response
   case class NodeCreated(path: String) extends Response
-  case class NodeDeleted(path: String) extends Response
+  case class NodeDeleted(path: String, counter: Int) extends Response
   case class NoNode(path: String) extends Response
   case class NotEmpty(path: String) extends Response
   case class Error(code: Code) extends Response
@@ -90,9 +90,12 @@ case class OnDeleted(reaction: Reaction[Callback.Response])
 {
   import Callback._
 
+  private var counter = 0
+
   def processResult(returnCode: Int, path: String, context: Any) = {
+    counter += 1
     processCode(returnCode) {
-      case Code.OK       => NodeDeleted(path)
+      case Code.OK       => NodeDeleted(path, counter)
       case Code.NONODE   => NoNode(path)
       case Code.NOTEMPTY => NotEmpty(path)
     }

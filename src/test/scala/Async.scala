@@ -123,7 +123,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var done = false
 
     zk.async.delete("node") {
-      case NodeDeleted(_) => done = true
+      case NodeDeleted(_, _) => done = true
     }
 
     eventually { done should be (true) }
@@ -131,8 +131,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     zk.exists("node") should be (false)
   }
 
-  /*
-  // TODO: FIXME
+
   it should "delete nodes recursively asynchronously" in {
     zk.create("node", Some("first value"), persistent = true)
     zk.create("node/child", Some("child value"), persistent = true)
@@ -140,7 +139,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var done = false
 
     zk.async.delete("node", recursive = true) {
-      case NodeDeleted(_) => done = true
+      case NodeDeleted(_, _) => done = true
     }
 
     eventually { done should be (true) }
@@ -148,7 +147,6 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     zk.exists("node") should be (false)
     zk.exists("node/child") should be (false)
   }
-  */
 
 }
 

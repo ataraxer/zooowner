@@ -262,7 +262,7 @@ class Zooowner(servers: String,
   def children(path: String, maybeWatcher: Option[EventWatcher] = None) = {
     val watcher = maybeWatcher.orNull
     if (maybeWatcher.isDefined) activeWatchers :+= watcher
-    client.getChildren(resolvePath(path), watcher)
+    client.getChildren(resolvePath(path), watcher).toList
   }
 
   /**
@@ -391,28 +391,36 @@ class Zooowner(servers: String,
     def delete(path: String, recursive: Boolean = false)
               (callback: Reaction[Response]): Unit =
     {
-      def deleteChildren(nodeChildren: List[String]): Unit = {
-        var counter = 0
+      def deleteNode(path: String, hook: OnDeleted): Unit =
+        client.delete(resolvePath(path), AnyVersion, hook, null)
+
+      def deleteChildren(parent: String, nodeChildren: List[String],
+                         parentCallback: OnDeleted): Unit =
+      {
+        val hook = OnDeleted {
+          case Callback.NodeDeleted(path, counter)
+            if (counter == nodeChildren.size) =>
+              deleteNode(parent, parentCallback)
+        }
 
         for (child <- nodeChildren) {
-          val childPath = path/child
-
-          async.delete(childPath, recursive = true) {
-            case Callback.NodeDeleted(_) =>
-              if (counter == nodeChildren.size) {
-                client.delete(resolvePath(path), AnyVersion, OnDeleted(callback), null)
-              }
-          }
+          deleteRecursive(path/child, hook)
         }
       }
 
-      if (recursive) {
+      def deleteRecursive(path: String, hook: OnDeleted): Unit = {
         async.children(path) {
+          case Callback.NodeChildren(Nil) =>
+            deleteNode(path, hook)
+
           case Callback.NodeChildren(nodeChildren) =>
-            deleteChildren(nodeChildren)
+            deleteChildren(path, nodeChildren, hook)
         }
-      } else {
-        client.delete(resolvePath(path), AnyVersion, OnDeleted(callback), null)
+      }
+
+      recursive match {
+        case true  => deleteRecursive(path, OnDeleted(callback))
+        case false => deleteNode(path, OnDeleted(callback))
       }
     }
 
