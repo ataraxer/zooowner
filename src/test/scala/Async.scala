@@ -25,12 +25,12 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     PatienceConfig(timeout = 10.seconds)
 
   var zkServer: TestingServer = null
-  var zk: Zooowner = null
+  var zk: Zooowner with Async = null
 
 
   before {
     zkServer = new TestingServer(port)
-    zk = new Zooowner(zkAddress, 15.seconds, "prefix")
+    zk = new Zooowner(zkAddress, 15.seconds, "prefix") with Async
     eventually { zk.isConnected should be (true) }
   }
 

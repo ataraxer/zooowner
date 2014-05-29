@@ -1,5 +1,4 @@
 package com.ataraxer.zooowner
-
 import scala.concurrent.duration._
 
 import org.apache.zookeeper.data.Stat
@@ -84,12 +83,12 @@ class Zooowner(servers: String,
    * Hook-function, that will be called when connection to ZooKeeper
    * server is established.
    */
-  private var connectionHook: Option[Action] = None
+  protected var connectionHook: Option[Action] = None
 
   /**
    * Internal watcher, that controls ZooKeeper connection life-cycle.
    */
-  private val watcher = StateWatcher {
+  protected val watcher = StateWatcher {
     case SyncConnected => {
       assert { isConnected == true }
 
@@ -107,12 +106,12 @@ class Zooowner(servers: String,
    * Internal ZooKeeper client, through which all interactions with ZK are
    * being performed.
    */
-  private var client: ZooKeeper = generateClient
+  protected var client: ZooKeeper = generateClient
 
   /**
    * Returns path prefixed with [[pathPrefix]]
    */
-  private def prefixedPath(path: String) = {
+  protected def prefixedPath(path: String) = {
     // path should always start from slash
     if (path startsWith "/") {
       throw new IllegalArgumentException
@@ -125,13 +124,13 @@ class Zooowner(servers: String,
    * Path resolver, that distincts between absolute paths starting with `/`
    * character and paths relative to [[pathPrefix]].
    */
-  private def resolvePath(path: String) =
+  protected def resolvePath(path: String) =
     if (path startsWith "/") path else prefixedPath(path)
 
   /**
    * Initiates connection to ZooKeeper server.
    */
-  private def connect(): Unit = {
+  protected def connect(): Unit = {
     disconnect()
     client = generateClient
   }
@@ -145,7 +144,7 @@ class Zooowner(servers: String,
   /**
    * Disconnects from ZooKeeper server.
    */
-  private def disconnect(): Unit = {
+  protected def disconnect(): Unit = {
     client.close()
   }
 
@@ -274,7 +273,7 @@ class Zooowner(servers: String,
   /**
    * Stores all active node watchers.
    */
-  private var activeWatchers = List.empty[EventWatcher]
+  protected var activeWatchers = List.empty[EventWatcher]
 
   def removeAllWatchers(): Unit = {
     activeWatchers foreach { _.stop() }
@@ -338,127 +337,6 @@ class Zooowner(servers: String,
     }
 
     watcher
-  }
-
-
-  object async {
-    import Callback.Response
-
-    /**
-     * Asynchronous version of [[Zooowner.stat]].
-     */
-    def stat(path: String, maybeWatcher: Option[EventWatcher] = None)
-            (callback: Reaction[Response]): Unit =
-    {
-      val watcher = maybeWatcher.orNull
-      if (maybeWatcher.isDefined) activeWatchers :+= watcher
-
-      client.exists(resolvePath(path), watcher, OnStat(callback), null)
-    }
-
-    /**
-     * Asynchronous version of [[Zooowner.create]].
-     */
-    def create(path: String,
-               maybeData: Option[String],
-               persistent: Boolean = false,
-               sequential: Boolean = false,
-               recursive: Boolean = false,
-               filler: Option[String] = None)
-              (callback: Reaction[Response]): Unit =
-    {
-      if (recursive) {
-        for (parentPath <- parentPaths(path)) {
-          ignoring(classOf[NodeExistsException]) {
-            create(parentPath, filler, persistent = true,
-                   recursive = false)(default[Response])
-          }
-        }
-      }
-
-      val data = maybeData.map( _.getBytes("utf8") ).orNull
-
-      client.create(
-        resolvePath(path), data, AnyACL,
-        createMode(persistent, sequential),
-        OnCreated(callback), null
-      )
-    }
-
-    /**
-     * Asynchronous version of [[Zooowner.delete]].
-     */
-    def delete(path: String, recursive: Boolean = false)
-              (callback: Reaction[Response]): Unit =
-    {
-      def deleteNode(path: String, hook: OnDeleted): Unit =
-        client.delete(resolvePath(path), AnyVersion, hook, null)
-
-      def deleteChildren(parent: String, nodeChildren: List[String],
-                         parentCallback: OnDeleted): Unit =
-      {
-        val hook = OnDeleted {
-          case Callback.NodeDeleted(path, counter)
-            if (counter == nodeChildren.size) =>
-              deleteNode(parent, parentCallback)
-        }
-
-        for (child <- nodeChildren) {
-          deleteRecursive(path/child, hook)
-        }
-      }
-
-      def deleteRecursive(path: String, hook: OnDeleted): Unit = {
-        async.children(path) {
-          case Callback.NodeChildren(Nil) =>
-            deleteNode(path, hook)
-
-          case Callback.NodeChildren(nodeChildren) =>
-            deleteChildren(path, nodeChildren, hook)
-        }
-      }
-
-      recursive match {
-        case true  => deleteRecursive(path, OnDeleted(callback))
-        case false => deleteNode(path, OnDeleted(callback))
-      }
-    }
-
-    /**
-     * Asynchronous version of [[Zooowner.set]].
-     */
-    def set(path: String, data: String)
-           (callback: Reaction[Response]): Unit =
-    {
-      client.setData(
-        resolvePath(path), data.getBytes, AnyVersion,
-        OnStat(callback), null
-      )
-    }
-
-    /**
-     * Asynchronous version of [[Zooowner.get]].
-     */
-    def get(path: String, maybeWatcher: Option[EventWatcher] = None)
-           (callback: Reaction[Response]): Unit =
-    {
-      val watcher = maybeWatcher.orNull
-      if (maybeWatcher.isDefined) activeWatchers :+= watcher
-
-      client.getData(resolvePath(path), watcher, OnData(callback), null)
-    }
-
-    /**
-     * Asynchronous version of [[Zooowner.children]].
-     */
-    def children(path: String, maybeWatcher: Option[EventWatcher] = None)
-                (callback: Reaction[Response]): Unit =
-    {
-      val watcher = maybeWatcher.orNull
-      if (maybeWatcher.isDefined) activeWatchers :+= watcher
-
-      client.getChildren(resolvePath(path), watcher, OnChildren(callback), null)
-    }
   }
 
 }
