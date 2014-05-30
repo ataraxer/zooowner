@@ -1,5 +1,6 @@
 package com.ataraxer.zooowner
-import scala.concurrent.duration._
+
+import com.ataraxer.zooowner.event._
 
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.ZooKeeper
@@ -10,11 +11,10 @@ import org.apache.zookeeper.KeeperException
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.ZooDefs.Ids
 
+import scala.concurrent.duration._
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 import scala.util.control.Exception._
-
-import com.ataraxer.zooowner.event._
 
 import scala.language.implicitConversions
 
@@ -138,7 +138,7 @@ class Zooowner(servers: String,
   /**
    * Generates new ZooKeeper client.
    */
-  def generateClient =
+  protected def generateClient =
     new ZooKeeper(servers, timeout.toMillis.toInt, watcher)
 
   /**
@@ -161,13 +161,28 @@ class Zooowner(servers: String,
    * Tests whether the connection to ZooKeeper server is established.
    */
   def isConnected =
-    client.getState == States.CONNECTED
+    client != null && client.getState == States.CONNECTED
 
   /**
    * Initiates disonnection from ZooKeeper server and performs clean up.
    */
   def close(): Unit = {
     disconnect()
+  }
+
+  /**
+   * Takes a function to be called on client taking care of ensuring that it's
+   * called with active instance of ZooKeeper client.
+   */
+  def applyToClient(call: ZooKeeper => Unit): Unit = {
+    if (!isConnected) connect()
+
+    try call(client) catch {
+      case _: KeeperException.ConnectionLossException => {
+        connect()
+        applyToClient(call)
+      }
+    }
   }
 
   /**
