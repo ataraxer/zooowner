@@ -1,7 +1,7 @@
 package com.ataraxer.zooowner
 
 import com.ataraxer.test.UnitSpec
-import com.ataraxer.zooowner.Callback._
+import com.ataraxer.zooowner.message._
 
 import org.apache.zookeeper.data.Stat
 import org.apache.curator.test.TestingServer
@@ -47,7 +47,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var done = false
 
     zk.async.create("node/with/long/path", Some("value"), recursive = true) {
-      case NodeCreated(_) => done = true
+      case NodeCreated(_, _) => done = true
     }
 
     eventually { done should be (true) }
@@ -67,7 +67,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
       Some("value"),
       recursive = true,
       filler = Some("filler")
-    ) { case NodeCreated(_) => done = true }
+    ) { case NodeCreated(_, _) => done = true }
 
     eventually { done should be (true) }
 

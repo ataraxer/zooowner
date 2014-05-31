@@ -1,6 +1,6 @@
 package com.ataraxer.zooowner
 
-import com.ataraxer.zooowner.Callback._
+import com.ataraxer.zooowner.message._
 
 import org.apache.zookeeper.ZooKeeper
 

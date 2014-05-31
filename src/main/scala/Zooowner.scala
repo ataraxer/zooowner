@@ -1,6 +1,6 @@
 package com.ataraxer.zooowner
 
-import com.ataraxer.zooowner.event._
+import com.ataraxer.zooowner.message._
 
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.ZooKeeper
@@ -332,7 +332,7 @@ class Zooowner(servers: String,
           // in watching it, in that case -- reset watcher
           if (persistent) watch(path, this)
 
-          reactOn { NodeDeleted(path) }
+          reactOn { NodeDeleted(path, 0) }
         }
       }
     }

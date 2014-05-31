@@ -1,6 +1,7 @@
 package com.ataraxer.zooowner
 
 import com.ataraxer.test.UnitSpec
+import com.ataraxer.zooowner.message._
 
 import org.apache.curator.test.TestingServer
 
@@ -179,7 +180,6 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
   it should "set one-time watches on nodes" in {
     import com.ataraxer.zooowner.Zooowner.Reaction
-    import com.ataraxer.zooowner.event._
 
     var created = false
     var changed = false
@@ -191,7 +191,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
         created = true
       case NodeChanged("some-node", Some("new-value")) =>
         changed = true
-      case NodeDeleted("some-node") =>
+      case NodeDeleted("some-node", _) =>
         deleted = true
       case NodeChildrenChanged("some-node", Seq("child")) =>
         childCreated = true
@@ -216,8 +216,6 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "set persistent watches on nodes" in {
-    import com.ataraxer.zooowner.event._
-
     var created = false
     var changed = false
     var deleted = false
@@ -228,7 +226,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
         created = true
       case NodeChanged("some-node", Some("new-value")) =>
         changed = true
-      case NodeDeleted("some-node") =>
+      case NodeDeleted("some-node", _) =>
         deleted = true
       case NodeChildrenChanged("some-node", Seq("child")) =>
         childCreated = true
@@ -249,15 +247,13 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "return cancellable watcher" in {
-    import com.ataraxer.zooowner.event._
-
     var created = false
     var deleted = false
 
     val watcher = zk.watch("some-node") {
       case NodeCreated("some-node", Some("value")) =>
         created = true
-      case NodeDeleted("some-node") =>
+      case NodeDeleted("some-node", _) =>
         deleted = true
     }
 
@@ -273,8 +269,6 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "cancell all watchers" in {
-    import com.ataraxer.zooowner.event._
-
     var createdA = false
     var deletedA = false
     var createdB = false
@@ -283,14 +277,14 @@ class ZooownerSpec extends UnitSpec with Eventually {
     val watcherA = zk.watch("some-node") {
       case NodeCreated("some-node", Some("value")) =>
         createdA = true
-      case NodeDeleted("some-node") =>
+      case NodeDeleted("some-node", _) =>
         deletedA = true
     }
 
     val watcherB = zk.watch("other-node") {
       case NodeCreated("other-node", Some("value")) =>
         createdB = true
-      case NodeDeleted("other-node") =>
+      case NodeDeleted("other-node", _) =>
         deletedB = true
     }
 
