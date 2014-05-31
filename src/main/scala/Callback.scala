@@ -93,7 +93,7 @@ case class OnStat(reaction: Reaction[Response])
                     stat: Stat) =
   {
     processCode(returnCode) {
-      case Code.OK     => NodeStat(stat)
+      case Code.OK     => NodeStat(path, stat)
       case Code.NONODE => NoNode(path)
     }
   }
@@ -112,7 +112,7 @@ case class OnData(reaction: Reaction[Response])
                     data: ZKData, stat: Stat): Unit =
   {
     processCode(returnCode) {
-      case Code.OK     => NodeData(serialize(data))
+      case Code.OK     => NodeData(path, serialize(data))
       case Code.NONODE => NoNode(path)
     }
   }
@@ -129,7 +129,7 @@ case class OnChildren(reaction: Reaction[Response])
                     children: JavaList[String], stat: Stat) =
   {
     processCode(returnCode) {
-      case Code.OK => NodeChildren(children.toList)
+      case Code.OK => NodeChildren(path, children.toList)
     }
   }
 }

@@ -83,7 +83,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var result = Option.empty[Stat]
 
     zk.async.stat("node") {
-      case NodeStat(stat) => result = Option(stat)
+      case NodeStat(_, stat) => result = Option(stat)
     }
 
     eventually { result should not be (None) }
@@ -96,7 +96,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var result = Option.empty[String]
 
     zk.async.get("node") {
-      case NodeData(data) => result = data
+      case NodeData(_, data) => result = data
     }
 
     eventually { result should be (Some("value")) }
@@ -107,7 +107,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var result = Option.empty[String]
 
     zk.async.get("non-existant-node") {
-      case NodeData(data) => result = data
+      case NodeData(_, data) => result = data
     }
 
     eventually { result should be (None) }
@@ -122,7 +122,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var done = false
 
     zk.async.set("node", "second value") {
-      case NodeStat(_) => done = true
+      case _: NodeStat => done = true
     }
 
     eventually { done should be (true) }
@@ -137,7 +137,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var done = false
 
     zk.async.delete("node") {
-      case NodeDeleted(_, _) => done = true
+      case _: NodeDeleted => done = true
     }
 
     eventually { done should be (true) }
@@ -153,7 +153,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var done = false
 
     zk.async.delete("node", recursive = true) {
-      case NodeDeleted(_, _) => done = true
+      case _: NodeDeleted => done = true
     }
 
     eventually { done should be (true) }

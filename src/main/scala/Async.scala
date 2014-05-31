@@ -89,10 +89,10 @@ trait Async { this: Zooowner =>
 
       def deleteRecursive(path: String, hook: OnDeleted): Unit = {
         async.children(path) {
-          case NodeChildren(Nil) =>
+          case NodeChildren(_, Nil) =>
             deleteNode(path, hook)
 
-          case NodeChildren(nodeChildren) =>
+          case NodeChildren(_, nodeChildren) =>
             deleteChildren(path, nodeChildren, hook)
         }
       }
