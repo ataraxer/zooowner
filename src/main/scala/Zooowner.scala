@@ -74,10 +74,7 @@ class Zooowner(servers: String,
   import Zooowner._
   import KeeperState._
 
-  // path prefix should be simple identifier
-  if (pathPrefix contains "/") {
-    throw new IllegalArgumentException
-  }
+  require(pathPrefix matches "^\\w+$", "path prefix should be simple identifier")
 
   /*
    * Hook-function, that will be called when connection to ZooKeeper
@@ -112,11 +109,7 @@ class Zooowner(servers: String,
    * Returns path prefixed with [[pathPrefix]]
    */
   protected def prefixedPath(path: String) = {
-    // path should always start from slash
-    if (path startsWith "/") {
-      throw new IllegalArgumentException
-    }
-
+    require(!(path startsWith "/"), "path shouldn't start from slash")
     Root/pathPrefix/path
   }
 
