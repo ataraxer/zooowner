@@ -13,6 +13,13 @@ import scala.concurrent.duration._
 object ZooownerSpec {
   val port = 9181
   val zkAddress = "localhost:%d".format(port)
+
+  trait ZooownerTest extends Zooowner {
+    def expireSession(): Unit = {
+      client.close()
+      Thread.sleep(1500)
+    }
+  }
 }
 
 
@@ -23,21 +30,25 @@ class ZooownerSpec extends UnitSpec with Eventually {
     PatienceConfig(timeout = 10.seconds)
 
   var zkServer: TestingServer = null
-  var zk: Zooowner = null
+  var zk: Zooowner with ZooownerTest = null
 
 
   before {
     zkServer = new TestingServer(port)
-    zk = new Zooowner(zkAddress, 15.seconds, "prefix")
+    zk = new Zooowner(zkAddress, 1.second, "prefix") with ZooownerTest
     eventually { zk.isConnected should be (true) }
   }
 
 
   after {
-    zkServer.stop()
-    zkServer = null
-    zk.close()
-    zk = null
+    try {
+      zkServer.stop()
+      zkServer = null
+      zk.close()
+      zk = null
+    } catch {
+      case _: Throwable =>
+    }
   }
 
 
@@ -303,6 +314,12 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zk.delete("other-node")
     Thread.sleep(500)
     deletedB should be (false)
+  }
+
+
+  it should "reconnect on session expiration" in {
+    zk.expireSession()
+    zk.create("foo", Some("value"))
   }
 
 }

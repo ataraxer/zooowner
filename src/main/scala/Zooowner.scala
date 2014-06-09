@@ -167,14 +167,17 @@ class Zooowner(servers: String,
    * Takes a function to be called on client taking care of ensuring that it's
    * called with active instance of ZooKeeper client.
    */
-  def applyToClient(call: ZooKeeper => Unit): Unit = {
+  def apply[T](call: ZooKeeper => T): T = {
     if (!isConnected) connect()
 
+    def perform = {
+      connect()
+      apply(call)
+    }
+
     try call(client) catch {
-      case _: KeeperException.ConnectionLossException => {
-        connect()
-        applyToClient(call)
-      }
+      case _: SessionExpiredException => perform
+      case _: ConnectionLossException => perform
     }
   }
 
@@ -205,10 +208,11 @@ class Zooowner(servers: String,
 
     val data = maybeData.map( _.getBytes("utf8") ).orNull
 
-    client.create(
-      resolvePath(path), data, AnyACL,
-      createMode(persistent, sequential)
-    )
+    this { client =>
+      client.create(
+        resolvePath(path), data, AnyACL,
+        createMode(persistent, sequential))
+    }
   }
 
   /**
@@ -217,7 +221,9 @@ class Zooowner(servers: String,
   def stat(path: String, maybeWatcher: Option[EventWatcher] = None) = {
     val watcher = maybeWatcher.orNull
     if (maybeWatcher.isDefined) activeWatchers :+= watcher
-    Option { client.exists(resolvePath(path), watcher) }
+    this { client =>
+      Option { client.exists(resolvePath(path), watcher) }
+    }
   }
 
   /**
@@ -232,8 +238,10 @@ class Zooowner(servers: String,
     val watcher = maybeWatcher.orNull
     if (maybeWatcher.isDefined) activeWatchers :+= watcher
 
-    val maybeData = catching(classOf[NoNodeException]).opt {
-      client.getData(resolvePath(path), watcher, null)
+    val maybeData = this { client =>
+      catching(classOf[NoNodeException]).opt {
+        client.getData(resolvePath(path), watcher, null)
+      }
     }
 
     for {
@@ -246,7 +254,7 @@ class Zooowner(servers: String,
    * Sets a new value for the node.
    */
   def set(path: String, data: String): Unit = {
-    client.setData(resolvePath(path), data.getBytes, AnyVersion)
+    this { _.setData(resolvePath(path), data.getBytes, AnyVersion) }
   }
 
   /**
@@ -260,7 +268,9 @@ class Zooowner(servers: String,
       }
     }
 
-    client.delete(resolvePath(path), AnyVersion)
+    this { client =>
+      client.delete(resolvePath(path), AnyVersion)
+    }
   }
 
   /**
@@ -269,7 +279,9 @@ class Zooowner(servers: String,
   def children(path: String, maybeWatcher: Option[EventWatcher] = None) = {
     val watcher = maybeWatcher.orNull
     if (maybeWatcher.isDefined) activeWatchers :+= watcher
-    client.getChildren(resolvePath(path), watcher).toList
+    this { client =>
+      client.getChildren(resolvePath(path), watcher).toList
+    }
   }
 
   /**
