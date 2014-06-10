@@ -45,6 +45,16 @@ object message {
   case class Error(code: Code)
     extends Message with Response
 
+  case class Create(
+    path: String,
+    maybeData: Option[String] = None,
+    persistent: Boolean = false,
+    sequential: Boolean = false,
+    recursive: Boolean = false,
+    filler: Option[String] = None)
+
+  case class Delete(path: String)
+
   type ZKData = Array[Byte]
 }
 
