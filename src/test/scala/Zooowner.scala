@@ -88,9 +88,10 @@ class ZooownerSpec extends UnitSpec with Eventually {
     var hookRan = false
 
     val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
-    zk.onConnection { () => hookRan = true }
 
+    zk.watchConnection { case Connected => hookRan = true }
     eventually { hookRan should be (true) }
+
     zk.close()
   }
 
@@ -101,7 +102,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
     val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
     eventually { zk.isConnected should be (true) }
 
-    zk.onConnection { () => hookRan = true }
+    zk.watchConnection { case Connected => hookRan = true }
     eventually { hookRan should be (true) }
 
     zk.close()

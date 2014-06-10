@@ -72,7 +72,6 @@ class Zooowner(servers: String,
                val pathPrefix: String)
 {
   import Zooowner._
-  import KeeperState._
 
   require(pathPrefix matches "^\\w+$", "path prefix should be simple identifier")
 
@@ -80,23 +79,27 @@ class Zooowner(servers: String,
    * Hook-function, that will be called when connection to ZooKeeper
    * server is established.
    */
-  protected var connectionHook: Option[Action] = None
+  protected var connectionHook: Reaction[ConnectionEvent] =
+    default[ConnectionEvent]
 
   /**
    * Internal watcher, that controls ZooKeeper connection life-cycle.
    */
   protected val watcher = StateWatcher {
-    case SyncConnected => {
+    case KeeperState.SyncConnected => {
       assert { isConnected == true }
 
       ignoring(classOf[NodeExistsException]) {
         create(Root/pathPrefix, persistent = true)
       }
 
-      connectionHook foreach { action => action() }
+      connectionHook(Connected)
     }
 
-    case Disconnected | Expired => connect()
+    case KeeperState.Disconnected | KeeperState.Expired => {
+      connectionHook(Disconnected)
+      connect()
+    }
   }
 
   /**
@@ -139,15 +142,16 @@ class Zooowner(servers: String,
    */
   protected def disconnect(): Unit = {
     client.close()
+    connectionHook(Disconnected)
   }
 
   /**
-   * Sets hook-function, that will be called when connection to ZooKeeper
-   * server is established.
+   * Sets up a partial callback-function that will be called on client
+   * connection status change.
    */
-  def onConnection(action: Action): Unit = {
-    connectionHook = Some(action)
-    if (isConnected) action()
+  def watchConnection(reaction: Reaction[ConnectionEvent]) = {
+    connectionHook = reaction orElse default[ConnectionEvent]
+    if (isConnected) reaction(Connected)
   }
 
   /**
@@ -171,6 +175,7 @@ class Zooowner(servers: String,
     if (!isConnected) connect()
 
     def perform = {
+      connectionHook(Disconnected)
       connect()
       apply(call)
     }

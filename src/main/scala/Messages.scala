@@ -8,6 +8,10 @@ object message {
   sealed trait Message
   sealed trait Response
   sealed trait Event
+  sealed trait ConnectionEvent extends Event
+
+  case object Connected    extends ConnectionEvent
+  case object Disconnected extends ConnectionEvent
 
   case object ReadOnly extends Response
 
