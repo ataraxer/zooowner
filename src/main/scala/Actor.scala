@@ -49,6 +49,25 @@ class ZooownerActor(
     case Delete(path) => {
       zk.async.delete(path) { passTo(sender) }
     }
+
+    /**
+     * Sets a new value for the node.
+     *
+     * @param path Path of the node to be updated.
+     * @param data New value of the node.
+     */
+    case Set(path, data) => {
+      zk.async.set(path, data) { passTo(sender) }
+    }
+
+    /**
+     * Requests current value of the node.
+     *
+     * @param path Path of the node which value is requested.
+     */
+    case Get(path) => {
+      zk.async.get(path) { passTo(sender) }
+    }
   }
 }
 

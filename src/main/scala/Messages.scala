@@ -52,8 +52,16 @@ object message {
     sequential: Boolean = false,
     recursive: Boolean = false,
     filler: Option[String] = None)
+      extends Message
 
   case class Delete(path: String)
+      extends Message
+
+  case class Set(path: String, data: String)
+      extends Message
+
+  case class Get(path: String)
+      extends Message
 
   type ZKData = Array[Byte]
 }
