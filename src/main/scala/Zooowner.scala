@@ -146,6 +146,17 @@ class Zooowner(servers: String,
   }
 
   /**
+   * Attempts to extract a [[Watcher]] from Option, add it to the active
+   * watchers set and return extracted watcher on success or just returns null
+   * to be passed to ZooKeeper otherwise.
+   */
+  protected def resolveWatcher(maybeWatcher: Option[EventWatcher]) = {
+    val watcher = maybeWatcher.orNull
+    if (maybeWatcher.isDefined) activeWatchers :+= watcher
+    watcher
+  }
+
+  /**
    * Sets up a partial callback-function that will be called on client
    * connection status change.
    */
@@ -223,11 +234,9 @@ class Zooowner(servers: String,
   /**
    * Gets node state and optionally sets watcher.
    */
-  def stat(path: String, maybeWatcher: Option[EventWatcher] = None) = {
-    val watcher = maybeWatcher.orNull
-    if (maybeWatcher.isDefined) activeWatchers :+= watcher
+  def stat(path: String, watcher: Option[EventWatcher] = None) = {
     this { client =>
-      Option { client.exists(resolvePath(path), watcher) }
+      Option { client.exists(resolvePath(path), resolveWatcher(watcher)) }
     }
   }
 
@@ -239,13 +248,10 @@ class Zooowner(servers: String,
   /**
    * Returns Some(value) of the node if exists, None otherwise.
    */
-  def get(path: String, maybeWatcher: Option[EventWatcher] = None) = {
-    val watcher = maybeWatcher.orNull
-    if (maybeWatcher.isDefined) activeWatchers :+= watcher
-
+  def get(path: String, watcher: Option[EventWatcher] = None) = {
     val maybeData = this { client =>
       catching(classOf[NoNodeException]).opt {
-        client.getData(resolvePath(path), watcher, null)
+        client.getData(resolvePath(path), resolveWatcher(watcher), null)
       }
     }
 
@@ -281,11 +287,9 @@ class Zooowner(servers: String,
   /**
    * Returns list of children of the node.
    */
-  def children(path: String, maybeWatcher: Option[EventWatcher] = None) = {
-    val watcher = maybeWatcher.orNull
-    if (maybeWatcher.isDefined) activeWatchers :+= watcher
+  def children(path: String, watcher: Option[EventWatcher] = None) = {
     this { client =>
-      client.getChildren(resolvePath(path), watcher).toList
+      client.getChildren(resolvePath(path), resolveWatcher(watcher)).toList
     }
   }
 
