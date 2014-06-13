@@ -287,9 +287,14 @@ class Zooowner(servers: String,
   /**
    * Returns list of children of the node.
    */
-  def children(path: String, watcher: Option[EventWatcher] = None) = {
+  def children(path: String,
+               absolutePaths: Boolean = false,
+               maybeWatcher: Option[EventWatcher] = None) =
+  {
+    val maybeWatcher = resolveWatcher(watcher)
     this { client =>
-      client.getChildren(resolvePath(path), resolveWatcher(watcher)).toList
+      val raw = client.getChildren(resolvePath(path), maybeWatcher).toList
+      if (absolutePaths) raw map { path/_ } else raw
     }
   }
 
@@ -338,7 +343,7 @@ class Zooowner(servers: String,
         }
 
         case EventType.NodeChildrenChanged => reactOn {
-          NodeChildrenChanged(path, children(path, self))
+          NodeChildrenChanged(path, children(path, watcher = self))
         }
 
         case EventType.NodeDeleted => {
