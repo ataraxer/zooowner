@@ -289,7 +289,7 @@ class Zooowner(servers: String,
    */
   def children(path: String,
                absolutePaths: Boolean = false,
-               maybeWatcher: Option[EventWatcher] = None) =
+               watcher: Option[EventWatcher] = None) =
   {
     val maybeWatcher = resolveWatcher(watcher)
     this { client =>
@@ -367,7 +367,7 @@ class Zooowner(servers: String,
 
     // node may not exist yet, so we ignore NoNode exceptions
     ignoring(classOf[NoNodeException]) {
-      children(path, Some(watcher))
+      children(path, watcher = Some(watcher))
     }
 
     watcher
