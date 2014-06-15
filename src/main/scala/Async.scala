@@ -2,7 +2,7 @@ package com.ataraxer.zooowner
 
 import com.ataraxer.zooowner.message._
 
-import org.apache.zookeeper.ZooKeeper
+import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
 
 import scala.concurrent.duration._
 import scala.language.implicitConversions
@@ -22,19 +22,21 @@ trait Async { this: Zooowner =>
   protected var client: ZooKeeper
   protected var activeWatchers: List[EventWatcher]
   protected def resolvePath(path: String): String
+  protected def resolveWatcher(maybeWatcher: Option[EventWatcher]): ZKWatcher
 
   object async {
 
     /**
      * Asynchronous version of [[Zooowner.stat]].
      */
-    def stat(path: String, maybeWatcher: Option[EventWatcher] = None)
+    def stat(path: String, watcher: Option[EventWatcher] = None)
             (callback: Reaction[Response]): Unit =
     {
-      val watcher = maybeWatcher.orNull
-      if (maybeWatcher.isDefined) activeWatchers :+= watcher
-
-      client.exists(resolvePath(path), watcher, OnStat(callback), null)
+      client.exists(
+        resolvePath(path),
+        resolveWatcher(watcher),
+        OnStat(callback),
+        null)
     }
 
     /**
@@ -118,25 +120,27 @@ trait Async { this: Zooowner =>
     /**
      * Asynchronous version of [[Zooowner.get]].
      */
-    def get(path: String, maybeWatcher: Option[EventWatcher] = None)
+    def get(path: String, watcher: Option[EventWatcher] = None)
            (callback: Reaction[Response]): Unit =
     {
-      val watcher = maybeWatcher.orNull
-      if (maybeWatcher.isDefined) activeWatchers :+= watcher
-
-      client.getData(resolvePath(path), watcher, OnData(callback), null)
+      client.getData(
+        resolvePath(path),
+        resolveWatcher(watcher),
+        OnData(callback),
+        null)
     }
 
     /**
      * Asynchronous version of [[Zooowner.children]].
      */
-    def children(path: String, maybeWatcher: Option[EventWatcher] = None)
+    def children(path: String, watcher: Option[EventWatcher] = None)
                 (callback: Reaction[Response]): Unit =
     {
-      val watcher = maybeWatcher.orNull
-      if (maybeWatcher.isDefined) activeWatchers :+= watcher
-
-      client.getChildren(resolvePath(path), watcher, OnChildren(callback), null)
+      client.getChildren(
+        resolvePath(path),
+        resolveWatcher(watcher),
+        OnChildren(callback),
+        null)
     }
   }
 }
