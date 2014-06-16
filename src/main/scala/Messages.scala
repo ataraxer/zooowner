@@ -63,6 +63,9 @@ object message {
   case class Get(path: String)
       extends Message
 
+  case class GetChildren(path: String)
+      extends Message
+
   type ZKData = Array[Byte]
 }
 

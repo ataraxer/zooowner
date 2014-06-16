@@ -68,6 +68,15 @@ class ZooownerActor(
     case Get(path) => {
       zk.async.get(path) { passTo(sender) }
     }
+
+    /**
+     * Request children list of the node.
+     *
+     * @param path Path of the node which children are requested.
+     */
+    case GetChildren(path) => {
+      zk.async.children(path) { passTo(sender) }
+    }
   }
 }
 
