@@ -24,6 +24,9 @@ object message {
   case class NodeChildren(path: String, children: List[String])
     extends Message with Event with Response
 
+  case class NodeChildrenPaths(path: String, childrenPaths: List[String])
+    extends Message with Event with Response
+
   case class NodeCreated(path: String, data: Option[String])
     extends Message with Event with Response
 
@@ -64,6 +67,9 @@ object message {
       extends Message
 
   case class GetChildren(path: String)
+      extends Message
+
+  case class GetChildrenPaths(path: String)
       extends Message
 
   type ZKData = Array[Byte]

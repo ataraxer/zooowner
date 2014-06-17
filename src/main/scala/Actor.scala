@@ -4,8 +4,11 @@ import com.ataraxer.zooowner.message._
 
 import akka.actor.{Actor, ActorRef}
 import akka.actor.Actor.Receive
+import akka.util.Timeout
+import akka.pattern.{ask, pipe}
 
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext
 
 
 class ZooownerActor(
@@ -14,6 +17,11 @@ class ZooownerActor(
   pathPrefix: String)
     extends Actor
 {
+  import Zooowner.SlashSeparatedPath
+
+  implicit val futureTimeout = Timeout(5.seconds)
+  implicit val ec = context.dispatcher
+
   val zk = new Zooowner(server, timeout, pathPrefix) with Async
 
   /**
@@ -76,6 +84,22 @@ class ZooownerActor(
      */
     case GetChildren(path) => {
       zk.async.children(path) { passTo(sender) }
+    }
+
+
+    /**
+     * Request list of children paths of the node.
+     * @param path Path of the node which children paths are requested.
+     */
+    case GetChildrenPaths(path) => {
+      val futureChildren = self ? GetChildren(path)
+
+      val futureChildrenPaths = futureChildren map {
+        case NodeChildren(_, children) =>
+          NodeChildrenPaths(path, children.map( path/_ ))
+      }
+
+      futureChildrenPaths pipeTo sender
     }
   }
 }
