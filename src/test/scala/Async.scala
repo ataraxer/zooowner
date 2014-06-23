@@ -11,25 +11,19 @@ import org.scalatest.concurrent.Eventually
 import scala.concurrent.duration._
 
 
-
-object AsyncZooownerSpec {
-  val port = 9181
-  val zkAddress = "localhost:%d".format(port)
-}
-
-
 class AsyncZooownerSpec extends UnitSpec with Eventually {
   import ZooownerSpec._
 
   implicit val eventuallyConfig =
     PatienceConfig(timeout = 10.seconds)
 
-  var zkServer: TestingServer = null
   var zk: Zooowner with Async = null
+  var zkServer: TestingServer = null
 
 
   before {
-    zkServer = new TestingServer(port)
+    zkServer = new TestingServer
+    val zkAddress = zkServer.getConnectString
     zk = new Zooowner(zkAddress, 15.seconds, "prefix") with Async
     eventually { zk.isConnected should be (true) }
   }

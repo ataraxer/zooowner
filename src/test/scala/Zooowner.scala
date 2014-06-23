@@ -11,9 +11,6 @@ import scala.concurrent.duration._
 
 
 object ZooownerSpec {
-  val port = 9181
-  val zkAddress = "localhost:%d".format(port)
-
   trait ZooownerTest extends Zooowner {
     def expireSession(): Unit = {
       client.close()
@@ -29,12 +26,14 @@ class ZooownerSpec extends UnitSpec with Eventually {
   implicit val eventuallyConfig =
     PatienceConfig(timeout = 10.seconds)
 
-  var zkServer: TestingServer = null
   var zk: Zooowner with ZooownerTest = null
+  var zkServer: TestingServer = null
+  var zkAddress: String = null
 
 
   before {
-    zkServer = new TestingServer(port)
+    zkServer = new TestingServer
+    zkAddress = zkServer.getConnectString
     zk = new Zooowner(zkAddress, 1.second, "prefix") with ZooownerTest
     eventually { zk.isConnected should be (true) }
   }

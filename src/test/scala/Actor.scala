@@ -13,12 +13,6 @@ import org.scalatest.concurrent.Eventually
 import scala.concurrent.duration._
 
 
-object ZooownerActorSpec {
-  val port = 9181
-  val zkAddress = "localhost:%d".format(port)
-}
-
-
 class ZooownerActorSpec(_system: ActorSystem)
     extends TestKit(_system)
     with ImplicitSender
@@ -29,12 +23,12 @@ class ZooownerActorSpec(_system: ActorSystem)
 
   def this() = this { ActorSystem("zooowner-actor-spec") }
 
-  var zkServer: TestingServer = null
   var zk: TestActorRef[ZooownerActor] = null
 
 
   before {
-    zkServer = new TestingServer(port)
+    val zkServer = new TestingServer
+    val zkAddress = zkServer.getConnectString
     zk = TestActorRef {
       new ZooownerActor(zkAddress, 15.seconds, "prefix")
     }
