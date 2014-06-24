@@ -48,6 +48,50 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk ! Create("foo", Some("value"))
     expectMsg { NodeCreated("/prefix/foo", None) }
   }
+
+
+  it should "delete nodes asynchronously" in {
+    zk.underlyingActor.zk.create("foo", Some("value"))
+    zk.underlyingActor.zk.exists("foo") should be (true)
+
+    zk ! Delete("foo")
+    expectMsgPF(5.seconds) { case NodeDeleted("/prefix/foo", _) => }
+
+    zk.underlyingActor.zk.exists("foo") should be (false)
+  }
+
+
+  it should "change values of created nodes asynchronously" in {
+    zk.underlyingActor.zk.create("foo", Some("value"))
+
+    zk ! Set("foo", "new-value")
+    expectMsgPF(5.seconds) { case NodeStat("/prefix/foo", _) => }
+
+    zk.underlyingActor.zk.get("foo") should be (Some("new-value"))
+  }
+
+
+  it should "get values of existing nodes asynchronously" in {
+    zk.underlyingActor.zk.create("foo", Some("value"))
+
+    zk ! Get("foo")
+    expectMsg { NodeData("/prefix/foo", Some("value")) }
+  }
+
+
+  it should "get node's children asynchronously" in {
+    zk.underlyingActor.zk.create("foo", Some("value"), persistent = true)
+    zk.underlyingActor.zk.create("foo/a", Some("value"))
+    zk.underlyingActor.zk.create("foo/b", Some("value"))
+
+    zk ! GetChildren("foo")
+    expectMsgPF(5.seconds) {
+      case NodeChildren("/prefix/foo", children) =>
+        children should contain only ("a", "b")
+    }
+  }
+
+
 }
 
 
