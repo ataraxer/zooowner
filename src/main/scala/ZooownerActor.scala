@@ -101,6 +101,17 @@ class ZooownerActor(
 
       futureChildrenPaths pipeTo sender
     }
+
+
+    /**
+     * Sets up a watcher on a node.
+     *
+     * @param path Path of the node to be watched.
+     * @param persistent Whether watch should be persistent.
+     */
+    case Watch(path, persistent) => {
+      zk.watch(path, persistent) { passTo(sender) }
+    }
   }
 }
 

@@ -7,7 +7,7 @@ import org.apache.zookeeper.KeeperException.Code
 object message {
   sealed trait Message
   sealed trait Response
-  sealed trait Event
+  sealed trait Event extends Response
   sealed trait ConnectionEvent extends Event
 
   case object Connected    extends ConnectionEvent
@@ -71,6 +71,8 @@ object message {
 
   case class GetChildrenPaths(path: String)
       extends Message
+
+  case class Watch(path: String, persistent: Boolean = true)
 
   type ZKData = Array[Byte]
 }
