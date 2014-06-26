@@ -64,6 +64,11 @@ case class OnCreated(reaction: Reaction[Response])
 }
 
 
+trait Counter {
+  def count: Int
+}
+
+
 /**
  * Fires up on node deletion.
  */
@@ -75,7 +80,9 @@ case class OnDeleted(reaction: Reaction[Response])
   def processResult(returnCode: Int, path: String, context: Any) = {
     counter += 1
     processCode(returnCode) {
-      case Code.OK       => NodeDeleted(path, counter)
+      case Code.OK => new NodeDeleted(path) with Counter {
+        val count = counter
+      }
       case Code.NONODE   => NoNode(path)
       case Code.NOTEMPTY => NotEmpty(path)
     }

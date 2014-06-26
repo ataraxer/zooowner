@@ -202,7 +202,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
         created = true
       case NodeChanged("some-node", Some("new-value")) =>
         changed = true
-      case NodeDeleted("some-node", _) =>
+      case NodeDeleted("some-node") =>
         deleted = true
       case NodeChildrenChanged("some-node", Seq("child")) =>
         childCreated = true
@@ -237,7 +237,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
         created = true
       case NodeChanged("some-node", Some("new-value")) =>
         changed = true
-      case NodeDeleted("some-node", _) =>
+      case NodeDeleted("some-node") =>
         deleted = true
       case NodeChildrenChanged("some-node", Seq("child")) =>
         childCreated = true
@@ -264,7 +264,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
     val watcher = zk.watch("some-node") {
       case NodeCreated("some-node", Some("value")) =>
         created = true
-      case NodeDeleted("some-node", _) =>
+      case NodeDeleted("some-node") =>
         deleted = true
     }
 
@@ -288,14 +288,14 @@ class ZooownerSpec extends UnitSpec with Eventually {
     val watcherA = zk.watch("some-node") {
       case NodeCreated("some-node", Some("value")) =>
         createdA = true
-      case NodeDeleted("some-node", _) =>
+      case NodeDeleted("some-node") =>
         deletedA = true
     }
 
     val watcherB = zk.watch("other-node") {
       case NodeCreated("other-node", Some("value")) =>
         createdB = true
-      case NodeDeleted("other-node", _) =>
+      case NodeDeleted("other-node") =>
         deletedB = true
     }
 

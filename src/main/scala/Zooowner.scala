@@ -351,7 +351,7 @@ class Zooowner(servers: String,
           // in watching it, in that case -- reset watcher
           if (persistent) watch(path, this)
 
-          reactOn { NodeDeleted(path, 0) }
+          reactOn { NodeDeleted(path) }
         }
       }
     }

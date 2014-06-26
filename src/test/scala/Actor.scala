@@ -55,7 +55,7 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk.underlyingActor.zk.exists("foo") should be (true)
 
     zk ! Delete("foo")
-    expectMsgPF(5.seconds) { case NodeDeleted("/prefix/foo", _) => }
+    expectMsgPF(5.seconds) { case NodeDeleted("/prefix/foo") => }
 
     zk.underlyingActor.zk.exists("foo") should be (false)
   }

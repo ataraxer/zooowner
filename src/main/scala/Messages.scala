@@ -36,7 +36,7 @@ object message {
   case class NodeChildrenChanged(path: String, children: Seq[String])
     extends Message with Event
 
-  case class NodeDeleted(path: String, counter: Int)
+  case class NodeDeleted(path: String)
     extends Message with Event with Response
 
   case class NoNode(path: String)

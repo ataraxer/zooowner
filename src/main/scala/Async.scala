@@ -79,8 +79,8 @@ trait Async { this: Zooowner =>
                          parentCallback: OnDeleted): Unit =
       {
         val hook = OnDeleted {
-          case NodeDeleted(path, counter)
-            if (counter == nodeChildren.size) =>
+          case event: NodeDeleted with Counter
+            if (event.count == nodeChildren.size) =>
               deleteNode(parent, parentCallback)
         }
 
