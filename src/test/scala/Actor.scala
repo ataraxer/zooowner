@@ -92,6 +92,15 @@ class ZooownerActorSpec(_system: ActorSystem)
   }
 
 
+  it should "watch node events and report them back to watcher" in {
+    zk.underlyingActor.zk.create("foo", Some("value"), persistent = true)
+
+    zk ! Watch("foo")
+
+    zk.underlyingActor.zk.set("foo", "new-value")
+    expectMsg { NodeChanged("foo", Some("new-value")) }
+  }
+
 }
 
 
