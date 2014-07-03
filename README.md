@@ -15,7 +15,7 @@ libraryDependencies += "com.ataraxer" %% "zooowner" % "0.2.1"
 ## Synchronous API
 
 Create new Zooowner client which will operate on nodes under specified preifx:
-```(scala)
+```scala
 import com.ataraxer.zooowner.Zooowner
 
 val zk = new Zooowner("localhost:2181", timeout = 30.seconds, "prefix")
@@ -24,7 +24,7 @@ val zk = new Zooowner("localhost:2181", timeout = 30.seconds, "prefix")
 ### Monitor connection
 
 Set up callbacks on connection status:
-```(scala)
+```scala
 import com.ataraxer.zooowner.messages._
 
 zk.watchConnection {
@@ -35,7 +35,7 @@ zk.watchConnection {
 
 
 ### Create nodes
-```(scala)
+```scala
 // Ephemeral node with no value (null)
 zk.create("node")
 // Ephermeral node with provided value
@@ -55,7 +55,7 @@ zk.create("node", Some("value"), recursive = true, filler = Some("filler"))
 
 
 ### Delete nodes
-```(scala)
+```scala
 // Delete only node itself
 zk.delete("node")
 // Delete node and all it's children. And it's grandchildren.
@@ -66,7 +66,7 @@ zk.delete("node", recursive = true)
 
 
 ### Get nodes children
-```(scala)
+```scala
 // Get list of node's children names
 zk.children("node")
 // Get list of node's children paths
@@ -74,7 +74,7 @@ zk.children("node", absolutePaths = true)
 ```
 
 ### Watch node values and children
-```(scala)
+```scala
 // Type declaration is just for demonstration
 zk.watch("node") {
   case NodeCreated(node: String, value: Option[String]) =>
