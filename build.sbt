@@ -24,6 +24,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor"   % "2.3.1",
   "com.typesafe.akka" %% "akka-testkit" % "2.3.1" % "test",
   "org.scalatest" %% "scalatest" % "2.1.0" % "test",
+  "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test",
   "org.apache.curator" % "curator-test" % "2.4.2" % "test",
   "org.apache.zookeeper" % "zookeeper" % "3.4.6" excludeAll (
     ExclusionRule(organization = "com.sun.jdmk"),
