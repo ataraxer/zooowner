@@ -1,20 +1,21 @@
 package com.ataraxer.zooowner
 
-import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
+import org.apache.zookeeper.ZooKeeper
+import org.apache.zookeeper.ZooKeeper.States
 
-import org.scalamock.scalatest.MockFactory
 import org.scalatest.Suite
+import org.scalatest.mock.MockitoSugar
+
+import org.mockito.Mockito._
 
 import scala.concurrent.duration.FiniteDuration
 
 
-trait ZKMock extends MockFactory { this: Suite =>
-  def zkAddress: String
-  def zkTimeout: FiniteDuration
-  def zkWatcher: ZKWatcher
-
-  def zk  = {
-    mock[ZooKeeper](zkAddress, zkTimeout.toMillis.toInt, zkWatcher)
+trait ZKMock extends MockitoSugar { this: Suite =>
+  val zkClient = {
+    val zk = mock[ZooKeeper]
+    when(zk.getState).thenReturn(States.CONNECTED)
+    zk
   }
 }
 
