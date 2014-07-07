@@ -7,7 +7,7 @@ organization := "com.ataraxer"
 homepage := Some(url("http://github.com/ataraxer/zooowner"))
 
 licenses := Seq("MIT License" -> url(
-  "http://www.opensource.org/licenses/mit-licenses.php"))
+  "http://www.opensource.org/licenses/mit-license.php"))
 
 scalaVersion := "2.10.3"
 
