@@ -12,10 +12,12 @@ import scala.concurrent.duration.FiniteDuration
 
 
 trait ZKMock extends MockitoSugar { this: Suite =>
-  val zkClient = {
-    val zk = mock[ZooKeeper]
-    when(zk.getState).thenReturn(States.CONNECTED)
-    zk
+  object zkMock {
+    val client = {
+      val zk = mock[ZooKeeper]
+      when(zk.getState).thenReturn(States.CONNECTED)
+      zk
+    }
   }
 }
 
