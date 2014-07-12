@@ -60,6 +60,57 @@ trait ZKMock {
         .thenReturn(null)
       zk
     }
+
+
+    def create(path: String,
+               maybeData: Option[String] = None,
+               persistent: Boolean = false)
+    {
+      val data = maybeData.map( _.getBytes("utf8") ).orNull
+      val stat = if (persistent) persistentStat else ephemeralStat
+
+      doReturn(data).when(client)
+        .getData(matches(path), anyWatcher, anyStat)
+
+      doReturn(stat).when(client)
+        .exists(matches(path), anyWatcher)
+
+
+      val setAnswer = answer { ctx =>
+        val Array(_, newData, _) = ctx.getArguments
+        doReturn(newData).when(client)
+          .getData(matches(path), anyWatcher, anyStat)
+        stat
+      }
+
+      doAnswer(setAnswer).when(client)
+        .setData(matches(path), anyData, anyInt)
+
+
+      val deleteAnswer = answer { ctx =>
+        doThrow(new NoNodeException).when(client)
+          .getData(matches(path), anyWatcher, anyStat)
+
+        doReturn(null).when(client)
+          .exists(matches(path), anyWatcher)
+      }
+
+      doAnswer(deleteAnswer).when(client)
+        .delete(matches(path), anyInt)
+    }
+
+
+    def createChildren(path: String, children: Map[String, Some[String]]) = {
+      val childrenNames: JavaList[String] = children.keys.toList
+
+      for ((child, data) <- children) {
+        val fullPath = path + "/" + child
+        create(fullPath, data)
+      }
+
+      doReturn(childrenNames).when(client)
+        .getChildren(matches(path), anyWatcher)
+    }
   }
 }
 
