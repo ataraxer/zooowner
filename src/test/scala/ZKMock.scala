@@ -111,6 +111,15 @@ trait ZKMock {
       doReturn(childrenNames).when(client)
         .getChildren(matches(path), anyWatcher)
     }
+
+
+    object check {
+      def created(path: String, maybeData: Option[String] = None) = {
+        val data = maybeData.map( _.getBytes("utf8") ).orNull
+        verify(client).create(
+          matches(path), matches(data), matches(AnyACL), anyCreateMode)
+      }
+    }
   }
 }
 
