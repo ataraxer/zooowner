@@ -51,6 +51,25 @@ trait ZKMock {
     def anyCreateMode = any(classOf[CreateMode])
 
 
+    def setAnswer(path: String, stat: Stat) = answer { ctx =>
+      val Array(_, newData, _) = ctx.getArguments
+
+      doReturn(newData).when(client)
+        .getData(matches(path), anyWatcher, anyStat)
+
+      stat
+    }
+
+
+    def deleteAnswer(path: String) = answer { ctx =>
+      doThrow(new NoNodeException).when(client)
+        .getData(matches(path), anyWatcher, anyStat)
+
+      doReturn(null).when(client)
+        .exists(matches(path), anyWatcher)
+    }
+
+
     val client = {
       val zk = mock(classOf[ZooKeeper])
       when(zk.getState).thenReturn(States.CONNECTED)
@@ -86,27 +105,10 @@ trait ZKMock {
       doReturn(stat).when(client)
         .exists(matches(path), anyWatcher)
 
-
-      val setAnswer = answer { ctx =>
-        val Array(_, newData, _) = ctx.getArguments
-        doReturn(newData).when(client)
-          .getData(matches(path), anyWatcher, anyStat)
-        stat
-      }
-
-      doAnswer(setAnswer).when(client)
+      doAnswer(setAnswer(path, stat)).when(client)
         .setData(matches(path), anyData, anyInt)
 
-
-      val deleteAnswer = answer { ctx =>
-        doThrow(new NoNodeException).when(client)
-          .getData(matches(path), anyWatcher, anyStat)
-
-        doReturn(null).when(client)
-          .exists(matches(path), anyWatcher)
-      }
-
-      doAnswer(deleteAnswer).when(client)
+      doAnswer(deleteAnswer(path)).when(client)
         .delete(matches(path), anyInt)
     }
 
