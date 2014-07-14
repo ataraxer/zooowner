@@ -62,6 +62,17 @@ trait ZKMock {
     }
 
 
+    /**
+     * Stubs following ZooKeeper methods to simulate created node:
+     * - getData(String, Watcher, Stat)
+     * - setData(String, Array[Byte])
+     * - exists(String, Watcher)
+     * - delete(String, Int)
+     *
+     * @param path Path of the created node.
+     * @param maybeData Optional value of the node.
+     * @param persistent Specifies whether created node should be persistent.
+     */
     def create(path: String,
                maybeData: Option[String] = None,
                persistent: Boolean = false)
@@ -100,6 +111,12 @@ trait ZKMock {
     }
 
 
+    /**
+     * Stubs each children node via [[ZKMock.create]] and `getChildren` method.
+     *
+     * @param path Path of the node for which children nodes will be created.
+     * @param children Mapping of children names to their optional values.
+     */
     def createChildren(path: String, children: Map[String, Some[String]]) = {
       val childrenNames: JavaList[String] = children.keys.toList
 
@@ -114,6 +131,13 @@ trait ZKMock {
 
 
     object check {
+      /**
+       * Checks that ZooKeeper has been requested to create node with
+       * specified path and optional data.
+       *
+       * @param path Path of the created node.
+       * @param maybeData Optional value of the node.
+       */
       def created(path: String, maybeData: Option[String] = None) = {
         val data = maybeData.map( _.getBytes("utf8") ).orNull
         verify(client).create(
