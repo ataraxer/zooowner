@@ -16,6 +16,7 @@ import org.mockito.invocation._
 
 import scala.concurrent.duration.FiniteDuration
 import scala.collection.JavaConversions._
+import scala.collection.mutable
 
 import java.util.{List => JavaList}
 
@@ -32,6 +33,9 @@ trait ZKMock {
 
 
   object zkMock {
+    private val children =
+      mutable.Map.empty[String, List[String]].withDefaultValue(Nil)
+
     val ephemeralStat = {
       val stat = mock(classOf[Stat])
       when(stat.getEphemeralOwner).thenReturn(1)
@@ -99,6 +103,13 @@ trait ZKMock {
       val data = maybeData.map( _.getBytes("utf8") ).orNull
       val stat = if (persistent) persistentStat else ephemeralStat
 
+      val cleanPath = path.stripPrefix("/").stripSuffix("/")
+      val parent = "/" + cleanPath.split("/").init.mkString("/")
+      children(parent) = children(parent) :+ cleanPath.split("/").last
+
+      doReturn(children(parent): JavaList[String]).when(client)
+        .getChildren(matches(parent), anyWatcher)
+
       doReturn(data).when(client)
         .getData(matches(path), anyWatcher, anyStat)
 
@@ -110,25 +121,6 @@ trait ZKMock {
 
       doAnswer(deleteAnswer(path)).when(client)
         .delete(matches(path), anyInt)
-    }
-
-
-    /**
-     * Stubs each children node via [[ZKMock.create]] and `getChildren` method.
-     *
-     * @param path Path of the node for which children nodes will be created.
-     * @param children Mapping of children names to their optional values.
-     */
-    def createChildren(path: String, children: Map[String, Some[String]]) = {
-      val childrenNames: JavaList[String] = children.keys.toList
-
-      for ((child, data) <- children) {
-        val fullPath = path + "/" + child
-        create(fullPath, data)
-      }
-
-      doReturn(childrenNames).when(client)
-        .getChildren(matches(path), anyWatcher)
     }
 
 
