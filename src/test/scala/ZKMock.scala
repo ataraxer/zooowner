@@ -23,18 +23,36 @@ import java.util.{List => JavaList}
 
 
 object ZKMock {
+  import Zooowner._
+
   def cleanPath(path: String) = path.stripPrefix("/").stripSuffix("/")
   def pathComponents(path: String) = cleanPath(path).split("/")
   def nodeParent(path: String) = "/" + pathComponents(path).init.mkString("/")
   def nodeName(path: String) = pathComponents(path).last
 
+
   val persistentModes = List(PERSISTENT_SEQUENTIAL, PERSISTENT)
-}
 
 
-trait ZKMock {
-  import ZKMock._
-  import Zooowner._
+  val ephemeralStat = {
+    val stat = mock(classOf[Stat])
+    when(stat.getEphemeralOwner).thenReturn(1)
+    stat
+  }
+
+  val persistentStat = {
+    val stat = mock(classOf[Stat])
+    when(stat.getEphemeralOwner).thenReturn(0)
+    stat
+  }
+
+
+  def anyWatcher = any(classOf[ZKWatcher])
+  def anyStat = any(classOf[Stat])
+  def anyData = any(classOf[Array[Byte]])
+  def anyCreateMode = any(classOf[CreateMode])
+  def anyACL = matches(AnyACL)
+
 
   def answer[T](code: InvocationOnMock => T) = {
     new Answer[T] {
@@ -42,30 +60,15 @@ trait ZKMock {
         code(invocation)
     }
   }
+}
 
+
+trait ZKMock {
+  import ZKMock._
 
   object zkMock {
     private val children =
       mutable.Map.empty[String, Set[String]].withDefaultValue(Set())
-
-    val ephemeralStat = {
-      val stat = mock(classOf[Stat])
-      when(stat.getEphemeralOwner).thenReturn(1)
-      stat
-    }
-
-    val persistentStat = {
-      val stat = mock(classOf[Stat])
-      when(stat.getEphemeralOwner).thenReturn(0)
-      stat
-    }
-
-
-    def anyWatcher = any(classOf[ZKWatcher])
-    def anyStat = any(classOf[Stat])
-    def anyData = any(classOf[Array[Byte]])
-    def anyCreateMode = any(classOf[CreateMode])
-    def anyACL = matches(AnyACL)
 
 
     val createAnswer = answer { ctx =>
