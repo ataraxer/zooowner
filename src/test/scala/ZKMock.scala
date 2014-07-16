@@ -4,6 +4,7 @@ import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
 import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.CreateMode
+import org.apache.zookeeper.CreateMode._
 import org.apache.zookeeper.data.Stat
 
 import org.scalatest.Suite
@@ -26,6 +27,8 @@ object ZKMock {
   def pathComponents(path: String) = cleanPath(path).split("/")
   def nodeParent(path: String) = "/" + pathComponents(path).init.mkString("/")
   def nodeName(path: String) = pathComponents(path).last
+
+  val persistentModes = List(PERSISTENT_SEQUENTIAL, PERSISTENT)
 }
 
 
@@ -62,6 +65,21 @@ trait ZKMock {
     def anyStat = any(classOf[Stat])
     def anyData = any(classOf[Array[Byte]])
     def anyCreateMode = any(classOf[CreateMode])
+    def anyACL = matches(AnyACL)
+
+
+    val createAnswer = answer { ctx =>
+      val Array(rawPath, rawData, _, rawCreateMode) = ctx.getArguments
+      val path = rawPath.asInstanceOf[String]
+      val data = rawData.asInstanceOf[Array[Byte]]
+      val createMode = rawCreateMode.asInstanceOf[CreateMode]
+
+      val persistent = persistentModes contains createMode
+
+      create(path, data, persistent)
+
+      path
+    }
 
 
     def setAnswer(path: String, stat: Stat) = answer { ctx =>
@@ -92,11 +110,19 @@ trait ZKMock {
 
     val client = {
       val zk = mock(classOf[ZooKeeper])
+
       when(zk.getState).thenReturn(States.CONNECTED)
+
+      when(zk.create(anyString, anyData, anyACL, anyCreateMode))
+        .thenAnswer(createAnswer)
+
       when(zk.getData(anyString, anyWatcher, anyStat))
         .thenThrow(new NoNodeException)
+
+      // TODO: remove as redundant
       when(zk.exists(anyString, anyWatcher))
         .thenReturn(null)
+
       zk
     }
 
@@ -107,16 +133,16 @@ trait ZKMock {
      * - setData(String, Array[Byte])
      * - exists(String, Watcher)
      * - delete(String, Int)
+     * - getChildren(String, Watcher)
      *
      * @param path Path of the created node.
-     * @param maybeData Optional value of the node.
+     * @param data Value of the node.
      * @param persistent Specifies whether created node should be persistent.
      */
     def create(path: String,
-               maybeData: Option[String] = None,
+               data: Array[Byte],
                persistent: Boolean = false)
     {
-      val data = maybeData.map( _.getBytes("utf8") ).orNull
       val stat = if (persistent) persistentStat else ephemeralStat
 
       val parent = nodeParent(path)
@@ -151,7 +177,7 @@ trait ZKMock {
       def created(path: String, maybeData: Option[String] = None) = {
         val data = maybeData.map( _.getBytes("utf8") ).orNull
         verify(client).create(
-          matches(path), matches(data), matches(AnyACL), anyCreateMode)
+          matches(path), matches(data), anyACL, anyCreateMode)
       }
     }
   }
