@@ -21,7 +21,16 @@ import scala.collection.mutable
 import java.util.{List => JavaList}
 
 
+object ZKMock {
+  def cleanPath(path: String) = path.stripPrefix("/").stripSuffix("/")
+  def pathComponents(path: String) = cleanPath(path).split("/")
+  def nodeParent(path: String) = "/" + pathComponents(path).init.mkString("/")
+  def nodeName(path: String) = pathComponents(path).last
+}
+
+
 trait ZKMock {
+  import ZKMock._
   import Zooowner._
 
   def answer[T](code: InvocationOnMock => T) = {
@@ -34,7 +43,7 @@ trait ZKMock {
 
   object zkMock {
     private val children =
-      mutable.Map.empty[String, List[String]].withDefaultValue(Nil)
+      mutable.Map.empty[String, Set[String]].withDefaultValue(Set())
 
     val ephemeralStat = {
       val stat = mock(classOf[Stat])
@@ -71,6 +80,13 @@ trait ZKMock {
 
       doReturn(null).when(client)
         .exists(matches(path), anyWatcher)
+
+      val parent = nodeParent(path)
+      val name   = nodeName(path)
+      children(parent) = children(parent) - name
+
+      doReturn(children(parent).toList: JavaList[String]).when(client)
+        .getChildren(matches(parent), anyWatcher)
     }
 
 
@@ -103,11 +119,11 @@ trait ZKMock {
       val data = maybeData.map( _.getBytes("utf8") ).orNull
       val stat = if (persistent) persistentStat else ephemeralStat
 
-      val cleanPath = path.stripPrefix("/").stripSuffix("/")
-      val parent = "/" + cleanPath.split("/").init.mkString("/")
-      children(parent) = children(parent) :+ cleanPath.split("/").last
+      val parent = nodeParent(path)
+      val name   = nodeName(path)
+      children(parent) = children(parent) + name
 
-      doReturn(children(parent): JavaList[String]).when(client)
+      doReturn(children(parent).toList: JavaList[String]).when(client)
         .getChildren(matches(parent), anyWatcher)
 
       doReturn(data).when(client)
