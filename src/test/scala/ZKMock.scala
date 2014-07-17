@@ -52,6 +52,7 @@ object ZKMock {
   def anyWatcher = any(classOf[ZKWatcher])
   def anyStat = any(classOf[Stat])
   def anyData = any(classOf[Array[Byte]])
+  def anyVersion = anyInt
   def anyCreateMode = any(classOf[CreateMode])
   def anyACL = matches(AnyACL)
 
@@ -203,15 +204,15 @@ trait ZKMock {
       fail.when(client).getData(anyString, anyWatcher, anyStat)
       fail.when(client).getChildren(anyString, anyWatcher)
       fail.when(client).exists(anyString, anyWatcher)
-      fail.when(client).setData(anyString, anyData, anyInt)
-      fail.when(client).delete(anyString, anyInt)
+      fail.when(client).setData(anyString, anyData, anyVersion)
+      fail.when(client).delete(anyString, anyVersion)
     }
 
 
     /**
      * Stubs following ZooKeeper methods to simulate created node:
      * - getData(String, Watcher, Stat)
-     * - setData(String, Array[Byte])
+     * - setData(String, Array[Byte], Int)
      * - exists(String, Watcher)
      * - delete(String, Int)
      * - getChildren(String, Watcher)
@@ -240,10 +241,10 @@ trait ZKMock {
         .exists(matches(path), anyWatcher)
 
       doAnswer(setAnswer(stat)).when(client)
-        .setData(matches(path), anyData, anyInt)
+        .setData(matches(path), anyData, anyVersion)
 
       doAnswer(deleteAnswer).when(client)
-        .delete(matches(path), anyInt)
+        .delete(matches(path), anyVersion)
 
       fireEvent(path, NodeCreated)
 
