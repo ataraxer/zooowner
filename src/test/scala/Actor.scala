@@ -19,7 +19,6 @@ class ZooownerActorSpec(_system: ActorSystem)
     with Eventually
     with UnitSpec
 {
-  import ZooownerSpec._
 
   def this() = this { ActorSystem("zooowner-actor-spec") }
 

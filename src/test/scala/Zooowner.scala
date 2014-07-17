@@ -3,90 +3,57 @@ package com.ataraxer.zooowner
 import com.ataraxer.test.UnitSpec
 import com.ataraxer.zooowner.message._
 
+import org.apache.zookeeper.KeeperException._
+import org.apache.zookeeper.Watcher.Event.KeeperState
+
 import org.apache.curator.test.TestingServer
 
 import org.scalatest.concurrent.Eventually
+import org.scalatest.mock.MockitoSugar
+
+import org.mockito.Mockito._
 
 import scala.concurrent.duration._
 
 
-object ZooownerSpec {
-  trait ZooownerTest extends Zooowner {
-    def expireSession(): Unit = {
-      client.close()
-      Thread.sleep(1500)
-    }
-  }
-}
-
-
 class ZooownerSpec extends UnitSpec with Eventually {
-  import ZooownerSpec._
 
   implicit val eventuallyConfig =
-    PatienceConfig(timeout = 10.seconds)
-
-  var zk: Zooowner with ZooownerTest = null
-  var zkServer: TestingServer = null
-  var zkAddress: String = null
+    PatienceConfig(timeout = 3.seconds)
 
 
-  before {
-    zkServer = new TestingServer
-    zkAddress = zkServer.getConnectString
-    zk = new Zooowner(zkAddress, 1.second, "prefix") with ZooownerTest
-    eventually { zk.isConnected should be (true) }
-  }
-
-
-  after {
-    try {
-      zkServer.stop()
-      zkServer = null
-      zk.close()
-      zk = null
-    } catch {
-      case _: Throwable =>
+  trait Env extends ZKMock {
+    val zk = new Zooowner("localhost:2181", 1.second, "prefix") {
+      override protected def generateClient = zkMock.createMock()
     }
+    zk.isConnected should be (true)
   }
 
 
-  "Zooowner" should "connect to ZooKeeper" in {
-    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
-    eventually { zk.isConnected should be (true) }
-
-    zk.close()
-  }
-
-
-  it should "be initialized with simple path prefix " +
-            "without slashes" in
+  "Zooowner" should "be initialized with simple path prefix " +
+                    "without slashes" in
   {
-    lazy val zkOne = new Zooowner(zkAddress, 15.seconds, "/prefix")
+    val stubAddress = "localhost:2181"
+
+    lazy val zkOne = new Zooowner(stubAddress, 15.seconds, "/prefix")
     an [IllegalArgumentException] should be thrownBy zkOne
 
-    lazy val zkTwo = new Zooowner(zkAddress, 15.seconds, "prefix/")
+    lazy val zkTwo = new Zooowner(stubAddress, 15.seconds, "prefix/")
     an [IllegalArgumentException] should be thrownBy zkTwo
 
-    lazy val zkThree = new Zooowner(zkAddress, 15.seconds, "prefix/sub-prefix")
+    lazy val zkThree = new Zooowner(stubAddress, 15.seconds, "prefix/sub-prefix")
     an [IllegalArgumentException] should be thrownBy zkThree
   }
 
 
-  it should "create root node on connection" in {
-    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
-    eventually { zk.isConnected should be (true) }
-
-    zk.exists("/prefix") should be (true)
-
-    zk.close()
+  it should "create root node on connection" in new Env {
+    zk.watcher.reaction(KeeperState.SyncConnected)
+    zkMock.check.created("/prefix")
   }
 
 
-  it should "accept connection hook, that will be run on connection" in {
+  it should "run provided hook on connection" in new Env {
     var hookRan = false
-
-    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
 
     zk.watchConnection { case Connected => hookRan = true }
     eventually { hookRan should be (true) }
@@ -95,20 +62,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "run connection hook if connection already established" in {
-    var hookRan = false
-
-    val zk = new Zooowner(zkAddress, 15.seconds, "prefix")
-    eventually { zk.isConnected should be (true) }
-
-    zk.watchConnection { case Connected => hookRan = true }
-    eventually { hookRan should be (true) }
-
-    zk.close()
-  }
-
-
-  it should "create nodes with paths" in {
+  it should "create nodes with paths" in new Env {
     zk.create("node/with/long/path", Some("value"), recursive = true)
 
     zk.get("node/with/long") should be (None)
@@ -116,7 +70,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "create nodes with paths filled with specified value" in {
+  it should "create nodes with paths filled with specified value" in new Env {
     zk.create(
       "node/with/long/path",
       Some("value"),
@@ -124,25 +78,27 @@ class ZooownerSpec extends UnitSpec with Eventually {
       filler = Some("filler")
     )
 
-    zk.get("node") should be (Some("filler"))
-    zk.get("node/with/long") should be (Some("filler"))
+    zkMock.check.created("/prefix/node", Some("filler"))
+    zkMock.check.created("/prefix/node/with", Some("filler"))
+    zkMock.check.created("/prefix/node/with/long", Some("filler"))
+
     zk.get("node/with/long/path") should be (Some("value"))
   }
 
 
-  it should "return Some(value) if node exists" in {
+  it should "return Some(value) if node exists" in new Env {
     zk.create("node", Some("value"))
 
     zk.get("node") should be (Some("value"))
   }
 
 
-  it should "return None if node doesn't exist" in {
+  it should "return None if node doesn't exist" in new Env {
     zk.get("non-existant-node") should be (None)
   }
 
 
-  it should "change values of created nodes" in {
+  it should "change values of created nodes" in new Env {
     zk.create("node", Some("first value"))
 
     zk.get("node") should be (Some("first value"))
@@ -153,16 +109,16 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "return a list of nodes children" in {
+  it should "return a list of nodes children" in new Env {
     zk.create("node", Some("value"), persistent = true)
     zk.create("node/foo", Some("foo-value"))
     zk.create("node/bar", Some("bar-value"))
 
-    zk.children("node") should be (List("foo", "bar"))
+    zk.children("node") should contain only ("foo", "bar")
   }
 
 
-  it should "delete nodes" in {
+  it should "delete nodes" in new Env {
     zk.create("node", Some("first value"))
     zk.delete("node")
 
@@ -170,7 +126,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "delete nodes recursively" in {
+  it should "delete nodes recursively" in new Env {
     zk.create("node", Some("first value"), persistent = true)
     zk.create("node/child", Some("child value"), persistent = true)
     zk.delete("node", recursive = true)
@@ -180,7 +136,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "test if node is ephemeral" in {
+  it should "test if node is ephemeral" in new Env {
     zk.create("persistent-node", persistent = true)
     zk.create("ephemeral-node", persistent = false)
 
@@ -189,7 +145,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "set one-time watches on nodes" in {
+  it should "set one-time watches on nodes" in new Env {
     import com.ataraxer.zooowner.Zooowner.Reaction
 
     var created = false
@@ -226,7 +182,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "set persistent watches on nodes" in {
+  it should "set persistent watches on nodes" in new Env {
     var created = false
     var changed = false
     var deleted = false
@@ -257,7 +213,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "return cancellable watcher" in {
+  it should "return cancellable watcher" in new Env {
     var created = false
     var deleted = false
 
@@ -279,7 +235,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "cancell all watchers" in {
+  it should "cancell all watchers" in new Env {
     var createdA = false
     var deletedA = false
     var createdB = false
@@ -317,9 +273,12 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "reconnect on session expiration" in {
-    zk.expireSession()
+  it should "reconnect on session expiration" in new Env {
+    zkMock.expireSession()
+    // attempt to create node with expired session
     zk.create("foo", Some("value"))
+    // check that request has been handled within new session
+    zk.get("foo") should be (Some("value"))
   }
 
 }

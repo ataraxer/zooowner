@@ -12,7 +12,6 @@ import scala.concurrent.duration._
 
 
 class AsyncZooownerSpec extends UnitSpec with Eventually {
-  import ZooownerSpec._
 
   implicit val eventuallyConfig =
     PatienceConfig(timeout = 10.seconds)

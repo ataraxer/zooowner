@@ -85,7 +85,7 @@ class Zooowner(servers: String,
   /**
    * Internal watcher, that controls ZooKeeper connection life-cycle.
    */
-  protected val watcher = StateWatcher {
+  protected[zooowner] val watcher = StateWatcher {
     case KeeperState.SyncConnected => {
       assert { isConnected == true }
 
