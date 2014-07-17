@@ -183,14 +183,20 @@ trait ZKMock {
 
       when(zk.getState).thenReturn(States.CONNECTED)
 
+      when(zk.exists(anyString, anyWatcher))
+        .thenAnswer(existsAnswer(null))
+
       when(zk.create(anyString, anyData, anyACL, anyCreateMode))
         .thenAnswer(createAnswer)
+
+      when(zk.setData(anyString, anyData, anyVersion))
+        .thenThrow(new NoNodeException)
 
       when(zk.getData(anyString, anyWatcher, anyStat))
         .thenThrow(new NoNodeException)
 
-      when(zk.exists(anyString, anyWatcher))
-        .thenAnswer(existsAnswer(null))
+      when(zk.delete(anyString, anyVersion))
+        .thenThrow(new NoNodeException)
 
       zk
     }
