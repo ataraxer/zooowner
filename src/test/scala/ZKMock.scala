@@ -195,6 +195,19 @@ trait ZKMock {
     }
 
 
+    def connect()    = when(client.getState).thenReturn(States.CONNECTED)
+    def disconnect() = when(client.getState).thenReturn(States.NOT_CONNECTED)
+
+    def expireSession() = {
+      val fail = doThrow(new SessionExpiredException)
+      fail.when(client).getData(anyString, anyWatcher, anyStat)
+      fail.when(client).getChildren(anyString, anyWatcher)
+      fail.when(client).exists(anyString, anyWatcher)
+      fail.when(client).setData(anyString, anyData, anyInt)
+      fail.when(client).delete(anyString, anyInt)
+    }
+
+
     /**
      * Stubs following ZooKeeper methods to simulate created node:
      * - getData(String, Watcher, Stat)
