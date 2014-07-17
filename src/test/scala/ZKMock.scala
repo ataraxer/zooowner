@@ -2,6 +2,8 @@ package com.ataraxer.zooowner
 
 import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
 import org.apache.zookeeper.ZooKeeper.States
+import org.apache.zookeeper.Watcher.Event._
+import org.apache.zookeeper.WatchedEvent
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.CreateMode
 import org.apache.zookeeper.CreateMode._
@@ -65,15 +67,51 @@ object ZKMock {
 
 trait ZKMock {
   import ZKMock._
+  import EventType.{NodeCreated, NodeDataChanged, NodeDeleted}
+  import EventType.NodeChildrenChanged
 
   object zkMock {
     private val children =
       mutable.Map.empty[String, Set[String]].withDefaultValue(Set())
 
+    private val watchers =
+      mutable.Map.empty[String, Set[ZKWatcher]].withDefaultValue(Set())
 
-    val createAnswer = answer { ctx =>
-      val Array(rawPath, rawData, _, rawCreateMode) = ctx.getArguments
-      val path = rawPath.asInstanceOf[String]
+    def addWatcher(path: String, watcher: ZKWatcher) = {
+      if (watcher != null) {
+        watchers(path) = watchers(path) + watcher
+      }
+    }
+
+    def removeWatcher(path: String, watcher: ZKWatcher) = {
+      watchers(path) = watchers(path) - watcher
+    }
+
+
+    def fireEvent(path: String, event: EventType): Unit = {
+      val zkEvent = new WatchedEvent(event, KeeperState.SyncConnected, path)
+
+      val nodeWatchers = watchers.getOrElse(path, Set())
+
+      nodeWatchers foreach { watcher =>
+        removeWatcher(path, watcher)
+        watcher.process(zkEvent)
+      }
+    }
+
+
+    private def existsAnswer(stat: Stat) = answer { ctx =>
+      val Array(path: String, rawWatcher) = ctx.getArguments
+      val watcher = rawWatcher.asInstanceOf[ZKWatcher]
+
+      addWatcher(path, watcher)
+
+      stat
+    }
+
+
+    private val createAnswer = answer { ctx =>
+      val Array(path: String, rawData, _, rawCreateMode) = ctx.getArguments
       val data = rawData.asInstanceOf[Array[Byte]]
       val createMode = rawCreateMode.asInstanceOf[CreateMode]
 
@@ -85,29 +123,57 @@ trait ZKMock {
     }
 
 
-    def setAnswer(path: String, stat: Stat) = answer { ctx =>
-      val Array(_, newData, _) = ctx.getArguments
+    private def setAnswer(stat: Stat) = answer { ctx =>
+      val Array(path: String, newData: Array[Byte], _) = ctx.getArguments
+      //val path = rawPath.asInstanceOf[String]
 
-      doReturn(newData).when(client)
+      doAnswer(getAnswer(newData)).when(client)
         .getData(matches(path), anyWatcher, anyStat)
+
+      fireEvent(path, NodeDataChanged)
 
       stat
     }
 
 
-    def deleteAnswer(path: String) = answer { ctx =>
+    private def getAnswer(data: Array[Byte]) = answer { ctx =>
+      val Array(path: String, rawWatcher, _) = ctx.getArguments
+      val watcher = rawWatcher.asInstanceOf[ZKWatcher]
+
+      addWatcher(path, watcher)
+
+      data
+    }
+
+
+    private val deleteAnswer = answer { ctx =>
+      val Array(path: String, _) = ctx.getArguments
+
       doThrow(new NoNodeException).when(client)
         .getData(matches(path), anyWatcher, anyStat)
 
-      doReturn(null).when(client)
+      doAnswer(existsAnswer(null)).when(client)
         .exists(matches(path), anyWatcher)
 
       val parent = nodeParent(path)
       val name   = nodeName(path)
       children(parent) = children(parent) - name
 
-      doReturn(children(parent).toList: JavaList[String]).when(client)
+      fireEvent(path, NodeDeleted)
+      watchers(path) = Set()
+
+      doAnswer(childrenAnswer).when(client)
         .getChildren(matches(parent), anyWatcher)
+    }
+
+
+    private val childrenAnswer = answer { ctx =>
+      val Array(path: String, rawWatcher) = ctx.getArguments
+      val watcher = rawWatcher.asInstanceOf[ZKWatcher]
+
+      addWatcher(path, watcher)
+
+      children(path).toList: JavaList[String]
     }
 
 
@@ -122,9 +188,8 @@ trait ZKMock {
       when(zk.getData(anyString, anyWatcher, anyStat))
         .thenThrow(new NoNodeException)
 
-      // TODO: remove as redundant
       when(zk.exists(anyString, anyWatcher))
-        .thenReturn(null)
+        .thenAnswer(existsAnswer(null))
 
       zk
     }
@@ -152,20 +217,26 @@ trait ZKMock {
       val name   = nodeName(path)
       children(parent) = children(parent) + name
 
-      doReturn(children(parent).toList: JavaList[String]).when(client)
-        .getChildren(matches(parent), anyWatcher)
-
-      doReturn(data).when(client)
+      doAnswer(getAnswer(data)).when(client)
         .getData(matches(path), anyWatcher, anyStat)
 
-      doReturn(stat).when(client)
+      doAnswer(childrenAnswer).when(client)
+        .getChildren(matches(parent), anyWatcher)
+
+      doAnswer(existsAnswer(stat)).when(client)
         .exists(matches(path), anyWatcher)
 
-      doAnswer(setAnswer(path, stat)).when(client)
+      doAnswer(setAnswer(stat)).when(client)
         .setData(matches(path), anyData, anyInt)
 
-      doAnswer(deleteAnswer(path)).when(client)
+      doAnswer(deleteAnswer).when(client)
         .delete(matches(path), anyInt)
+
+      fireEvent(path, NodeCreated)
+
+      if (watchers contains parent) {
+        fireEvent(parent, NodeChildrenChanged)
+      }
     }
 
 
