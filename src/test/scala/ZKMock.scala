@@ -213,7 +213,26 @@ trait ZKMock {
     }
 
 
-    val client = {
+    /**
+     * Internal ZK mock reference.
+     */
+    private var client = generate
+
+
+    /**
+     * Updates internal ZK mock and returns it.
+     */
+    def createMock(): ZooKeeper = {
+      val newClient = generate
+      client = newClient
+      newClient
+    }
+
+
+    /**
+     * Return new ZK mock with default stubbing.
+     */
+    def generate = {
       val zk = mock(classOf[ZooKeeper])
 
       when(zk.getState).thenReturn(States.CONNECTED)
