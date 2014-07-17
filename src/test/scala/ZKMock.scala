@@ -152,7 +152,6 @@ trait ZKMock {
      */
     private def setAnswer(stat: Stat) = answer { ctx =>
       val Array(path: String, newData: Array[Byte], _) = ctx.getArguments
-      //val path = rawPath.asInstanceOf[String]
 
       doAnswer(getAnswer(newData)).when(client)
         .getData(matches(path), anyWatcher, anyStat)
@@ -271,10 +270,11 @@ trait ZKMock {
      */
     def expireSession() = {
       val fail = doThrow(new SessionExpiredException)
-      fail.when(client).getData(anyString, anyWatcher, anyStat)
-      fail.when(client).getChildren(anyString, anyWatcher)
       fail.when(client).exists(anyString, anyWatcher)
+      fail.when(client).create(anyString, anyData, anyACL, anyCreateMode)
+      fail.when(client).getData(anyString, anyWatcher, anyStat)
       fail.when(client).setData(anyString, anyData, anyVersion)
+      fail.when(client).getChildren(anyString, anyWatcher)
       fail.when(client).delete(anyString, anyVersion)
     }
 
@@ -293,7 +293,7 @@ trait ZKMock {
      */
     def create(path: String,
                data: Array[Byte],
-               persistent: Boolean = false)
+               persistent: Boolean = false): Unit =
     {
       val stat = if (persistent) persistentStat else ephemeralStat
 
