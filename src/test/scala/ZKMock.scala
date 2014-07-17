@@ -72,23 +72,39 @@ trait ZKMock {
   import EventType.NodeChildrenChanged
 
   object zkMock {
+    /**
+     * In-memory storage of each node children names.
+     */
     private val children =
       mutable.Map.empty[String, Set[String]].withDefaultValue(Set())
 
+    /**
+     * In-memory storage of each node watchers.
+     */
     private val watchers =
       mutable.Map.empty[String, Set[ZKWatcher]].withDefaultValue(Set())
 
+
+    /**
+     * Set up a watcher on a node.
+     */
     def addWatcher(path: String, watcher: ZKWatcher) = {
       if (watcher != null) {
         watchers(path) = watchers(path) + watcher
       }
     }
 
+    /**
+     * Remove a watcher from a node.
+     */
     def removeWatcher(path: String, watcher: ZKWatcher) = {
       watchers(path) = watchers(path) - watcher
     }
 
 
+    /**
+     * Fire node event, passing it to all node's watchers.
+     */
     def fireEvent(path: String, event: EventType): Unit = {
       val zkEvent = new WatchedEvent(event, KeeperState.SyncConnected, path)
 
@@ -101,6 +117,9 @@ trait ZKMock {
     }
 
 
+    /**
+     * Generate `exists(String, Watcher)` stub answer.
+     */
     private def existsAnswer(stat: Stat) = answer { ctx =>
       val Array(path: String, rawWatcher) = ctx.getArguments
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
@@ -111,6 +130,10 @@ trait ZKMock {
     }
 
 
+    /**
+     * `create(String, Array[Byte], Array[ACL], CreateMode)`
+     * stub answer.
+     */
     private val createAnswer = answer { ctx =>
       val Array(path: String, rawData, _, rawCreateMode) = ctx.getArguments
       val data = rawData.asInstanceOf[Array[Byte]]
@@ -124,6 +147,9 @@ trait ZKMock {
     }
 
 
+    /**
+     * Generate `setData(String, Int)` stub answer.
+     */
     private def setAnswer(stat: Stat) = answer { ctx =>
       val Array(path: String, newData: Array[Byte], _) = ctx.getArguments
       //val path = rawPath.asInstanceOf[String]
@@ -137,6 +163,9 @@ trait ZKMock {
     }
 
 
+    /**
+     * Generate `getData(String, Watcher, Stat)` stub answer.
+     */
     private def getAnswer(data: Array[Byte]) = answer { ctx =>
       val Array(path: String, rawWatcher, _) = ctx.getArguments
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
@@ -147,6 +176,9 @@ trait ZKMock {
     }
 
 
+    /**
+     * `delete(String, Int)` stub answer.
+     */
     private val deleteAnswer = answer { ctx =>
       val Array(path: String, _) = ctx.getArguments
 
@@ -168,6 +200,9 @@ trait ZKMock {
     }
 
 
+    /**
+     * `getChildren(String, Watcher)` stub answer.
+     */
     private val childrenAnswer = answer { ctx =>
       val Array(path: String, rawWatcher) = ctx.getArguments
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
@@ -202,9 +237,19 @@ trait ZKMock {
     }
 
 
-    def connect()    = when(client.getState).thenReturn(States.CONNECTED)
+    /**
+     * Change ZK mock status to connected.
+     */
+    def connect() = when(client.getState).thenReturn(States.CONNECTED)
+
+    /**
+     * Change ZK mock status to disconnected.
+     */
     def disconnect() = when(client.getState).thenReturn(States.NOT_CONNECTED)
 
+    /**
+     * Simulate session expiration.
+     */
     def expireSession() = {
       val fail = doThrow(new SessionExpiredException)
       fail.when(client).getData(anyString, anyWatcher, anyStat)
@@ -216,7 +261,7 @@ trait ZKMock {
 
 
     /**
-     * Stubs following ZooKeeper methods to simulate created node:
+     * Stub following ZooKeeper methods to simulate created node:
      * - getData(String, Watcher, Stat)
      * - setData(String, Array[Byte], Int)
      * - exists(String, Watcher)
@@ -262,7 +307,7 @@ trait ZKMock {
 
     object check {
       /**
-       * Checks that ZooKeeper has been requested to create node with
+       * Check that ZooKeeper has been requested to create node with
        * specified path and optional data.
        *
        * @param path Path of the created node.
