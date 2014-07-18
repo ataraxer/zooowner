@@ -7,9 +7,7 @@ import org.apache.zookeeper.WatchedEvent
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.CreateMode
 import org.apache.zookeeper.CreateMode._
-import org.apache.zookeeper.data.Stat
-
-import org.scalatest.Suite
+import org.apache.zookeeper.data.{Stat, ACL}
 
 import org.mockito.Mockito._
 import org.mockito.Matchers._
@@ -25,7 +23,6 @@ import java.util.{List => JavaList}
 
 
 object ZKMock {
-  import Zooowner._
 
   def cleanPath(path: String) = path.stripPrefix("/").stripSuffix("/")
   def pathComponents(path: String) = cleanPath(path).split("/")
@@ -54,7 +51,7 @@ object ZKMock {
   def anyData = any(classOf[Array[Byte]])
   def anyVersion = anyInt
   def anyCreateMode = any(classOf[CreateMode])
-  def anyACL = matches(AnyACL)
+  def anyACL = any(classOf[JavaList[ACL]])
 
 
   def answer[T](code: InvocationOnMock => T) = {
