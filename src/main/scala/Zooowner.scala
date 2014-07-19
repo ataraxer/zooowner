@@ -328,18 +328,14 @@ class Zooowner(servers: String,
 
       def reaction = {
         case EventType.NodeCreated => {
-          // child watcher isn't set yet for that node so
-          // we need to set it up if watcher is persistent
-          if (persistent) watch(path, this)
-
           // since `watch` takes care of setting both data
           // and children watches there is no need to
           // set watcher again via `get`
-          reactOn { NodeCreated(path, get(path)) }
+          reactOn { NodeCreated(path, get(path, watcher = self)) }
         }
 
         case EventType.NodeDataChanged => reactOn {
-          NodeChanged(path, get(path, self))
+          NodeChanged(path, get(path, watcher = self))
         }
 
         case EventType.NodeChildrenChanged => reactOn {
@@ -364,12 +360,6 @@ class Zooowner(servers: String,
    */
   def watch(path: String, watcher: EventWatcher): EventWatcher = {
     stat(path, Some(watcher))
-
-    // node may not exist yet, so we ignore NoNode exceptions
-    ignoring(classOf[NoNodeException]) {
-      children(path, watcher = Some(watcher))
-    }
-
     watcher
   }
 
