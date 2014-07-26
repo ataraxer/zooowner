@@ -75,27 +75,51 @@ trait ZKMock {
     private val children =
       mutable.Map.empty[String, Set[String]].withDefaultValue(Set())
 
+
     /**
-     * In-memory storage of each node watchers.
+     * In-memory storage of node data watchers.
      */
-    private val watchers =
+    private val dataWatchers =
+      mutable.Map.empty[String, Set[ZKWatcher]].withDefaultValue(Set())
+
+    /**
+     * In-memory storage of node children watchers.
+     */
+    private val childrenWatchers =
       mutable.Map.empty[String, Set[ZKWatcher]].withDefaultValue(Set())
 
 
     /**
-     * Set up a watcher on a node.
+     * Set up a data watcher on a node.
      */
-    def addWatcher(path: String, watcher: ZKWatcher) = {
+    def addDataWatcher(path: String, watcher: ZKWatcher) = {
       if (watcher != null) {
-        watchers(path) = watchers(path) + watcher
+        dataWatchers(path) = dataWatchers(path) + watcher
       }
+    }
+
+    /**
+     * Set up a children watcher on a node.
+     */
+    def addChildrenWatcher(path: String, watcher: ZKWatcher) = {
+      if (watcher != null) {
+        childrenWatchers(path) = childrenWatchers(path) + watcher
+      }
+    }
+
+
+    /**
+     * Remove a watcher from a node.
+     */
+    def removeDataWatcher(path: String, watcher: ZKWatcher) = {
+      dataWatchers(path) = dataWatchers(path) - watcher
     }
 
     /**
      * Remove a watcher from a node.
      */
-    def removeWatcher(path: String, watcher: ZKWatcher) = {
-      watchers(path) = watchers(path) - watcher
+    def removeChildrenWatcher(path: String, watcher: ZKWatcher) = {
+      childrenWatchers(path) = childrenWatchers(path) - watcher
     }
 
 
@@ -105,11 +129,20 @@ trait ZKMock {
     def fireEvent(path: String, event: EventType): Unit = {
       val zkEvent = new WatchedEvent(event, KeeperState.SyncConnected, path)
 
-      val nodeWatchers = watchers.getOrElse(path, Set())
+      if (event == NodeChildrenChanged) {
+        val nodeWatchers = childrenWatchers.getOrElse(path, Set())
 
-      nodeWatchers foreach { watcher =>
-        removeWatcher(path, watcher)
-        watcher.process(zkEvent)
+        nodeWatchers foreach { watcher =>
+          removeChildrenWatcher(path, watcher)
+          watcher.process(zkEvent)
+        }
+      } else {
+        val nodeWatchers = dataWatchers.getOrElse(path, Set())
+
+        nodeWatchers foreach { watcher =>
+          removeDataWatcher(path, watcher)
+          watcher.process(zkEvent)
+        }
       }
     }
 
@@ -121,7 +154,7 @@ trait ZKMock {
       val Array(path: String, rawWatcher) = ctx.getArguments
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
 
-      addWatcher(path, watcher)
+      addDataWatcher(path, watcher)
 
       stat
     }
@@ -166,7 +199,7 @@ trait ZKMock {
       val Array(path: String, rawWatcher, _) = ctx.getArguments
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
 
-      addWatcher(path, watcher)
+      addDataWatcher(path, watcher)
 
       data
     }
@@ -192,12 +225,12 @@ trait ZKMock {
       val name   = nodeName(path)
       children(parent) = children(parent) - name
 
-      if (watchers contains parent) {
+      if (childrenWatchers contains parent) {
         fireEvent(parent, NodeChildrenChanged)
       }
 
       fireEvent(path, NodeDeleted)
-      watchers(path) = Set()
+      dataWatchers(path) = Set()
 
       doAnswer(childrenAnswer).when(client)
         .getChildren(matches(parent), anyWatcher)
@@ -211,7 +244,7 @@ trait ZKMock {
       val Array(path: String, rawWatcher) = ctx.getArguments
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
 
-      addWatcher(path, watcher)
+      addChildrenWatcher(path, watcher)
 
       children(path).toList: JavaList[String]
     }
@@ -348,7 +381,7 @@ trait ZKMock {
 
       fireEvent(path, NodeCreated)
 
-      if (watchers contains parent) {
+      if (childrenWatchers contains parent) {
         fireEvent(parent, NodeChildrenChanged)
       }
     }

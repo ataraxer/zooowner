@@ -208,7 +208,7 @@ class ZKMockSpec extends UnitSpec {
     zk.create("/some-node/child-a", data, AnyACL, PERSISTENT)
     zk.create("/some-node/child-b", data, AnyACL, PERSISTENT)
     // set up watcher
-    zk.exists("/some-node", watcher)
+    zk.getChildren("/some-node", watcher)
     // change children by deleting one of existing
     zk.delete("/some-node/child-b", -1)
 
@@ -216,7 +216,7 @@ class ZKMockSpec extends UnitSpec {
 
     eventFired = false
     // set up watcher
-    zk.exists("/some-node", watcher)
+    zk.getChildren("/some-node", watcher)
     // change children by creating a new one
     zk.create("/some-node/child-c", data, AnyACL, PERSISTENT)
 
