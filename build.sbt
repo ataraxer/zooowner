@@ -55,17 +55,23 @@ val publishingSettings = Seq(
 instrumentSettings
 
 lazy val zooowner = project.in(file("."))
-  .dependsOn(zooownerMock)
-  .settings(name := "zoowner")
+  .dependsOn(zooownerMocking, zooownerCore)
   .settings(commonSettings: _*)
   .settings(publishingSettings: _*)
   .settings(dependencies: _*)
 
-lazy val zooownerMock = project.in(file("zooowner-mock"))
-  .settings(name := "zooowner-mock")
+lazy val zooownerMocking = project.in(file("zooowner-mocking"))
+  .dependsOn(zooownerCore)
   .settings(commonSettings: _*)
   .settings(publishingSettings: _*)
   .settings(dependencies: _*)
   .settings(libraryDependencies +=
     "org.mockito" % "mockito-core" % "1.8.5")
+
+lazy val zooownerCore = project.in(file("zooowner-core"))
+  .settings(commonSettings: _*)
+  .settings(publishingSettings: _*)
+  .settings(dependencies: _*)
+  .settings(libraryDependencies +=
+    "org.scalatest" %% "scalatest" % "2.1.0")
 

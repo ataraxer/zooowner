@@ -1,4 +1,4 @@
-package com.ataraxer.zooowner
+package com.ataraxer.zooowner.mocking
 
 import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
 import org.apache.zookeeper.ZooKeeper.States
@@ -187,6 +187,10 @@ trait ZKMock {
       val parent = nodeParent(path)
       val name   = nodeName(path)
       children(parent) = children(parent) - name
+
+      if (watchers contains parent) {
+        fireEvent(parent, NodeChildrenChanged)
+      }
 
       fireEvent(path, NodeDeleted)
       watchers(path) = Set()
