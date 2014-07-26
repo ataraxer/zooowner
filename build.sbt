@@ -55,6 +55,7 @@ val publishingSettings = Seq(
 instrumentSettings
 
 lazy val zooowner = project.in(file("."))
+  .aggregate(zooownerMocking, zooownerCommon)
   .dependsOn(zooownerMocking, zooownerCommon)
   .settings(commonSettings: _*)
   .settings(publishingSettings: _*)
