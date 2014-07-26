@@ -243,7 +243,9 @@ class Zooowner(servers: String,
   /**
    * Tests whether the node exists.
    */
-  def exists(path: String) = stat(path) != None
+  def exists(path: String, watcher: Option[EventWatcher] = None) = {
+    stat(path, watcher) != None
+  }
 
   /**
    * Returns Some(value) of the node if exists, None otherwise.
@@ -328,25 +330,24 @@ class Zooowner(servers: String,
 
       def reaction = {
         case EventType.NodeCreated => {
-          // since `watch` takes care of setting both data
-          // and children watches there is no need to
-          // set watcher again via `get`
-          reactOn { NodeCreated(path, get(path, watcher = self)) }
+          if (persistent) watchChildren(path, watcher = this)
+          reactOn { NodeCreated(path, get(path)) }
         }
 
         case EventType.NodeDataChanged => reactOn {
+          if (persistent) watchChildren(path, watcher = this)
           NodeChanged(path, get(path, watcher = self))
         }
 
         case EventType.NodeChildrenChanged => reactOn {
+          if (persistent) watchData(path, watcher = this)
           NodeChildrenChanged(path, children(path, watcher = self))
         }
 
         case EventType.NodeDeleted => {
           // after node deletion we still may be interested
           // in watching it, in that case -- reset watcher
-          if (persistent) watch(path, this)
-
+          if (persistent) watch(path, watcher = this)
           reactOn { NodeDeleted(path) }
         }
       }
@@ -359,9 +360,16 @@ class Zooowner(servers: String,
    * Sets up a watcher on node events.
    */
   def watch(path: String, watcher: EventWatcher): EventWatcher = {
-    stat(path, Some(watcher))
+    val nodeExists = exists(path, Some(watcher))
+    if (nodeExists) children(path, watcher = Some(watcher))
     watcher
   }
+
+  def watchData(path: String, watcher: EventWatcher): Unit =
+    exists(path, watcher = Some(watcher))
+
+  def watchChildren(path: String, watcher: EventWatcher): Unit =
+    children(path, watcher = Some(watcher))
 
 }
 
