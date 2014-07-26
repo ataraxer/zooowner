@@ -172,6 +172,8 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zk.watch("some-node", persistent = false)(reaction)
     zk.create("some-node/child", Some("value"))
     eventually { childCreated should be (true) }
+    // cleanup
+    zk.delete("some-node/child")
 
     zk.watch("some-node", persistent = false)(reaction)
     zk.set("some-node", "new-value")
