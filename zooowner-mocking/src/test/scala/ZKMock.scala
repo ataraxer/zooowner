@@ -42,6 +42,9 @@ class ZKMockSpec extends UnitSpec {
   it should "simulate children creation" in new Env {
     val data = "some-data".getBytes
     zk.create("/some-node", data, AnyACL, PERSISTENT)
+
+    zk.getChildren("/some-node", null) shouldBe empty
+
     zk.create("/some-node/child-a", data, AnyACL, PERSISTENT)
     zk.create("/some-node/child-b", data, AnyACL, PERSISTENT)
 
