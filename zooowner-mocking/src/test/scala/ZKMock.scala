@@ -81,6 +81,75 @@ class ZKMockSpec extends UnitSpec {
   }
 
 
+  it should "simulate NoNodeException for client calls " +
+            "on uncreated nodes" in new Env
+  {
+    intercept[NoNodeException] {
+      zk.getData("/non-existing-node", null, null)
+    }
+
+    intercept[NoNodeException] {
+      val data = "some-data".getBytes
+      zk.setData("/non-existing-node", data, -1)
+    }
+
+    intercept[NoNodeException] {
+      zk.getChildren("/non-existing-node", null)
+    }
+
+    intercept[NoNodeException] {
+      zk.delete("/non-existing-node", -1)
+    }
+  }
+
+
+  it should "simulate NoNodeException on attempt to create a node " +
+            "under non-existing one" in new Env
+  {
+    intercept[NoNodeException] {
+      val data = "some-data".getBytes
+      zk.create("/non-existing-node/some-node", data, AnyACL, PERSISTENT)
+    }
+  }
+
+
+  it should "simulate NoChildrenForEphemeralsException on attempt to create " +
+            "a node under ephemeral one" in new Env
+  {
+    val data = "some-data".getBytes
+    zk.create("/ephemeral-node", data, AnyACL, EPHEMERAL)
+
+    intercept[NoChildrenForEphemeralsException] {
+      zk.create("/ephemeral-node/child", data, AnyACL, EPHEMERAL)
+    }
+  }
+
+
+  it should "simulate NodeExistsException on creation of " +
+            "existing node attempt" in new Env
+  {
+    val data = "some-data".getBytes
+    zk.create("/some-node", data, AnyACL, PERSISTENT)
+
+    intercept[NodeExistsException] {
+      zk.create("/some-node", data, AnyACL, PERSISTENT)
+    }
+  }
+
+
+  it should "simulate NoEmptyException on node " +
+            "with children deletion" in new Env
+  {
+    val data = "some-data".getBytes
+    zk.create("/some-node", data, AnyACL, PERSISTENT)
+    zk.create("/some-node/child", data, AnyACL, PERSISTENT)
+
+    intercept[NotEmptyException] {
+      zk.delete("/some-node", -1)
+    }
+  }
+
+
   it should "simulate NodeCreated event" in new Env {
     var eventFired = false
 

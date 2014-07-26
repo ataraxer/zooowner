@@ -24,9 +24,19 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   trait Env extends ZKMock {
-    val zk = new Zooowner("localhost:2181", 1.second, "prefix") {
-      override protected def generateClient = zkMock.createMock()
+    class ZooownerMock extends Zooowner("", 1.second, "prefix") {
+      override def generateClient = zkMock.createMock()
+
+      override def connect() = {
+        super.connect()
+        watcher.reaction(KeeperState.SyncConnected)
+      }
+
+      watcher.reaction(KeeperState.SyncConnected)
     }
+
+    val zk = new ZooownerMock
+
     zk.isConnected should be (true)
   }
 
@@ -48,7 +58,6 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "create root node on connection" in new Env {
-    zk.watcher.reaction(KeeperState.SyncConnected)
     zkMock.check.created("/prefix")
   }
 

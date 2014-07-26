@@ -178,6 +178,10 @@ trait ZKMock {
     private val deleteAnswer = answer { ctx =>
       val Array(path: String, _) = ctx.getArguments
 
+      if (!children(path).isEmpty) {
+        throw new NotEmptyException
+      }
+
       doThrow(new NoNodeException).when(client)
         .getData(matches(path), anyWatcher, anyStat)
 
@@ -249,6 +253,9 @@ trait ZKMock {
       when(zk.getData(anyString, anyWatcher, anyStat))
         .thenThrow(new NoNodeException)
 
+      when(zk.getChildren(anyString, anyWatcher))
+        .thenThrow(new NoNodeException)
+
       when(zk.delete(anyString, anyVersion))
         .thenThrow(new NoNodeException)
 
@@ -300,10 +307,32 @@ trait ZKMock {
 
       val parent = nodeParent(path)
       val name   = nodeName(path)
-      children(parent) = children(parent) + name
+
+      if (parent != "/") {
+        children(parent) = children(parent) + name
+
+        val maybeStat = Option { client.exists(parent, null) }
+        maybeStat match {
+          case Some(stat) => {
+            if (stat.getEphemeralOwner != 0) {
+              throw new NoChildrenForEphemeralsException
+            }
+          }
+
+          case None => {
+            throw new NoNodeException
+          }
+        }
+      }
+
+      doThrow(new NodeExistsException).when(client)
+        .create(matches(path), anyData, anyACL, anyCreateMode)
 
       doAnswer(getAnswer(data)).when(client)
         .getData(matches(path), anyWatcher, anyStat)
+
+      doAnswer(childrenAnswer).when(client)
+        .getChildren(matches(path), anyWatcher)
 
       doAnswer(childrenAnswer).when(client)
         .getChildren(matches(parent), anyWatcher)
