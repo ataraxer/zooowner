@@ -1,23 +1,23 @@
 package com.ataraxer.zooowner.mocking
 
-import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
-import org.apache.zookeeper.ZooKeeper.States
-import org.apache.zookeeper.Watcher.Event._
-import org.apache.zookeeper.WatchedEvent
-import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.CreateMode
 import org.apache.zookeeper.CreateMode._
+import org.apache.zookeeper.KeeperException._
+import org.apache.zookeeper.WatchedEvent
+import org.apache.zookeeper.Watcher.Event._
+import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.data.{Stat, ACL}
+import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
 
-import org.mockito.Mockito._
 import org.mockito.Matchers._
 import org.mockito.Matchers.{eq => matches}
-import org.mockito.stubbing._
+import org.mockito.Mockito._
 import org.mockito.invocation._
+import org.mockito.stubbing._
 
-import scala.concurrent.duration.FiniteDuration
 import scala.collection.JavaConversions._
 import scala.collection.mutable
+import scala.concurrent.duration.FiniteDuration
 
 import java.util.{List => JavaList}
 
