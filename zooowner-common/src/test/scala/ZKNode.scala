@@ -73,6 +73,16 @@ class NodeTreeSpec extends UnitSpec {
   }
 
 
+  it should "throw exception if node to be created already exists" in {
+    val node = ZKNode("original-value", persistent = true)
+    node.create("child", "child-value")
+
+    intercept[NodeExistsException] {
+      node.create("child", "child-value")
+    }
+  }
+
+
   it should "get child by name" in {
     val node = ZKNode("original-value", persistent = true)
     val child = node.create("child", "child-value")
