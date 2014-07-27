@@ -39,6 +39,12 @@ class ZKMockSpec extends UnitSpec {
   }
 
 
+  it should "simulate node existance check" in new Env {
+    zk.exists("/non-existing-node", null) should be (null)
+    zk.exists("/non-existing-node/non-existing-child", null) should be (null)
+  }
+
+
   it should "simulate children creation" in new Env {
     val data = "some-data".getBytes
     zk.create("/some-node", data, AnyACL, PERSISTENT)
@@ -140,7 +146,7 @@ class ZKMockSpec extends UnitSpec {
   }
 
 
-  it should "simulate NoEmptyException on node " +
+  it should "simulate NotEmptyException on node " +
             "with children deletion" in new Env
   {
     val data = "some-data".getBytes
