@@ -122,12 +122,18 @@ abstract class ZKNode(initialData: ZKData) {
     create(child, Some(data.getBytes), persistent)
   }
 
+  def create(child: String, persistent: Boolean): ZKNode = {
+    create(child, None, persistent)
+  }
+
   def create(child: String, data: String): ZKNode = create(child, data, false)
+  def create(child: String): ZKNode = create(child, None, false)
 
 
   def delete(child: String, version: Int = Constants.AnyVersion): Unit = {
     val childNode = this.child(child)
     childNode.checkVersion(version)
+    if (!childNode.children.isEmpty) throw new NotEmptyException
     State.children -= child
   }
 

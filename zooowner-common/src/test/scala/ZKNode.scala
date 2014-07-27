@@ -102,6 +102,17 @@ class NodeTreeSpec extends UnitSpec {
     }
   }
 
+
+  it should "throw exception if node to be deleted has children" in new {
+    val root = ZKNode(persistent = true)
+    val parent = root.create("parent", persistent = true)
+    parent.create("child")
+
+    intercept[NotEmptyException] {
+      root.delete("parent")
+    }
+  }
+
 }
 
 
