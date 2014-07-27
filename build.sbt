@@ -1,5 +1,5 @@
 val commonSettings = Seq(
-  version := "0.2.1-SNAPSHOT",
+  version := "0.2.2",
   organization := "com.ataraxer",
   homepage := Some(url("http://github.com/ataraxer/zooowner")),
   licenses := Seq("MIT License" -> url(
