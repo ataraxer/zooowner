@@ -18,32 +18,27 @@ import org.mockito.stubbing._
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 import scala.concurrent.duration.FiniteDuration
+import scala.util.control.Exception.catching
 
 import java.util.{List => JavaList}
+
+import com.ataraxer.zooowner.common.ZKNode
 
 
 object ZKMock {
 
   def cleanPath(path: String) = path.stripPrefix("/").stripSuffix("/")
-  def pathComponents(path: String) = cleanPath(path).split("/")
+
+  def pathComponents(path: String) = {
+    val clean = cleanPath(path)
+    if (clean.isEmpty) Nil else clean.split("/").toList
+  }
+
   def nodeParent(path: String) = "/" + pathComponents(path).init.mkString("/")
   def nodeName(path: String) = pathComponents(path).last
 
 
   val persistentModes = List(PERSISTENT_SEQUENTIAL, PERSISTENT)
-
-
-  val ephemeralStat = {
-    val stat = mock(classOf[Stat])
-    when(stat.getEphemeralOwner).thenReturn(1)
-    stat
-  }
-
-  val persistentStat = {
-    val stat = mock(classOf[Stat])
-    when(stat.getEphemeralOwner).thenReturn(0)
-    stat
-  }
 
 
   def anyWatcher = any(classOf[ZKWatcher])
@@ -69,12 +64,16 @@ trait ZKMock {
   import EventType.NodeChildrenChanged
 
   object zkMock {
-    /**
-     * In-memory storage of each node children names.
-     */
-    private val children =
-      mutable.Map.empty[String, Set[String]].withDefaultValue(Set())
+    val rootNode = ZKNode("", persistent = true)
 
+    def fetchNode(path: String) = {
+      val components = pathComponents(path)
+      var node = rootNode
+      for (child <- components) {
+        node = node.child(child)
+      }
+      node
+    }
 
     /**
      * In-memory storage of node data watchers.
@@ -150,13 +149,16 @@ trait ZKMock {
     /**
      * Generate `exists(String, Watcher)` stub answer.
      */
-    private def existsAnswer(stat: Stat) = answer { ctx =>
+    private val existsAnswer = answer { ctx =>
       val Array(path: String, rawWatcher) = ctx.getArguments
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
 
       addDataWatcher(path, watcher)
 
-      stat
+      val stat = catching(classOf[NoNodeException]).opt {
+        fetchNode(path).stat
+      }
+      stat.orNull
     }
 
 
@@ -168,10 +170,17 @@ trait ZKMock {
       val Array(path: String, rawData, _, rawCreateMode) = ctx.getArguments
       val data = rawData.asInstanceOf[Array[Byte]]
       val createMode = rawCreateMode.asInstanceOf[CreateMode]
-
       val persistent = persistentModes contains createMode
+      val parent = nodeParent(path)
+      val name = nodeName(path)
 
-      create(path, data, persistent)
+      fetchNode(parent).create(name, Option(data), persistent)
+
+      fireEvent(path, NodeCreated)
+
+      if (childrenWatchers contains parent) {
+        fireEvent(parent, NodeChildrenChanged)
+      }
 
       path
     }
@@ -180,28 +189,27 @@ trait ZKMock {
     /**
      * Generate `setData(String, Int)` stub answer.
      */
-    private def setAnswer(stat: Stat) = answer { ctx =>
+    private val setAnswer = answer { ctx =>
       val Array(path: String, newData: Array[Byte], _) = ctx.getArguments
 
-      doAnswer(getAnswer(newData)).when(client)
-        .getData(matches(path), anyWatcher, anyStat)
+      val node = fetchNode(path)
+      node.data = Option(newData)
 
       fireEvent(path, NodeDataChanged)
-
-      stat
+      node.stat
     }
 
 
     /**
      * Generate `getData(String, Watcher, Stat)` stub answer.
      */
-    private def getAnswer(data: Array[Byte]) = answer { ctx =>
+    private val getAnswer = answer { ctx =>
       val Array(path: String, rawWatcher, _) = ctx.getArguments
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
 
       addDataWatcher(path, watcher)
 
-      data
+      fetchNode(path).data.orNull
     }
 
 
@@ -211,19 +219,9 @@ trait ZKMock {
     private val deleteAnswer = answer { ctx =>
       val Array(path: String, _) = ctx.getArguments
 
-      if (!children(path).isEmpty) {
-        throw new NotEmptyException
-      }
-
-      doThrow(new NoNodeException).when(client)
-        .getData(matches(path), anyWatcher, anyStat)
-
-      doAnswer(existsAnswer(null)).when(client)
-        .exists(matches(path), anyWatcher)
-
       val parent = nodeParent(path)
-      val name   = nodeName(path)
-      children(parent) = children(parent) - name
+      val name = nodeName(path)
+      fetchNode(parent).delete(name)
 
       if (childrenWatchers contains parent) {
         fireEvent(parent, NodeChildrenChanged)
@@ -231,9 +229,6 @@ trait ZKMock {
 
       fireEvent(path, NodeDeleted)
       dataWatchers(path) = Set()
-
-      doAnswer(childrenAnswer).when(client)
-        .getChildren(matches(parent), anyWatcher)
     }
 
 
@@ -246,7 +241,7 @@ trait ZKMock {
 
       addChildrenWatcher(path, watcher)
 
-      children(path).toList: JavaList[String]
+      fetchNode(path).children.toList: JavaList[String]
     }
 
 
@@ -275,22 +270,22 @@ trait ZKMock {
       when(zk.getState).thenReturn(States.CONNECTED)
 
       when(zk.exists(anyString, anyWatcher))
-        .thenAnswer(existsAnswer(null))
+        .thenAnswer(existsAnswer)
 
       when(zk.create(anyString, anyData, anyACL, anyCreateMode))
         .thenAnswer(createAnswer)
 
       when(zk.setData(anyString, anyData, anyVersion))
-        .thenThrow(new NoNodeException)
+        .thenAnswer(setAnswer)
 
       when(zk.getData(anyString, anyWatcher, anyStat))
-        .thenThrow(new NoNodeException)
+        .thenAnswer(getAnswer)
 
       when(zk.getChildren(anyString, anyWatcher))
-        .thenThrow(new NoNodeException)
+        .thenAnswer(childrenAnswer)
 
       when(zk.delete(anyString, anyVersion))
-        .thenThrow(new NoNodeException)
+        .thenAnswer(deleteAnswer)
 
       zk
     }
@@ -317,73 +312,6 @@ trait ZKMock {
       fail.when(client).setData(anyString, anyData, anyVersion)
       fail.when(client).getChildren(anyString, anyWatcher)
       fail.when(client).delete(anyString, anyVersion)
-    }
-
-
-    /**
-     * Stub following ZooKeeper methods to simulate created node:
-     * - getData(String, Watcher, Stat)
-     * - setData(String, Array[Byte], Int)
-     * - exists(String, Watcher)
-     * - delete(String, Int)
-     * - getChildren(String, Watcher)
-     *
-     * @param path Path of the created node.
-     * @param data Value of the node.
-     * @param persistent Specifies whether created node should be persistent.
-     */
-    def create(path: String,
-               data: Array[Byte],
-               persistent: Boolean = false): Unit =
-    {
-      val stat = if (persistent) persistentStat else ephemeralStat
-
-      val parent = nodeParent(path)
-      val name   = nodeName(path)
-
-      if (parent != "/") {
-        children(parent) = children(parent) + name
-
-        val maybeStat = Option { client.exists(parent, null) }
-        maybeStat match {
-          case Some(stat) => {
-            if (stat.getEphemeralOwner != 0) {
-              throw new NoChildrenForEphemeralsException
-            }
-          }
-
-          case None => {
-            throw new NoNodeException
-          }
-        }
-      }
-
-      doThrow(new NodeExistsException).when(client)
-        .create(matches(path), anyData, anyACL, anyCreateMode)
-
-      doAnswer(getAnswer(data)).when(client)
-        .getData(matches(path), anyWatcher, anyStat)
-
-      doAnswer(childrenAnswer).when(client)
-        .getChildren(matches(path), anyWatcher)
-
-      doAnswer(childrenAnswer).when(client)
-        .getChildren(matches(parent), anyWatcher)
-
-      doAnswer(existsAnswer(stat)).when(client)
-        .exists(matches(path), anyWatcher)
-
-      doAnswer(setAnswer(stat)).when(client)
-        .setData(matches(path), anyData, anyVersion)
-
-      doAnswer(deleteAnswer).when(client)
-        .delete(matches(path), anyVersion)
-
-      fireEvent(path, NodeCreated)
-
-      if (childrenWatchers contains parent) {
-        fireEvent(parent, NodeChildrenChanged)
-      }
     }
 
 
