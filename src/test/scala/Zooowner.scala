@@ -7,12 +7,7 @@ import com.ataraxer.zooowner.message._
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.Watcher.Event.KeeperState
 
-import org.apache.curator.test.TestingServer
-
 import org.scalatest.concurrent.Eventually
-import org.scalatest.mock.MockitoSugar
-
-import org.mockito.Mockito._
 
 import scala.concurrent.duration._
 
