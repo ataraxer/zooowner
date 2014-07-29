@@ -19,19 +19,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   trait Env extends ZKMock {
-    class ZooownerMock extends Zooowner("", 1.second, "prefix") {
-      override def generateClient = zkMock.createMock()
-
-      override def connect() = {
-        super.connect()
-        watcher.reaction(KeeperState.SyncConnected)
-      }
-
-      watcher.reaction(KeeperState.SyncConnected)
-    }
-
-    val zk = new ZooownerMock
-
+    val zk = new ZooownerMock(zkMock.createMock _)
     zk.isConnected should be (true)
   }
 
