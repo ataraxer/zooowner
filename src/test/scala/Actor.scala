@@ -4,9 +4,8 @@ import akka.actor.ActorSystem
 import akka.testkit.{TestKit, TestActorRef, TestProbe, ImplicitSender}
 
 import com.ataraxer.test.UnitSpec
+import com.ataraxer.zooowner.mocking.ZKMock
 import com.ataraxer.zooowner.message._
-
-import org.apache.curator.test.TestingServer
 
 import org.scalatest.concurrent.Eventually
 
@@ -26,11 +25,12 @@ class ZooownerActorSpec(_system: ActorSystem)
 
 
   before {
-    val zkServer = new TestingServer
-    val zkAddress = zkServer.getConnectString
     zk = TestActorRef {
-      new ZooownerActor(zkAddress, 15.seconds, "prefix")
+      new ZooownerActor("", 1.second, "prefix") with ZKMock {
+        override val zk = new ZooownerMock(zkMock.createMock _) with Async
+      }
     }
+
     eventually { zk.underlyingActor.zk.isConnected should be (true) }
   }
 
