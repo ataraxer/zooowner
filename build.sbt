@@ -4,7 +4,8 @@ val commonSettings = Seq(
   homepage := Some(url("http://github.com/ataraxer/zooowner")),
   licenses := Seq("MIT License" -> url(
     "http://www.opensource.org/licenses/mit-license.php")),
-  scalaVersion := "2.10.3",
+  scalaVersion := "2.11.2",
+  crossScalaVersions := Seq("2.10.4", "2.11.2"),
   scalacOptions ++= Seq(
     "-g:vars",
     "-deprecation",
@@ -15,10 +16,9 @@ val commonSettings = Seq(
 
 val dependencies = Seq(
   libraryDependencies ++= Seq(
-    "com.typesafe.akka" %% "akka-actor"   % "2.3.1",
-    "com.typesafe.akka" %% "akka-testkit" % "2.3.1" % "test",
-    "org.scalatest" %% "scalatest" % "2.1.0" % "test",
-    "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test",
+    "com.typesafe.akka" %% "akka-actor"   % "2.3.4",
+    "com.typesafe.akka" %% "akka-testkit" % "2.3.4" % "test",
+    "org.scalatest" %% "scalatest" % "2.2.0" % "test",
     "org.mockito" % "mockito-core" % "1.8.5" % "test",
     "org.apache.curator" % "curator-test" % "2.4.2" % "test",
     "org.apache.zookeeper" % "zookeeper" % "3.4.6" excludeAll (
@@ -62,6 +62,7 @@ lazy val zooowner = project.in(file("."))
   .settings(dependencies: _*)
 
 lazy val zooownerMocking = project.in(file("zooowner-mocking"))
+  .settings(name := "zooowner-mocking")
   .dependsOn(zooownerCommon)
   .settings(commonSettings: _*)
   .settings(publishingSettings: _*)
@@ -70,9 +71,10 @@ lazy val zooownerMocking = project.in(file("zooowner-mocking"))
     "org.mockito" % "mockito-core" % "1.8.5")
 
 lazy val zooownerCommon = project.in(file("zooowner-common"))
+  .settings(name := "zooowner-common")
   .settings(commonSettings: _*)
   .settings(publishingSettings: _*)
   .settings(dependencies: _*)
   .settings(libraryDependencies +=
-    "org.scalatest" %% "scalatest" % "2.1.0")
+    "org.scalatest" %% "scalatest" % "2.2.0")
 
