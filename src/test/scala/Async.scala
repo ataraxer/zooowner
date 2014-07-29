@@ -1,10 +1,10 @@
 package com.ataraxer.zooowner
 
 import com.ataraxer.test.UnitSpec
+import com.ataraxer.zooowner.mocking.ZKMock
 import com.ataraxer.zooowner.message._
 
 import org.apache.zookeeper.data.Stat
-import org.apache.curator.test.TestingServer
 
 import org.scalatest.concurrent.Eventually
 
@@ -14,29 +14,16 @@ import scala.concurrent.duration._
 class AsyncZooownerSpec extends UnitSpec with Eventually {
 
   implicit val eventuallyConfig =
-    PatienceConfig(timeout = 10.seconds)
-
-  var zk: Zooowner with Async = null
-  var zkServer: TestingServer = null
+    PatienceConfig(timeout = 3.seconds)
 
 
-  before {
-    zkServer = new TestingServer
-    val zkAddress = zkServer.getConnectString
-    zk = new Zooowner(zkAddress, 15.seconds, "prefix") with Async
-    eventually { zk.isConnected should be (true) }
+  trait Env extends ZKMock {
+    val zk = new ZooownerMock(zkMock.createMock _) with Async
+    zk.isConnected should be (true)
   }
 
 
-  after {
-    zkServer.stop()
-    zkServer = null
-    zk.close()
-    zk = null
-  }
-
-
-  "Zooowner.async" should "create nodes with paths asynchronously" in {
+  "Zooowner.async" should "create nodes with paths asynchronously" in new Env {
     var done = false
 
     zk.async.create("node/with/long/path", Some("value"), recursive = true) {
@@ -51,7 +38,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "create nodes with paths filled with specified value " +
-            "asynchronously" in
+            "asynchronously" in new Env
   {
     var done = false
 
@@ -70,7 +57,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "return stat of the node asynchronously" in {
+  it should "return stat of the node asynchronously" in new Env {
     zk.create("node", Some("value"))
 
     var result = Option.empty[Stat]
@@ -83,7 +70,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "return Some(value) if node exists asynchronously" in {
+  it should "return Some(value) if node exists asynchronously" in new Env {
     zk.create("node", Some("value"))
 
     var result = Option.empty[String]
@@ -96,7 +83,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "return None if node doesn't exist asynchronously" in {
+  it should "return None if node doesn't exist asynchronously" in new Env {
     var result = Option.empty[String]
 
     zk.async.get("non-existant-node") {
@@ -107,7 +94,21 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "change values of created nodes asynchronously" in {
+  it should "get node's children asynchronously" in new Env {
+    var result = List.empty[String]
+    zk.create("parent", persistent = true)
+    zk.create("parent/child-a")
+    zk.create("parent/child-b")
+
+    zk.async.children("parent") {
+      case NodeChildren(_, children) => result = children
+    }
+
+    eventually { result should contain only ("child-a", "child-b") }
+  }
+
+
+  it should "change values of created nodes asynchronously" in new Env {
     zk.create("node", Some("first value"))
 
     zk.get("node") should be (Some("first value"))
@@ -124,7 +125,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "delete nodes asynchronously" in {
+  it should "delete nodes asynchronously" in new Env {
     zk.create("node", Some("first value"))
 
     var done = false
@@ -139,7 +140,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "delete nodes recursively asynchronously" in {
+  it should "delete nodes recursively asynchronously" in new Env {
     zk.create("node", Some("first value"), persistent = true)
     zk.create("node/child", Some("child value"), persistent = true)
 
