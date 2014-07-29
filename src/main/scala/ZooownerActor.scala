@@ -33,7 +33,7 @@ class ZooownerActor(
 
 
   def receive = {
-    /**
+    /*
      * Creates new node.
      *
      * @param path Path of node to be created.
@@ -49,7 +49,7 @@ class ZooownerActor(
       }
     }
 
-    /**
+    /*
      * Deletes node.
      *
      * @param path Path of node to be deleted.
@@ -58,7 +58,7 @@ class ZooownerActor(
       zk.async.delete(path) { passTo(sender) }
     }
 
-    /**
+    /*
      * Sets a new value for the node.
      *
      * @param path Path of the node to be updated.
@@ -68,7 +68,7 @@ class ZooownerActor(
       zk.async.set(path, data) { passTo(sender) }
     }
 
-    /**
+    /*
      * Requests current value of the node.
      *
      * @param path Path of the node which value is requested.
@@ -77,7 +77,7 @@ class ZooownerActor(
       zk.async.get(path) { passTo(sender) }
     }
 
-    /**
+    /*
      * Request children list of the node.
      *
      * @param path Path of the node which children are requested.
@@ -87,7 +87,7 @@ class ZooownerActor(
     }
 
 
-    /**
+    /*
      * Request list of children paths of the node.
      * @param path Path of the node which children paths are requested.
      */
@@ -103,7 +103,7 @@ class ZooownerActor(
     }
 
 
-    /**
+    /*
      * Sets up a watcher on a node.
      *
      * @param path Path of the node to be watched.
