@@ -1,12 +1,15 @@
 package com.ataraxer.zooowner.mocking
 
-import org.apache.zookeeper.CreateMode
+import org.apache.zookeeper.AsyncCallback
+import org.apache.zookeeper.AsyncCallback._
 import org.apache.zookeeper.CreateMode._
+import org.apache.zookeeper.KeeperException
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.WatchedEvent
 import org.apache.zookeeper.Watcher.Event._
 import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.data.{Stat, ACL}
+import org.apache.zookeeper.{CreateMode, KeeperException}
 import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
 
 import org.mockito.Matchers._
@@ -41,6 +44,11 @@ object ZKMock {
   val persistentModes = List(PERSISTENT_SEQUENTIAL, PERSISTENT)
 
 
+  def anyStatCallback = any(classOf[StatCallback])
+  def anyDataCallback = any(classOf[DataCallback])
+  def anyVoidCallback = any(classOf[VoidCallback])
+  def anyStringCallback = any(classOf[StringCallback])
+  def anyChildrenCallback = any(classOf[Children2Callback])
   def anyWatcher = any(classOf[ZKWatcher])
   def anyStat = any(classOf[Stat])
   def anyData = any(classOf[Array[Byte]])
@@ -49,10 +57,19 @@ object ZKMock {
   def anyACL = any(classOf[JavaList[ACL]])
 
 
-  def answer[T](code: InvocationOnMock => T) = {
+  def answer[T](code: Array[Object] => T) = {
     new Answer[T] {
       override def answer(invocation: InvocationOnMock): T =
-        code(invocation)
+        code(invocation.getArguments)
+    }
+  }
+
+
+  def catchExceptionCode[T](action: => T): (Option[T], Int) = {
+    try {
+      (Some(action), Code.OK.intValue)
+    } catch {
+      case e: KeeperException => (None, e.code.intValue)
     }
   }
 }
@@ -67,62 +84,99 @@ trait ZKMock {
 
   object zkMock {
 
-    /**
-     * Generate `exists(String, Watcher)` stub answer.
-     */
-    private val existsAnswer = answer { ctx =>
-      val Array(path: String, rawWatcher) = ctx.getArguments
+    /** `exists(String, Watcher)` stub answer.  */
+    private val existsAnswer = answer { args =>
+      val Array(path: String, rawWatcher) = args
       nodeTree.exists(path, rawWatcher.asInstanceOf[ZKWatcher])
     }
 
+    private val asyncExistsAnswer = answer {
+      case Array(path: String, rawWatcher, rawCallback, context) =>
+      val watcher = rawWatcher.asInstanceOf[ZKWatcher]
+      val callback = rawCallback.asInstanceOf[StatCallback]
+      val (result, code) = catchExceptionCode { nodeTree.exists(path, watcher) }
+      callback.processResult(code, path, context, result.orNull)
+    }
 
-    /**
-     * `create(String, Array[Byte], Array[ACL], CreateMode)`
-     * stub answer.
-     */
-    private val createAnswer = answer { ctx =>
-      val Array(path: String, rawData, _, rawCreateMode) = ctx.getArguments
+    /** `create(String, Array[Byte], Array[ACL], CreateMode)` stub answer.  */
+    private val createAnswer = answer { args =>
+      val Array(path: String, rawData, _, rawCreateMode) = args
       val data = rawData.asInstanceOf[Array[Byte]]
       val createMode = rawCreateMode.asInstanceOf[CreateMode]
       nodeTree.create(path, data, createMode)
     }
 
+    private val asyncCreateAnswer = answer {
+      case Array(path: String, rawData, _, rawCreateMode, rawCallback, context) =>
+      val data = rawData.asInstanceOf[Array[Byte]]
+      val createMode = rawCreateMode.asInstanceOf[CreateMode]
+      val callback = rawCallback.asInstanceOf[StringCallback]
+      val (result, code) = catchExceptionCode {
+        nodeTree.create(path, data, createMode)
+      }
+      callback.processResult(code, path, context, result.orNull)
+    }
 
-    /**
-     * Generate `setData(String, Int)` stub answer.
-     */
-    private val setAnswer = answer { ctx =>
-      val Array(path: String, newData: Array[Byte], _) = ctx.getArguments
+    /** Generate `setData(String, Int)` stub answer.  */
+    private val setAnswer = answer { args =>
+      val Array(path: String, newData: Array[Byte], _) = args
       nodeTree.set(path, newData)
     }
 
+    private val asyncSetAnswer = answer {
+      case Array(path: String, rawData, _, rawCallback, context) =>
+      val newData = rawData.asInstanceOf[Array[Byte]]
+      val callback = rawCallback.asInstanceOf[StatCallback]
+      val (_, code) = catchExceptionCode { nodeTree.set(path, newData) }
+      callback.processResult(
+        code, path, context, nodeTree.exists(path, null))
+    }
 
-    /**
-     * Generate `getData(String, Watcher, Stat)` stub answer.
-     */
-    private val getAnswer = answer { ctx =>
-      val Array(path: String, rawWatcher, _) = ctx.getArguments
+    /** Generate `getData(String, Watcher, Stat)` stub answer.  */
+    private val getAnswer = answer { args =>
+      val Array(path: String, rawWatcher, _) = args
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
       nodeTree.get(path, watcher)
     }
 
+    private val asyncGetAnswer = answer {
+      case Array(path: String, rawWatcher, rawCallback, context) =>
+      val watcher = rawWatcher.asInstanceOf[ZKWatcher]
+      val callback = rawCallback.asInstanceOf[DataCallback]
+      val (result, code) = catchExceptionCode { nodeTree.get(path, watcher) }
+      callback.processResult(
+        code, path, context, result.orNull, nodeTree.exists(path, null))
+    }
 
-    /**
-     * `delete(String, Int)` stub answer.
-     */
-    private val deleteAnswer = answer { ctx =>
-      val Array(path: String, _) = ctx.getArguments
+    /** `delete(String, Int)` stub answer.  */
+    private val deleteAnswer = answer { args =>
+      val Array(path: String, _) = args
       nodeTree.delete(path)
     }
 
+    private val asyncDeleteAnswer = answer {
+      case Array(path: String, _, rawCallback, context) =>
+      val callback = rawCallback.asInstanceOf[VoidCallback]
+      val (_, code) = catchExceptionCode { nodeTree.delete(path) }
+      callback.processResult(code, path, context)
+    }
 
-    /**
-     * `getChildren(String, Watcher)` stub answer.
-     */
-    private val childrenAnswer = answer { ctx =>
-      val Array(path: String, rawWatcher) = ctx.getArguments
+    /** `getChildren(String, Watcher)` stub answer.  */
+    private val childrenAnswer = answer { args =>
+      val Array(path: String, rawWatcher) = args
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
       nodeTree.children(path, watcher)
+    }
+
+    private val asyncChildrenAnswer = answer {
+      case Array(path: String, rawWatcher, rawCallback, context) =>
+      val watcher = rawWatcher.asInstanceOf[ZKWatcher]
+      val callback = rawCallback.asInstanceOf[Children2Callback]
+      val (result, code) = catchExceptionCode {
+        nodeTree.children(path, watcher)
+      }
+      callback.processResult(
+        code, path, context, result.getOrElse(Nil), nodeTree.exists(path, null))
     }
 
 
@@ -150,23 +204,48 @@ trait ZKMock {
 
       when(zk.getState).thenReturn(States.CONNECTED)
 
+      // Exists
       when(zk.exists(anyString, anyWatcher))
         .thenAnswer(existsAnswer)
 
+      when(zk.exists(anyString, anyWatcher, anyStatCallback, anyObject))
+        .thenAnswer(asyncExistsAnswer)
+
+      // Create
       when(zk.create(anyString, anyData, anyACL, anyCreateMode))
         .thenAnswer(createAnswer)
 
+      when(zk.create(anyString, anyData, anyACL, anyCreateMode,
+                     anyStringCallback, anyObject))
+        .thenAnswer(asyncCreateAnswer)
+
+      // Set
       when(zk.setData(anyString, anyData, anyVersion))
         .thenAnswer(setAnswer)
 
+      when(zk.setData(anyString, anyData, anyVersion, anyStatCallback, anyObject))
+        .thenAnswer(asyncSetAnswer)
+
+      // Get
       when(zk.getData(anyString, anyWatcher, anyStat))
         .thenAnswer(getAnswer)
 
+      when(zk.getData(anyString, anyWatcher, anyDataCallback, anyObject))
+        .thenAnswer(asyncGetAnswer)
+
+      // Children
       when(zk.getChildren(anyString, anyWatcher))
         .thenAnswer(childrenAnswer)
 
+      when(zk.getChildren(anyString, anyWatcher, anyChildrenCallback, anyObject))
+        .thenAnswer(asyncChildrenAnswer)
+
+      // Delete
       when(zk.delete(anyString, anyVersion))
         .thenAnswer(deleteAnswer)
+
+      when(zk.delete(anyString, anyVersion, anyVoidCallback, anyObject))
+        .thenAnswer(asyncDeleteAnswer)
 
       zk
     }
