@@ -2,13 +2,16 @@ package com.ataraxer.zooowner.mocking
 
 import com.ataraxer.test.UnitSpec
 
+import org.apache.zookeeper.AsyncCallback._
 import org.apache.zookeeper.CreateMode._
 import org.apache.zookeeper.KeeperException._
+import org.apache.zookeeper.KeeperException.Code
 import org.apache.zookeeper.{Watcher, WatchedEvent}
 import org.apache.zookeeper.Watcher.Event.{EventType, KeeperState}
 import org.apache.zookeeper.ZooDefs.Ids.{OPEN_ACL_UNSAFE => AnyACL}
 import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.ZooKeeper.States
+import org.apache.zookeeper.data.Stat
 
 import scala.concurrent.duration._
 
@@ -247,6 +250,45 @@ class ZKMockSpec extends UnitSpec {
     zk.delete("/some-node", -1)
 
     eventFired should be (true)
+  }
+
+
+  it should "simulate asynchronous node creation" in new Env {
+    var called = false
+
+    val callback = new StringCallback {
+      def processResult(code: Int, path: String, context: Any, name: String) = {
+        Code.get(code) should be (Code.OK)
+        path should be ("/some-node")
+        context should be ("some-context")
+        name should be ("/some-node")
+        called = true
+      }
+    }
+
+    val data = "some-data".getBytes
+    zk.create("/some-node", data, AnyACL, PERSISTENT, callback, "some-context")
+
+    called should be (true)
+  }
+
+
+  it should "simulate asynchronous node existance check" in new Env {
+    var called = false
+
+    val callback = new StatCallback {
+      def processResult(code: Int, path: String, context: Any, stat: Stat) = {
+        Code.get(code) should be (Code.OK)
+        path should be ("/none-existing-node")
+        context should be ("some-context")
+        stat should be (null)
+        called = true
+      }
+    }
+
+    zk.exists("/none-existing-node", null, callback, "some-context")
+
+    called should be (true)
   }
 
 }
