@@ -14,6 +14,9 @@ import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.data.Stat
 
 import scala.concurrent.duration._
+import scala.collection.JavaConversions._
+
+import java.util.{List => JavaList}
 
 
 class ZKMockSpec extends UnitSpec {
@@ -289,6 +292,107 @@ class ZKMockSpec extends UnitSpec {
     zk.exists("/none-existing-node", null, callback, "some-context")
 
     called should be (true)
+  }
+
+
+  it should "simulate asynchronous node data request" in new Env {
+    val data = "some-data".getBytes
+    zk.create("/some-node", data, AnyACL, PERSISTENT)
+
+    var called = false
+
+    val callback = new DataCallback {
+      def processResult(
+        code: Int, path: String,
+        context: Any, nodeData: Array[Byte],
+        stat: Stat) =
+      {
+        Code.get(code) should be (Code.OK)
+        path should be ("/some-node")
+        context should be ("some-context")
+        nodeData should be (data)
+        stat should not be (null)
+        called = true
+      }
+    }
+
+    zk.getData("/some-node", null, callback, "some-context")
+
+    called should be (true)
+  }
+
+
+  it should "simulate asynchronous children request" in new Env {
+    val data = "some-data".getBytes
+    zk.create("/some-node", data, AnyACL, PERSISTENT)
+    zk.create("/some-node/child-a", data, AnyACL, PERSISTENT)
+    zk.create("/some-node/child-b", data, AnyACL, PERSISTENT)
+
+    var called = false
+
+    val callback = new Children2Callback {
+      def processResult(
+        code: Int, path: String,
+        context: Any, children: JavaList[String],
+        stat: Stat) =
+      {
+        Code.get(code) should be (Code.OK)
+        path should be ("/some-node")
+        context should be ("some-context")
+        children should contain only ("child-a", "child-b")
+        called = true
+      }
+    }
+
+    zk.getChildren("/some-node", null, callback, "some-context")
+
+    called should be (true)
+  }
+
+
+  it should "simulate asynchronous changing of created nodes" in new Env {
+    val data = "some-data".getBytes
+    zk.create("/some-node", data, AnyACL, PERSISTENT)
+
+    var called = false
+
+    val callback = new StatCallback {
+      def processResult(code: Int, path: String, context: Any, stat: Stat) = {
+        Code.get(code) should be (Code.OK)
+        path should be ("/some-node")
+        context should be ("some-context")
+        stat should not be (null)
+        called = true
+      }
+    }
+
+    val newData = "new-data".getBytes
+    zk.setData("/some-node", newData, -1, callback, "some-context")
+
+    called should be (true)
+    zk.getData("/some-node", null, null) should be (newData)
+  }
+
+
+  it should "simulate asynchronous deletion of created nodes" in new Env {
+    val data = "some-data".getBytes
+    zk.create("/some-node", data, AnyACL, PERSISTENT)
+
+    var called = false
+
+    val callback = new VoidCallback {
+      def processResult(code: Int, path: String, context: Any) = {
+        Code.get(code) should be (Code.OK)
+        path should be ("/some-node")
+        context should be ("some-context")
+        called = true
+      }
+    }
+
+    zk.delete("/some-node", -1, callback, "some-context")
+
+    called should be (true)
+    zk.exists("/some-node", null) should be (null)
   }
 
 }
