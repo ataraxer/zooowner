@@ -12,7 +12,8 @@ val commonSettings = Seq(
     "-unchecked",
     "-feature",
     "-Xlint",
-    "-Xfatal-warnings"))
+    "-Xfatal-warnings")) ++
+  instrumentSettings
 
 val dependencies = Seq(
   libraryDependencies ++= Seq(
@@ -50,9 +51,6 @@ val publishingSettings = Seq(
         <url>github.com/ataraxer</url>
       </developer>
     </developers>))
-
-// Scoverage support
-instrumentSettings
 
 lazy val zooowner = project.in(file("."))
   .aggregate(zooownerMocking, zooownerCommon)
