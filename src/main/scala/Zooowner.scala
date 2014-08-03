@@ -266,14 +266,20 @@ class Zooowner(servers: String,
   /**
    * Sets a new value for the node.
    */
-  def set(path: String, data: String): Unit = {
-    this { _.setData(resolvePath(path), data.getBytes, AnyVersion) }
+  def set(path: String, data: String, version: Int = AnyVersion): Unit = {
+    this { _.setData(resolvePath(path), data.getBytes, version) }
   }
 
   /**
    * Deletes node.
+   *
+   * @param path Path of the node to be deleted.
+   * @param recursive Specifies whether all sub-nodes should be deleted.
+   * @param version Version of a node to be deleted.
    */
-  def delete(path: String, recursive: Boolean = false): Unit = {
+  def delete(path: String,
+             recursive: Boolean = false,
+             version: Int = AnyVersion): Unit = {
     if (recursive) {
       for (child <- children(path)) {
         val childPath = path/child
@@ -282,7 +288,7 @@ class Zooowner(servers: String,
     }
 
     this { client =>
-      client.delete(resolvePath(path), AnyVersion)
+      client.delete(resolvePath(path), version)
     }
   }
 
