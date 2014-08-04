@@ -69,11 +69,11 @@ trait Async { this: Zooowner =>
     /**
      * Asynchronous version of [[Zooowner.delete]].
      */
-    def delete(path: String, recursive: Boolean = false)
+    def delete(path: String, recursive: Boolean = false, version: Int = AnyVersion)
               (callback: Reaction[Response]): Unit =
     {
       def deleteNode(path: String, hook: OnDeleted): Unit =
-        client.delete(resolvePath(path), AnyVersion, hook, null)
+        client.delete(resolvePath(path), version, hook, null)
 
       def deleteChildren(parent: String, nodeChildren: List[String],
                          parentCallback: OnDeleted): Unit =
@@ -108,11 +108,11 @@ trait Async { this: Zooowner =>
     /**
      * Asynchronous version of [[Zooowner.set]].
      */
-    def set(path: String, data: String)
+    def set(path: String, data: String, version: Int = AnyVersion)
            (callback: Reaction[Response]): Unit =
     {
       client.setData(
-        resolvePath(path), data.getBytes, AnyVersion,
+        resolvePath(path), data.getBytes, version,
         OnStat(callback), null
       )
     }
