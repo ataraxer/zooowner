@@ -188,7 +188,7 @@ class Zooowner(servers: String,
     def perform = {
       connectionHook(Disconnected)
       connect()
-      apply(call)
+      call(client)
     }
 
     try call(client) catch {
