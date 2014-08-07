@@ -14,6 +14,7 @@ object message {
   case object Disconnected extends ConnectionEvent
 
   case object ReadOnly extends Response
+  case object BadVersion extends Response
 
   case class NodeStat(path: String, stat: Stat)
     extends Message with Response
@@ -57,10 +58,10 @@ object message {
     filler: Option[String] = None)
       extends Message
 
-  case class Delete(path: String)
+  case class Delete(path: String, version: Int = Zooowner.AnyVersion)
       extends Message
 
-  case class Set(path: String, data: String)
+  case class Set(path: String, data: String, version: Int = Zooowner.AnyVersion)
       extends Message
 
   case class Get(path: String)

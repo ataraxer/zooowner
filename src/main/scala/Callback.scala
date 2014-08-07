@@ -39,6 +39,7 @@ sealed abstract class Callback
 
       // default context-free codes reactions
       case Code.NOTREADONLY => reactOn(ReadOnly)
+      case Code.BADVERSION => reactOn(BadVersion)
 
       case unexpectedCode => reactOn {
         Error(unexpectedCode)

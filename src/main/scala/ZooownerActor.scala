@@ -54,8 +54,8 @@ class ZooownerActor(
      *
      * @param path Path of node to be deleted.
      */
-    case Delete(path) => {
-      zk.async.delete(path) { passTo(sender) }
+    case Delete(path, version) => {
+      zk.async.delete(path, version = version) { passTo(sender) }
     }
 
     /*
@@ -64,8 +64,8 @@ class ZooownerActor(
      * @param path Path of the node to be updated.
      * @param data New value of the node.
      */
-    case Set(path, data) => {
-      zk.async.set(path, data) { passTo(sender) }
+    case Set(path, data, version) => {
+      zk.async.set(path, data, version) { passTo(sender) }
     }
 
     /*
