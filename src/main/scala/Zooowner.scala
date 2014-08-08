@@ -1,6 +1,8 @@
 package com.ataraxer.zooowner
 
 import com.ataraxer.zooowner.message._
+import com.ataraxer.zooowner.common.NodeStat
+import com.ataraxer.zooowner.common.NodeStat.convertStat
 
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.ZooKeeper
@@ -236,7 +238,10 @@ class Zooowner(servers: String,
    */
   def stat(path: String, watcher: Option[EventWatcher] = None) = {
     this { client =>
-      Option { client.exists(resolvePath(path), resolveWatcher(watcher)) }
+      val maybeStat = Option {
+        client.exists(resolvePath(path), resolveWatcher(watcher))
+      }
+      maybeStat.map(convertStat)
     }
   }
 
@@ -309,8 +314,7 @@ class Zooowner(servers: String,
   /**
    * Tests whether the node is ephemeral.
    */
-  def isEphemeral(path: String) =
-    stat(path).map( _.getEphemeralOwner != 0).getOrElse(false)
+  def isEphemeral(path: String) = stat(path).map(_.ephemeral).getOrElse(false)
 
   /**
    * Stores all active node watchers.
