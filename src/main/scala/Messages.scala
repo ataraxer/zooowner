@@ -1,5 +1,7 @@
 package com.ataraxer.zooowner
 
+import com.ataraxer.zooowner.common.Constants.AnyVersion
+
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.KeeperException.Code
 
@@ -58,10 +60,10 @@ object message {
     filler: Option[String] = None)
       extends Message
 
-  case class Delete(path: String, version: Int = Zooowner.AnyVersion)
+  case class Delete(path: String, version: Int = AnyVersion)
       extends Message
 
-  case class Set(path: String, data: String, version: Int = Zooowner.AnyVersion)
+  case class Set(path: String, data: String, version: Int = AnyVersion)
       extends Message
 
   case class Get(path: String)

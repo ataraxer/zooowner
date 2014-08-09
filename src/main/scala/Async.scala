@@ -1,5 +1,6 @@
 package com.ataraxer.zooowner
 
+import com.ataraxer.zooowner.common.Constants._
 import com.ataraxer.zooowner.message._
 
 import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}

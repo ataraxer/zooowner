@@ -6,12 +6,7 @@ import org.apache.zookeeper.data.Stat
 import scala.collection.mutable
 
 
-object Constants {
-  type ZKData = Option[Array[Byte]]
-  val AnyVersion = -1
-}
-
-import Constants._
+import com.ataraxer.zooowner.common.Constants._
 
 
 object ZKNode {

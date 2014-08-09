@@ -1,6 +1,7 @@
 package com.ataraxer.zooowner
 
 import com.ataraxer.zooowner.message._
+import com.ataraxer.zooowner.common.Constants._
 import com.ataraxer.zooowner.common.NodeStat
 import com.ataraxer.zooowner.common.NodeStat.convertStat
 
@@ -11,7 +12,6 @@ import org.apache.zookeeper.Watcher.Event.{KeeperState, EventType}
 import org.apache.zookeeper.CreateMode._
 import org.apache.zookeeper.KeeperException
 import org.apache.zookeeper.KeeperException._
-import org.apache.zookeeper.ZooDefs.Ids
 
 import scala.concurrent.duration._
 import scala.collection.JavaConversions._
@@ -27,8 +27,6 @@ object Zooowner {
 
   def default[T]: Reaction[T] = { case _ => }
 
-  val AnyVersion = -1
-  val AnyACL = Ids.OPEN_ACL_UNSAFE
   val Root = ""
 
   implicit def durationToInt(duration: FiniteDuration) =
