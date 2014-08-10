@@ -1,4 +1,5 @@
 package com.ataraxer.zooowner
+package test
 
 import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.Watcher.Event.KeeperState

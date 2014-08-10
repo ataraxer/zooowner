@@ -1,6 +1,7 @@
 package com.ataraxer.zooowner
 
 import com.ataraxer.test.UnitSpec
+import com.ataraxer.zooowner.test.ZooownerMock
 import com.ataraxer.zooowner.mocking.ZKMock
 import com.ataraxer.zooowner.message._
 
