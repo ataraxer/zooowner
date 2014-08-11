@@ -17,11 +17,7 @@ val commonSettings = Seq(
 
 val dependencies = Seq(
   libraryDependencies ++= Seq(
-    "com.typesafe.akka" %% "akka-actor"   % "2.3.4",
-    "com.typesafe.akka" %% "akka-testkit" % "2.3.4" % "test",
     "org.scalatest" %% "scalatest" % "2.2.0" % "test",
-    "org.mockito" % "mockito-core" % "1.8.5" % "test",
-    "org.apache.curator" % "curator-test" % "2.4.2" % "test",
     "org.apache.zookeeper" % "zookeeper" % "3.4.6" excludeAll (
       ExclusionRule(organization = "com.sun.jdmk"),
       ExclusionRule(organization = "com.sun.jmx"),
@@ -61,6 +57,9 @@ lazy val zooownerActor = project.in(file("zooowner-actor"))
   .settings(commonSettings: _*)
   .settings(publishingSettings: _*)
   .settings(dependencies: _*)
+  .settings(libraryDependencies ++= Seq(
+    "com.typesafe.akka" %% "akka-actor"   % "2.3.4",
+    "com.typesafe.akka" %% "akka-testkit" % "2.3.4" % "test"))
 
 lazy val zooownerCore = project.in(file("zooowner-core"))
   .dependsOn(zooownerMocking, zooownerCommon)
