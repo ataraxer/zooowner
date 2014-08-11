@@ -1,4 +1,5 @@
 package com.ataraxer.zooowner
+package actor
 
 import akka.actor.ActorSystem
 import akka.testkit.{TestKit, TestActorRef, TestProbe, ImplicitSender}

@@ -1,4 +1,7 @@
 package com.ataraxer.zooowner
+package actor
+
+import com.ataraxer.zooowner.{Zooowner, Async}
 
 import com.ataraxer.zooowner.message._
 

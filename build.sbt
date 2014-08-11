@@ -54,9 +54,9 @@ val publishingSettings = Seq(
 
 
 lazy val zooowner = project.in(file("."))
-  .aggregate(zooownerCore, zooownerAkka, zooownerMocking, zooownerCommon)
+  .aggregate(zooownerCore, zooownerActor, zooownerMocking, zooownerCommon)
 
-lazy val zooownerAkka = project.in(file("zooowner-akka"))
+lazy val zooownerActor = project.in(file("zooowner-actor"))
   .dependsOn(zooownerCore, zooownerMocking, zooownerCommon)
   .settings(commonSettings: _*)
   .settings(publishingSettings: _*)
