@@ -28,7 +28,7 @@ class ZooownerActorSpec(_system: ActorSystem)
 
   before {
     zk = TestActorRef {
-      new ZooownerActor("", 1.second, "prefix") with ZKMock {
+      new ZooownerActor("", 1.second, Some("/prefix")) with ZKMock {
         override val zk = new ZooownerMock(zkMock.createMock _) with Async
       }
     }

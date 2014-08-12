@@ -17,7 +17,7 @@ import scala.concurrent.ExecutionContext
 class ZooownerActor(
   server: String,
   timeout: FiniteDuration,
-  pathPrefix: String)
+  pathPrefix: Option[String] = None)
     extends Actor
 {
   import Zooowner.SlashSeparatedPath

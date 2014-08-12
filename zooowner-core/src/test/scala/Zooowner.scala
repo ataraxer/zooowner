@@ -30,14 +30,11 @@ class ZooownerSpec extends UnitSpec with Eventually {
   {
     val stubAddress = "localhost:2181"
 
-    lazy val zkOne = new Zooowner(stubAddress, 15.seconds, "/prefix")
+    lazy val zkOne = new Zooowner(stubAddress, 15.seconds, Some("prefix"))
     an [IllegalArgumentException] should be thrownBy zkOne
 
-    lazy val zkTwo = new Zooowner(stubAddress, 15.seconds, "prefix/")
+    lazy val zkTwo = new Zooowner(stubAddress, 15.seconds, Some("prefix/"))
     an [IllegalArgumentException] should be thrownBy zkTwo
-
-    lazy val zkThree = new Zooowner(stubAddress, 15.seconds, "prefix/sub-prefix")
-    an [IllegalArgumentException] should be thrownBy zkThree
   }
 
 

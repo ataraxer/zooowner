@@ -69,11 +69,18 @@ object Zooowner {
  */
 class Zooowner(servers: String,
                timeout: FiniteDuration,
-               val pathPrefix: String)
+               val pathPrefix: Option[String] = None)
 {
   import Zooowner._
 
-  require(pathPrefix matches "^\\w+$", "path prefix should be simple identifier")
+  pathPrefix foreach { prefix =>
+    require(
+      prefix startsWith "/",
+      "path prefix should start at root node ('/')")
+    require(
+      !(prefix endsWith "/"),
+      "path prefix shouldn't end with slash ('/')")
+  }
 
   /*
    * Hook-function, that will be called when connection to ZooKeeper
@@ -89,8 +96,11 @@ class Zooowner(servers: String,
     case KeeperState.SyncConnected => {
       assert { isConnected == true }
 
-      ignoring(classOf[NodeExistsException]) {
-        create(Root/pathPrefix, persistent = true)
+      // make sure that path prefix exists
+      pathPrefix foreach { prefix =>
+        ignoring(classOf[NodeExistsException]) {
+          create(prefix, persistent = true, recursive = true)
+        }
       }
 
       connectionHook(Connected)
@@ -109,11 +119,20 @@ class Zooowner(servers: String,
   protected var client: ZooKeeper = generateClient
 
   /**
-   * Returns path prefixed with [[pathPrefix]]
+   * Returns path prefixed with [[pathPrefix]], if defined.
    */
   protected def prefixedPath(path: String) = {
-    require(!(path startsWith "/"), "path shouldn't start from slash")
-    Root/pathPrefix/path
+    require(
+      !(path startsWith "/"),
+      "path shouldn't start from slash")
+
+    pathPrefix match {
+      case Some(prefix) =>
+        prefix/path
+
+      case None =>
+        Root/path
+    }
   }
 
   /**

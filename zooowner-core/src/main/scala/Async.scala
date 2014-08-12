@@ -14,7 +14,7 @@ import scala.util.control.Exception._
  * Plug-in trait which extends Zooowner client with asynchronous API.
  *
  * {{{
- * val zk = new ZooKeeper("localhost:2181", 5.seconds, "prefix") with Async
+ * val zk = new ZooKeeper("localhost:2181", 5.seconds, Some("prefix")) with Async
  * }}}
  */
 trait Async { this: Zooowner =>
