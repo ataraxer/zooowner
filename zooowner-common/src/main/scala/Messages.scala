@@ -60,7 +60,10 @@ object message {
     filler: Option[String] = None)
       extends Message
 
-  case class Delete(path: String, version: Int = AnyVersion)
+  case class Delete(
+    path: String,
+    recursive: Boolean = false,
+    version: Int = AnyVersion)
       extends Message
 
   case class Set(path: String, data: String, version: Int = AnyVersion)

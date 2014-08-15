@@ -56,9 +56,14 @@ class ZooownerActor(
      * Deletes node.
      *
      * @param path Path of node to be deleted.
+     * @param recursive Specifies whether to remove underlying nodes.
+     * @param version Provides version to be checked against before deletion.
      */
-    case Delete(path, version) => {
-      zk.async.delete(path, version = version) { passTo(sender) }
+    case Delete(path, recursive, version) => {
+      zk.async.delete(
+        path,
+        recursive = recursive,
+        version = version) { passTo(sender) }
     }
 
     /*
