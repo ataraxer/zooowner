@@ -61,10 +61,10 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   it should "return stat of the node asynchronously" in new Env {
     zk.create("node", Some("value"))
 
-    var result = Option.empty[Stat]
+    var result = Option.empty[common.NodeStat]
 
     zk.async.stat("node") {
-      case NodeStat(_, stat) => result = Option(stat)
+      case NodeStat(_, stat) => result = stat
     }
 
     eventually { result should not be (None) }

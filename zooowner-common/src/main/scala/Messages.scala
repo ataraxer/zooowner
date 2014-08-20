@@ -18,7 +18,7 @@ object message {
   case object ReadOnly extends Response
   case object BadVersion extends Response
 
-  case class NodeStat(path: String, stat: Stat)
+  case class NodeStat(path: String, stat: Option[common.NodeStat])
     extends Message with Response
 
   case class NodeData(path: String, data: Option[String])

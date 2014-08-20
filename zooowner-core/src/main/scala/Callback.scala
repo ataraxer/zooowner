@@ -7,6 +7,7 @@ import org.apache.zookeeper.AsyncCallback._
 
 import com.ataraxer.zooowner.Zooowner.{Reaction, default}
 import com.ataraxer.zooowner.message._
+import com.ataraxer.zooowner.common.NodeStat.convertStat
 
 import java.util.{List => JavaList}
 
@@ -101,7 +102,7 @@ case class OnStat(reaction: Reaction[Response])
                     stat: Stat) =
   {
     processCode(returnCode) {
-      case Code.OK     => NodeStat(path, stat)
+      case Code.OK     => NodeStat(path, Option(stat).map(convertStat))
       case Code.NONODE => NoNode(path)
     }
   }
