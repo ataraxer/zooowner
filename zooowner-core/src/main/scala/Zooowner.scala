@@ -288,8 +288,12 @@ class Zooowner(servers: String,
   /**
    * Sets a new value for the node.
    */
-  def set(path: String, data: String, version: Int = AnyVersion): Unit = {
-    this { _.setData(resolvePath(path), data.getBytes, version) }
+  def set[T]
+    (path: String, data: T, version: Int = AnyVersion)
+    (implicit serializer: ZKSerializer[T]): Unit =
+  {
+    val encodedData = serializer.encode(data)
+    this { _.setData(resolvePath(path), encodedData.orNull, version) }
   }
 
   /**

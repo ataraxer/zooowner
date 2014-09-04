@@ -14,6 +14,7 @@ import scala.concurrent.duration._
 
 
 class ZooownerSpec extends UnitSpec with Eventually {
+  import DefaultSerializers._
 
   implicit val eventuallyConfig =
     PatienceConfig(timeout = 3.seconds)

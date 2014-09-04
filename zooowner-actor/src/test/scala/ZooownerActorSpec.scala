@@ -20,6 +20,7 @@ class ZooownerActorSpec(_system: ActorSystem)
     with Eventually
     with UnitSpec
 {
+  import DefaultSerializers._
 
   def this() = this { ActorSystem("zooowner-actor-spec") }
 
