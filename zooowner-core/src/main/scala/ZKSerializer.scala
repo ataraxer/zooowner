@@ -34,7 +34,7 @@ trait ZKSerializer[T] {
   import ZKSerializer._
 
   def encode(value: T): ZKData
-  def decode(data: ZKData): Unit
+  def decode(data: ZKData): T
 }
 
 
