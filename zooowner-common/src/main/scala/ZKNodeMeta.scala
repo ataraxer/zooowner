@@ -4,12 +4,12 @@ import org.apache.zookeeper.data.Stat
 import scala.language.implicitConversions
 
 
-object NodeStat {
-  implicit def convertStat(stat: Stat): NodeStat = {
+object ZKNodeMeta {
+  implicit def convertStat(stat: Stat): ZKNodeMeta = {
     val ephemeralOwner = stat.getEphemeralOwner
     val isEphemeral = (ephemeralOwner != 0)
 
-    NodeStat(
+    ZKNodeMeta(
       creationTime = stat.getCtime,
       modificationTime = stat.getMtime,
       size = stat.getDataLength,
@@ -22,7 +22,7 @@ object NodeStat {
 }
 
 
-case class NodeStat(
+case class ZKNodeMeta(
   creationTime: Long,
   modificationTime: Long,
   size: Long,

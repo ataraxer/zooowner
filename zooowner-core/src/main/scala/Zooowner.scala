@@ -2,8 +2,8 @@ package com.ataraxer.zooowner
 
 import com.ataraxer.zooowner.message._
 import com.ataraxer.zooowner.common.Constants._
-import com.ataraxer.zooowner.common.NodeStat
-import com.ataraxer.zooowner.common.NodeStat.convertStat
+import com.ataraxer.zooowner.common.ZKNodeMeta
+import com.ataraxer.zooowner.common.ZKNodeMeta.convertStat
 
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.ZooKeeper
@@ -401,7 +401,6 @@ class Zooowner(servers: String,
 
   def watchChildren(path: String, watcher: EventWatcher): Unit =
     children(path, watcher = Some(watcher))
-
 }
 
 

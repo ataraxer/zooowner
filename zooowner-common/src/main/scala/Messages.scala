@@ -1,6 +1,7 @@
 package com.ataraxer.zooowner
 
 import com.ataraxer.zooowner.common.Constants.AnyVersion
+import com.ataraxer.zooowner.common.ZKNodeMeta
 
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.KeeperException.Code
@@ -18,7 +19,7 @@ object message {
   case object ReadOnly extends Response
   case object BadVersion extends Response
 
-  case class NodeStat(path: String, stat: Option[common.NodeStat])
+  case class NodeStat(path: String, stat: Option[ZKNodeMeta])
     extends Message with Response
 
   case class NodeData(path: String, data: Option[String])

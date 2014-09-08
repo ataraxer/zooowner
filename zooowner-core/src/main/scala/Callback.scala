@@ -7,7 +7,7 @@ import org.apache.zookeeper.AsyncCallback._
 
 import com.ataraxer.zooowner.Zooowner.{Reaction, default}
 import com.ataraxer.zooowner.message._
-import com.ataraxer.zooowner.common.NodeStat.convertStat
+import com.ataraxer.zooowner.common.ZKNodeMeta.convertStat
 
 import java.util.{List => JavaList}
 
