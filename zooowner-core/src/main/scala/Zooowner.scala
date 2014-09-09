@@ -181,7 +181,7 @@ class Zooowner(servers: String,
    */
   def watchConnection(reaction: Reaction[ConnectionEvent]) = {
     connectionHook = reaction orElse default[ConnectionEvent]
-    if (isConnected) reaction(Connected)
+    if (isConnected) connectionHook(Connected)
   }
 
   /**
@@ -211,8 +211,16 @@ class Zooowner(servers: String,
     }
 
     try call(client) catch {
-      case _: SessionExpiredException => perform
+      // session expiration leads to a whole bunch of nasty side-effects
+      // such as dead watchres and ephemeral nodes, so application has to
+      // deal with it itself
+      case e: SessionExpiredException => {
+        connectionHook(Expired)
+        throw e
+      }
+
       case _: ConnectionLossException => perform
+      case e: Throwable => throw e
     }
   }
 

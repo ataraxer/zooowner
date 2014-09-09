@@ -267,12 +267,22 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "reconnect on session expiration" in new Env {
+  it should "fail and pass Expired event to registered callback " +
+            "on session expiration" in new Env
+  {
+    var hookRan = false
+
+    zk.watchConnection {
+      case Expired => hookRan = true
+    }
+
     zkMock.expireSession()
-    // attempt to create node with expired session
-    zk.create("foo", Some("value"))
-    // check that request has been handled within new session
-    zk.get("foo") should be (Some("value"))
+
+    intercept[SessionExpiredException] {
+      zk.create("foo", Some("value"))
+    }
+
+    hookRan should be (true)
   }
 
 }

@@ -13,8 +13,9 @@ object message {
   sealed trait Event extends Response
   sealed trait ConnectionEvent extends Event
 
-  case object Connected    extends ConnectionEvent
+  case object Connected extends ConnectionEvent
   case object Disconnected extends ConnectionEvent
+  case object Expired extends ConnectionEvent
 
   case object ReadOnly extends Response
   case object BadVersion extends Response
