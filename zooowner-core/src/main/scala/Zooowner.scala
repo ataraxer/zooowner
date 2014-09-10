@@ -3,9 +3,8 @@ package com.ataraxer.zooowner
 import com.ataraxer.zooowner.message._
 import com.ataraxer.zooowner.common.Constants._
 import com.ataraxer.zooowner.common.ZKNodeMeta
-import com.ataraxer.zooowner.common.ZKNodeMeta.convertStat
+import com.ataraxer.zooowner.common.ZKNodeMeta.StatConverter
 
-import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.Watcher.Event.{KeeperState, EventType}
@@ -261,12 +260,12 @@ class Zooowner(servers: String,
   /**
    * Gets node state and optionally sets watcher.
    */
-  def stat(path: String, watcher: Option[EventWatcher] = None) = {
+  def meta(path: String, watcher: Option[EventWatcher] = None) = {
     this { client =>
       val maybeStat = Option {
         client.exists(resolvePath(path), resolveWatcher(watcher))
       }
-      maybeStat.map(convertStat)
+      maybeStat.map(_.toMeta)
     }
   }
 
@@ -274,7 +273,7 @@ class Zooowner(servers: String,
    * Tests whether the node exists.
    */
   def exists(path: String, watcher: Option[EventWatcher] = None) = {
-    stat(path, watcher) != None
+    meta(path, watcher) != None
   }
 
   /**
@@ -343,7 +342,7 @@ class Zooowner(servers: String,
   /**
    * Tests whether the node is ephemeral.
    */
-  def isEphemeral(path: String) = stat(path).map(_.ephemeral).getOrElse(false)
+  def isEphemeral(path: String) = meta(path).map(_.ephemeral).getOrElse(false)
 
   /**
    * Stores all active node watchers.

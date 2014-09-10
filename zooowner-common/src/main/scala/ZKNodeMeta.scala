@@ -5,7 +5,7 @@ import scala.language.implicitConversions
 
 
 object ZKNodeMeta {
-  implicit def convertStat(stat: Stat): ZKNodeMeta = {
+  implicit def statToMeta(stat: Stat): ZKNodeMeta = {
     val ephemeralOwner = stat.getEphemeralOwner
     val isEphemeral = (ephemeralOwner != 0)
 
@@ -18,6 +18,11 @@ object ZKNodeMeta {
       childrenNumber = stat.getNumChildren,
       ephemeral = isEphemeral,
       session = ephemeralOwner)
+  }
+
+
+  implicit class StatConverter(stat: Stat) {
+    def toMeta = statToMeta(stat)
   }
 }
 
