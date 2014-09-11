@@ -121,7 +121,7 @@ case class OnData(reaction: Reaction[Response])
                     data: ZKData, stat: Stat): Unit =
   {
     processCode(returnCode) {
-      case Code.OK     => NodeData(path, serialize(data))
+      case Code.OK     => Node(path, serialize(data), stat.toMeta)
       case Code.NONODE => NoNode(path)
     }
   }
