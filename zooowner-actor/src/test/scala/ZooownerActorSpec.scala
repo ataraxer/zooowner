@@ -67,7 +67,7 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk.underlyingActor.zk.create("foo", Some("value"))
 
     zk ! Set("foo", "new-value")
-    expectMsgPF(5.seconds) { case NodeStat("/prefix/foo", _) => }
+    expectMsgPF(5.seconds) { case NodeMeta("/prefix/foo", _) => }
 
     zk.underlyingActor.zk.get("foo") should be (Some("new-value"))
   }

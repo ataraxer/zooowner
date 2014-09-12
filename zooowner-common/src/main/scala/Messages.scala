@@ -20,7 +20,7 @@ object message {
   case object ReadOnly extends Response
   case object BadVersion extends Response
 
-  case class NodeStat(path: String, stat: Option[ZKNodeMeta])
+  case class NodeMeta(path: String, meta: ZKNodeMeta)
     extends Message with Response
 
   case class Node(path: String, data: Option[String], meta: ZKNodeMeta)

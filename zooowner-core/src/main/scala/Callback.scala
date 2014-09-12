@@ -102,7 +102,7 @@ case class OnStat(reaction: Reaction[Response])
                     stat: Stat) =
   {
     processCode(returnCode) {
-      case Code.OK     => NodeStat(path, Option(stat).map(_.toMeta))
+      case Code.OK     => NodeMeta(path, stat.toMeta)
       case Code.NONODE => NoNode(path)
     }
   }

@@ -64,7 +64,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var result = Option.empty[common.ZKNodeMeta]
 
     zk.async.stat("node") {
-      case NodeStat(_, stat) => result = stat
+      case NodeMeta(_, stat) => result = Some(stat)
     }
 
     eventually { result should not be (None) }
@@ -117,7 +117,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var done = false
 
     zk.async.set("node", "second value") {
-      case _: NodeStat => done = true
+      case _: NodeMeta=> done = true
     }
 
     eventually { done should be (true) }
