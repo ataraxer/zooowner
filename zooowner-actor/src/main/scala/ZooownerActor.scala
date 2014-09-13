@@ -96,22 +96,6 @@ class ZooownerActor(
 
 
     /*
-     * Request list of children paths of the node.
-     * @param path Path of the node which children paths are requested.
-     */
-    case GetChildrenPaths(path) => {
-      val futureChildren = self ? GetChildren(path)
-
-      val futureChildrenPaths = futureChildren map {
-        case NodeChildren(_, children) =>
-          NodeChildrenPaths(path, children.map( path/_ ))
-      }
-
-      futureChildrenPaths pipeTo sender
-    }
-
-
-    /*
      * Sets up a watcher on a node.
      *
      * @param path Path of the node to be watched.
