@@ -30,9 +30,10 @@ sealed abstract class Callback
 {
   protected val reactOn = reaction orElse default[Response]
 
-  protected def processCode(codeNumber: Int)
+  protected def processCode(code: Int, path: String)
                            (process: PartialFunction[Code, Response]) =
   {
+    val codeNumber = code
     Code.get(codeNumber) match {
       case code if process.isDefinedAt(code) => reactOn {
         process(code)
@@ -41,6 +42,13 @@ sealed abstract class Callback
       // default context-free codes reactions
       case Code.NOTREADONLY => reactOn(ReadOnly)
       case Code.BADVERSION => reactOn(BadVersion)
+      case Code.CONNECTIONLOSS => reactOn(Disconnected)
+      case Code.SESSIONEXPIRED => reactOn(Expired)
+
+      case Code.NONODE => reactOn(NoNode(path))
+      case Code.NODEEXISTS => reactOn(NodeExists(path))
+      case Code.NOTEMPTY => reactOn(NotEmpty(path))
+      case Code.NOCHILDRENFOREPHEMERALS => reactOn(NodeIsEphemeral(path))
 
       case unexpectedCode => reactOn {
         Error(unexpectedCode)
@@ -59,7 +67,7 @@ case class OnCreated(reaction: Reaction[Response])
   def processResult(returnCode: Int, path: String, context: Any,
                     name: String) =
   {
-    processCode(returnCode) {
+    processCode(code = returnCode, path = path) {
       case Code.OK => NodeCreated(name, None)
     }
   }
@@ -81,12 +89,10 @@ case class OnDeleted(reaction: Reaction[Response])
 
   def processResult(returnCode: Int, path: String, context: Any) = {
     counter += 1
-    processCode(returnCode) {
+    processCode(code = returnCode, path = path) {
       case Code.OK => new NodeDeleted(path) with Counter {
         val count = counter
       }
-      case Code.NONODE   => NoNode(path)
-      case Code.NOTEMPTY => NotEmpty(path)
     }
   }
 }
@@ -101,9 +107,8 @@ case class OnStat(reaction: Reaction[Response])
   def processResult(returnCode: Int, path: String, context: Any,
                     stat: Stat) =
   {
-    processCode(returnCode) {
-      case Code.OK     => NodeMeta(path, stat.toMeta)
-      case Code.NONODE => NoNode(path)
+    processCode(code = returnCode, path = path) {
+      case Code.OK => NodeMeta(path, stat.toMeta)
     }
   }
 }
@@ -120,9 +125,8 @@ case class OnData(reaction: Reaction[Response])
   def processResult(returnCode: Int, path: String, context: Any,
                     data: ZKData, stat: Stat): Unit =
   {
-    processCode(returnCode) {
-      case Code.OK     => Node(path, serialize(data), stat.toMeta)
-      case Code.NONODE => NoNode(path)
+    processCode(code = returnCode, path = path) {
+      case Code.OK => Node(path, serialize(data), stat.toMeta)
     }
   }
 }
@@ -137,7 +141,7 @@ case class OnChildren(reaction: Reaction[Response])
   def processResult(returnCode: Int, path: String, context: Any,
                     children: JavaList[String], stat: Stat) =
   {
-    processCode(returnCode) {
+    processCode(code = returnCode, path = path) {
       case Code.OK => NodeChildren(path, children.toList)
     }
   }

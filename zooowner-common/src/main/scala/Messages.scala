@@ -47,6 +47,12 @@ object message {
   case class NotEmpty(path: String)
     extends Message with Response
 
+  case class NodeExists(path: String)
+    extends Message with Response
+
+  case class NodeIsEphemeral(path: String)
+    extends Message with Response
+
   case class Error(code: Code)
     extends Message with Response
 
