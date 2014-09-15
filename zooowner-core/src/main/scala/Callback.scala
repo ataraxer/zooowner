@@ -28,30 +28,30 @@ sealed abstract class Callback
   (reaction: Reaction[Response])
     extends AsyncCallback
 {
+  import Code._
+
   protected val reactOn = reaction orElse default[Response]
+
 
   protected def processCode(code: Int, path: String)
                            (process: PartialFunction[Code, Response]) =
   {
-    val codeNumber = code
-    Code.get(codeNumber) match {
-      case code if process.isDefinedAt(code) => reactOn {
-        process(code)
-      }
+    reactOn {
+      Code.get(code) match {
+        case codeEnum if process.isDefinedAt(codeEnum) => process(codeEnum)
 
-      // default context-free codes reactions
-      case Code.NOTREADONLY => reactOn(ReadOnly)
-      case Code.BADVERSION => reactOn(BadVersion)
-      case Code.CONNECTIONLOSS => reactOn(Disconnected)
-      case Code.SESSIONEXPIRED => reactOn(Expired)
+        case NONODE => NoNode(path)
+        case NODEEXISTS => NodeExists(path)
+        case NOTEMPTY => NotEmpty(path)
+        case NOCHILDRENFOREPHEMERALS => NodeIsEphemeral(path)
 
-      case Code.NONODE => reactOn(NoNode(path))
-      case Code.NODEEXISTS => reactOn(NodeExists(path))
-      case Code.NOTEMPTY => reactOn(NotEmpty(path))
-      case Code.NOCHILDRENFOREPHEMERALS => reactOn(NodeIsEphemeral(path))
+        // default context-free reactions
+        case NOTREADONLY => ReadOnly
+        case BADVERSION => BadVersion
+        case CONNECTIONLOSS => Disconnected
+        case SESSIONEXPIRED => Expired
 
-      case unexpectedCode => reactOn {
-        Error(unexpectedCode)
+        case unexpectedCode => Error(unexpectedCode)
       }
     }
   }
