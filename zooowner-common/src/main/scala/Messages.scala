@@ -56,7 +56,7 @@ object message {
   case class Error(code: Code)
     extends Message with Response
 
-  case class Create(
+  case class CreateNode(
     path: String,
     maybeData: Option[String] = None,
     persistent: Boolean = false,
@@ -65,25 +65,22 @@ object message {
     filler: Option[String] = None)
       extends Message
 
-  case class Delete(
+  case class DeleteNode(
     path: String,
     recursive: Boolean = false,
     version: Int = AnyVersion)
       extends Message
 
-  case class Set(path: String, data: String, version: Int = AnyVersion)
+  case class SetNodeValue(path: String, data: String, version: Int = AnyVersion)
       extends Message
 
-  case class Get(path: String)
+  case class GetNodeValue(path: String)
       extends Message
 
-  case class GetChildren(path: String)
+  case class GetNodeChildren(path: String)
       extends Message
 
-  case class GetChildrenPaths(path: String)
-      extends Message
-
-  case class Watch(path: String, persistent: Boolean = true)
+  case class WatchNode(path: String, persistent: Boolean = true)
 
   type ZKData = Array[Byte]
 }

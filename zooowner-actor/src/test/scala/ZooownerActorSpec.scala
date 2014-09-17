@@ -47,7 +47,7 @@ class ZooownerActorSpec(_system: ActorSystem)
 
 
   "ZooownerActor" should "create nodes with paths asynchronously" in {
-    zk ! Create("foo", Some("value"))
+    zk ! CreateNode("foo", Some("value"))
     expectMsg { NodeCreated("/prefix/foo", None) }
   }
 
@@ -56,7 +56,7 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk.underlyingActor.zk.create("foo", Some("value"))
     zk.underlyingActor.zk.exists("foo") should be (true)
 
-    zk ! Delete("foo")
+    zk ! DeleteNode("foo")
     expectMsgPF(5.seconds) { case NodeDeleted("/prefix/foo") => }
 
     zk.underlyingActor.zk.exists("foo") should be (false)
@@ -66,7 +66,7 @@ class ZooownerActorSpec(_system: ActorSystem)
   it should "change values of created nodes asynchronously" in {
     zk.underlyingActor.zk.create("foo", Some("value"))
 
-    zk ! Set("foo", "new-value")
+    zk ! SetNodeValue("foo", "new-value")
     expectMsgPF(5.seconds) { case NodeMeta("/prefix/foo", _) => }
 
     zk.underlyingActor.zk.get("foo") should be (Some("new-value"))
@@ -76,7 +76,7 @@ class ZooownerActorSpec(_system: ActorSystem)
   it should "get values of existing nodes asynchronously" in {
     zk.underlyingActor.zk.create("foo", Some("value"))
 
-    zk ! Get("foo")
+    zk ! GetNodeValue("foo")
     expectMsgPF(3.seconds) {
       case Node("/prefix/foo", Some("value"), _) =>
     }
@@ -88,7 +88,7 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk.underlyingActor.zk.create("foo/a", Some("value"))
     zk.underlyingActor.zk.create("foo/b", Some("value"))
 
-    zk ! GetChildren("foo")
+    zk ! GetNodeChildren("foo")
     expectMsgPF(5.seconds) {
       case NodeChildren("/prefix/foo", children) =>
         children should contain only ("a", "b")
@@ -99,7 +99,7 @@ class ZooownerActorSpec(_system: ActorSystem)
   it should "watch node events and report them back to watcher" in {
     zk.underlyingActor.zk.create("foo", Some("value"), persistent = true)
 
-    zk ! Watch("foo")
+    zk ! WatchNode("foo")
 
     zk.underlyingActor.zk.set("foo", "new-value")
     expectMsg { NodeChanged("foo", Some("new-value")) }

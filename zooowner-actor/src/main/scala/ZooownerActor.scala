@@ -46,7 +46,7 @@ class ZooownerActor(
      * @param recursive Specifies whether path to the node should be created.
      * @param filler Optional value with which path nodes should be created.
      */
-    case Create(path, data, persistent, sequential, recursive, filler) => {
+    case CreateNode(path, data, persistent, sequential, recursive, filler) => {
       zk.async.create(path, data, persistent, sequential, recursive, filler) {
         passTo(sender)
       }
@@ -59,7 +59,7 @@ class ZooownerActor(
      * @param recursive Specifies whether to remove underlying nodes.
      * @param version Provides version to be checked against before deletion.
      */
-    case Delete(path, recursive, version) => {
+    case DeleteNode(path, recursive, version) => {
       zk.async.delete(
         path,
         recursive = recursive,
@@ -72,7 +72,7 @@ class ZooownerActor(
      * @param path Path of the node to be updated.
      * @param data New value of the node.
      */
-    case Set(path, data, version) => {
+    case SetNodeValue(path, data, version) => {
       zk.async.set(path, data, version) { passTo(sender) }
     }
 
@@ -81,7 +81,7 @@ class ZooownerActor(
      *
      * @param path Path of the node which value is requested.
      */
-    case Get(path) => {
+    case GetNodeValue(path) => {
       zk.async.get(path) { passTo(sender) }
     }
 
@@ -90,7 +90,7 @@ class ZooownerActor(
      *
      * @param path Path of the node which children are requested.
      */
-    case GetChildren(path) => {
+    case GetNodeChildren(path) => {
       zk.async.children(path) { passTo(sender) }
     }
 
@@ -101,7 +101,7 @@ class ZooownerActor(
      * @param path Path of the node to be watched.
      * @param persistent Whether watch should be persistent.
      */
-    case Watch(path, persistent) => {
+    case WatchNode(path, persistent) => {
       zk.watch(path, persistent) { passTo(sender) }
     }
   }
