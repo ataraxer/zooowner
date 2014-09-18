@@ -16,9 +16,28 @@ object DefaultSerializers {
       }
 
       def decode(data: ZKData) = {
-        data.map {
+        data map {
           new String(_, Encoding)
         } orNull
+      }
+    }
+  }
+
+
+  implicit def optionSerializer[T]
+    (implicit valueSerializer: ZKSerializer[T]) =
+  {
+    new ZKSerializer[Option[T]] {
+      def encode(data: Option[T]) = {
+        data flatMap { value =>
+          valueSerializer.encode(value)
+        }
+      }
+
+      def decode(data: ZKData) = {
+        data map { value =>
+          valueSerializer.decode(Some(value))
+        }
       }
     }
   }
