@@ -6,15 +6,21 @@ import scala.language.postfixOps
 object DefaultSerializers {
   import ZKSerializer._
 
-  implicit val stringSerializer = {
-    new ZKSerializer[String] {
-      private val Encoding = "UTF-8"
+  private val Encoding = "UTF-8"
 
+
+  implicit val stringEncoder = {
+    new ZKEncoder[String] {
       def encode(string: String) = {
         val wrappedString = Option(string)
         wrappedString.map(_.getBytes(Encoding))
       }
+    }
+  }
 
+
+  implicit val stringDecoder = {
+    new ZKDecoder[String] {
       def decode(data: ZKData) = {
         data map {
           new String(_, Encoding)
@@ -24,19 +30,26 @@ object DefaultSerializers {
   }
 
 
-  implicit def optionSerializer[T]
-    (implicit valueSerializer: ZKSerializer[T]) =
+  implicit def optionEncoder[T]
+    (implicit valueEncoder: ZKEncoder[T]) =
   {
-    new ZKSerializer[Option[T]] {
+    new ZKEncoder[Option[T]] {
       def encode(data: Option[T]) = {
         data flatMap { value =>
-          valueSerializer.encode(value)
+          valueEncoder.encode(value)
         }
       }
+    }
+  }
 
+
+  implicit def optionDecoder[T]
+    (implicit valueDecoder: ZKDecoder[T]) =
+  {
+    new ZKDecoder[Option[T]] {
       def decode(data: ZKData) = {
         data map { value =>
-          valueSerializer.decode(Some(value))
+          valueDecoder.decode(Some(value))
         }
       }
     }
@@ -49,11 +62,15 @@ object ZKSerializer {
 }
 
 
-trait ZKSerializer[T] {
+trait ZKDecoder[+T] {
   import ZKSerializer._
-
-  def encode(value: T): ZKData
   def decode(data: ZKData): T
+}
+
+
+trait ZKEncoder[-T] {
+  import ZKSerializer._
+  def encode(value: T): ZKData
 }
 
 
