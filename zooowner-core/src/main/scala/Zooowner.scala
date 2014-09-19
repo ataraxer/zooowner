@@ -71,6 +71,7 @@ class Zooowner(servers: String,
                val pathPrefix: Option[String] = None)
 {
   import Zooowner._
+  import DefaultSerializers._
 
   pathPrefix foreach { prefix =>
     require(
@@ -227,18 +228,20 @@ class Zooowner(servers: String,
    * Creates new node.
    *
    * @param path Path of node to be created.
-   * @param maybeData Optional data that should be stored in created node.
+   * @param value Optional data that should be stored in created node.
    * @param persistent Specifies whether created node should be persistent.
    * @param sequential Specifies whether created node should be sequential.
    * @param recursive Specifies whether path to the node should be created.
    * @param filler Optional value with which path nodes should be created.
    */
-  def create(path: String,
-             maybeData: Option[String] = None,
-             persistent: Boolean = false,
-             sequential: Boolean = false,
-             recursive: Boolean = false,
-             filler: Option[String] = None): Unit =
+  def create[T](
+    path: String,
+    value: T = Option.empty[String],
+    persistent: Boolean = false,
+    sequential: Boolean = false,
+    recursive: Boolean = false,
+    filler: Option[String] = None)
+    (implicit encoder: ZKEncoder[T]): Unit =
   {
     if (recursive) {
       for (parentPath <- parentPaths(path)) {
@@ -248,7 +251,7 @@ class Zooowner(servers: String,
       }
     }
 
-    val data = maybeData.map( _.getBytes("utf8") ).orNull
+    val data = encoder.encode(value).orNull
 
     this { client =>
       client.create(
@@ -296,11 +299,11 @@ class Zooowner(servers: String,
    * Sets a new value for the node.
    */
   def set[T]
-    (path: String, data: T, version: Int = AnyVersion)
-    (implicit serializer: ZKSerializer[T]): Unit =
+    (path: String, value: T, version: Int = AnyVersion)
+    (implicit encoder: ZKEncoder[T]): Unit =
   {
-    val encodedData = serializer.encode(data)
-    this { _.setData(resolvePath(path), encodedData.orNull, version) }
+    val data = encoder.encode(value).orNull
+    this { _.setData(resolvePath(path), data, version) }
   }
 
   /**
