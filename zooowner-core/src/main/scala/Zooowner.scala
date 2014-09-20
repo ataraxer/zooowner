@@ -234,14 +234,14 @@ class Zooowner(servers: String,
    * @param recursive Specifies whether path to the node should be created.
    * @param filler Optional value with which path nodes should be created.
    */
-  def create[T](
+  def create[V, F](
     path: String,
-    value: T = Option.empty[String],
+    value: V = Option.empty[String],
     persistent: Boolean = false,
     sequential: Boolean = false,
     recursive: Boolean = false,
-    filler: Option[String] = None)
-    (implicit encoder: ZKEncoder[T]): Unit =
+    filler: F = Option.empty[String])
+    (implicit valueEncoder: ZKEncoder[V], fillerEncoder: ZKEncoder[F]): Unit =
   {
     if (recursive) {
       for (parentPath <- parentPaths(path)) {
@@ -251,7 +251,7 @@ class Zooowner(servers: String,
       }
     }
 
-    val data = encoder.encode(value).orNull
+    val data = valueEncoder.encode(value).orNull
 
     this { client =>
       client.create(
