@@ -33,12 +33,13 @@ sealed abstract class Callback
   protected val reactOn = reaction orElse default[Response]
 
 
-  protected def processCode(code: Int, path: String)
-                           (process: PartialFunction[Code, Response]) =
+  protected def processCode
+    (code: Int, path: String)
+    (response: => Response) =
   {
     reactOn {
       Code.get(code) match {
-        case codeEnum if process.isDefinedAt(codeEnum) => process(codeEnum)
+        case OK => response
 
         case NONODE => NoNode(path)
         case NODEEXISTS => NodeExists(path)
@@ -68,7 +69,7 @@ case class OnCreated(reaction: Reaction[Response])
                     name: String) =
   {
     processCode(code = returnCode, path = path) {
-      case Code.OK => NodeCreated(name, None)
+      NodeCreated(name, None)
     }
   }
 }
@@ -90,7 +91,7 @@ case class OnDeleted(reaction: Reaction[Response])
   def processResult(returnCode: Int, path: String, context: Any) = {
     counter += 1
     processCode(code = returnCode, path = path) {
-      case Code.OK => new NodeDeleted(path) with Counter {
+      new NodeDeleted(path) with Counter {
         val count = counter
       }
     }
@@ -108,7 +109,7 @@ case class OnStat(reaction: Reaction[Response])
                     stat: Stat) =
   {
     processCode(code = returnCode, path = path) {
-      case Code.OK => NodeMeta(path, stat.toMeta)
+      NodeMeta(path, stat.toMeta)
     }
   }
 }
@@ -126,7 +127,7 @@ case class OnData(reaction: Reaction[Response])
                     data: ZKData, stat: Stat): Unit =
   {
     processCode(code = returnCode, path = path) {
-      case Code.OK => Node(path, serialize(data), stat.toMeta)
+      Node(path, serialize(data), stat.toMeta)
     }
   }
 }
@@ -142,7 +143,7 @@ case class OnChildren(reaction: Reaction[Response])
                     children: JavaList[String], stat: Stat) =
   {
     processCode(code = returnCode, path = path) {
-      case Code.OK => NodeChildren(path, children.toList)
+      NodeChildren(path, children.toList)
     }
   }
 }
