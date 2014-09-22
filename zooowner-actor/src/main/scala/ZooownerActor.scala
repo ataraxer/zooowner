@@ -27,6 +27,13 @@ class ZooownerActor(
 
   val zk = new Zooowner(server, timeout, pathPrefix) with Async
 
+  override def preStart(): Unit = {
+    // forward all connection events to current actor's
+    // mailbox in order to preserve absolute order of events
+    zk watchConnection { case event => self ! event }
+  }
+
+
   /**
    * Generates a partial function which will pass messages to specified actor.
    */
@@ -34,8 +41,31 @@ class ZooownerActor(
     case message => client ! message
   }
 
+  def receive = active
 
-  def receive = {
+  /**
+   * Waits for connection to ZooKeeper ensamble.
+   */
+  def connecting: Receive = {
+    case Connected => context become active
+  }
+
+  /**
+   * Implements ZooownerActor primary API.
+   */
+  def active: Receive = {
+    case Disconnected => {
+      // since events are being processed via mailbox we need to
+      // make sure that connection is still down
+      if (!zk.isConnected) {
+        context become connecting
+      }
+    }
+
+    case Expired => {
+      throw new Exception("ZK Session has expired")
+    }
+
     /*
      * Creates new node.
      *
