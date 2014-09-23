@@ -8,6 +8,7 @@ import org.apache.zookeeper.Watcher.Event._
 import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.data.{Stat, ACL}
 import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
+import org.apache.zookeeper.common.PathUtils
 
 import org.mockito.Matchers._
 import org.mockito.Matchers.{eq => matches}
@@ -113,6 +114,8 @@ class ZKNodeTree {
 
 
   def exists(path: String, watcher: ZKWatcher) = {
+    PathUtils.validatePath(path)
+
     addDataWatcher(path, watcher)
 
     val stat = catching(classOf[NoNodeException]).opt {
@@ -124,6 +127,8 @@ class ZKNodeTree {
 
 
   def create(path: String, data: Array[Byte], createMode: CreateMode) = {
+    PathUtils.validatePath(path)
+
     val persistent = persistentModes contains createMode
     val parent = nodeParent(path)
     val name = nodeName(path)
@@ -140,6 +145,8 @@ class ZKNodeTree {
 
 
   def set(path: String, newData: Array[Byte]) = {
+    PathUtils.validatePath(path)
+
     val node = fetchNode(path)
     node.data = Option(newData)
 
@@ -149,12 +156,16 @@ class ZKNodeTree {
 
 
   def get(path: String, watcher: ZKWatcher) = {
+    PathUtils.validatePath(path)
+
     addDataWatcher(path, watcher)
     fetchNode(path).data.orNull
   }
 
 
   def delete(path: String) = {
+    PathUtils.validatePath(path)
+
     val parent = nodeParent(path)
     val name = nodeName(path)
     fetchNode(parent).delete(name)
@@ -169,6 +180,8 @@ class ZKNodeTree {
 
 
   def children(path: String, watcher: ZKWatcher) = {
+    PathUtils.validatePath(path)
+
     addChildrenWatcher(path, watcher)
     fetchNode(path).children.toList: JavaList[String]
   }

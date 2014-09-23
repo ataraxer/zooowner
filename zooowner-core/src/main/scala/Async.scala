@@ -51,8 +51,10 @@ trait Async { this: Zooowner =>
                filler: Option[String] = None)
               (callback: Reaction[Response]): Unit =
     {
+      val realPath = resolvePath(path)
+
       if (recursive) {
-        for (parentPath <- parentPaths(path)) {
+        for (parentPath <- parentPaths(realPath)) {
           create(parentPath, filler, persistent = true,
                  recursive = false)(default[Response])
         }
@@ -61,7 +63,7 @@ trait Async { this: Zooowner =>
       val data = maybeData.map( _.getBytes("utf8") ).orNull
 
       client.create(
-        resolvePath(path), data, AnyACL,
+        realPath, data, AnyACL,
         createMode(persistent, sequential),
         OnCreated(callback), null
       )

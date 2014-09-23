@@ -48,8 +48,10 @@ object Zooowner {
     var parentPath = ""
     var result = ArrayBuffer.empty[String]
 
-    for (nextPart <- path.split("/")) {
-      parentPath = (parentPath/nextPart).replaceAll("^/", "")
+    val cleanPath = path.stripPrefix("/").stripSuffix("/")
+
+    for (nextPart <- cleanPath.split("/")) {
+      parentPath = parentPath/nextPart
       if (parentPath != path) result += parentPath
     }
 
@@ -243,8 +245,10 @@ class Zooowner(servers: String,
     filler: F = Option.empty[String])
     (implicit valueEncoder: ZKEncoder[V], fillerEncoder: ZKEncoder[F]): Unit =
   {
+    val realPath = resolvePath(path)
+
     if (recursive) {
-      for (parentPath <- parentPaths(path)) {
+      for (parentPath <- parentPaths(realPath)) {
         ignoring(classOf[NodeExistsException]) {
           create(parentPath, filler, persistent = true, recursive = false)
         }
@@ -255,7 +259,7 @@ class Zooowner(servers: String,
 
     this { client =>
       client.create(
-        resolvePath(path), data, AnyACL,
+        realPath, data, AnyACL,
         createMode(persistent, sequential))
     }
   }
