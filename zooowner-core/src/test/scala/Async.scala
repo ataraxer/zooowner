@@ -25,37 +25,16 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  "Zooowner.async" should "create nodes with paths asynchronously" in new Env {
+  "Async Zooowner" should "create nodes asynchronously" in new Env {
     var done = false
 
-    zk.async.create("node/with/long/path", Some("value"), recursive = true) {
+    zk.async.create("node", Some("value")) {
       case NodeCreated(_, _) => done = true
     }
 
     eventually { done should be (true) }
 
-    zk.get("node/with/long") should be (None)
-    zk.get("node/with/long/path") should be (Some("value"))
-  }
-
-
-  it should "create nodes with paths filled with specified value " +
-            "asynchronously" in new Env
-  {
-    var done = false
-
-    zk.async.create(
-      "node/with/long/path",
-      Some("value"),
-      recursive = true,
-      filler = Some("filler")
-    ) { case NodeCreated(_, _) => done = true }
-
-    eventually { done should be (true) }
-
-    zk.get("node") should be (Some("filler"))
-    zk.get("node/with/long") should be (Some("filler"))
-    zk.get("node/with/long/path") should be (Some("value"))
+    zk.get("node") should be (Some("value"))
   }
 
 
@@ -139,23 +118,6 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     eventually { done should be (true) }
 
     zk.exists("node") should be (false)
-  }
-
-
-  it should "delete nodes recursively asynchronously" in new Env {
-    zk.create("node", Some("first value"), persistent = true)
-    zk.create("node/child", Some("child value"), persistent = true)
-
-    var done = false
-
-    zk.async.delete("node", recursive = true) {
-      case _: NodeDeleted => done = true
-    }
-
-    eventually { done should be (true) }
-
-    zk.exists("node") should be (false)
-    zk.exists("node/child") should be (false)
   }
 
 }

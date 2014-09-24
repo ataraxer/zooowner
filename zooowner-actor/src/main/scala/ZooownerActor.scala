@@ -77,7 +77,7 @@ class ZooownerActor(
      * @param filler Optional value with which path nodes should be created.
      */
     case CreateNode(path, data, persistent, sequential, recursive, filler) => {
-      zk.async.create(path, data, persistent, sequential, recursive, filler) {
+      zk.async.create(path, data, persistent, sequential) {
         passTo(sender)
       }
     }
@@ -90,10 +90,9 @@ class ZooownerActor(
      * @param version Provides version to be checked against before deletion.
      */
     case DeleteNode(path, recursive, version) => {
-      zk.async.delete(
-        path,
-        recursive = recursive,
-        version = version) { passTo(sender) }
+      zk.async.delete(path, version = version) {
+        passTo(sender)
+      }
     }
 
     /*

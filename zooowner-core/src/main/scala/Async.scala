@@ -43,69 +43,36 @@ trait Async { this: Zooowner =>
     /**
      * Asynchronous version of [[Zooowner.create]].
      */
-    def create(path: String,
-               maybeData: Option[String],
-               persistent: Boolean = false,
-               sequential: Boolean = false,
-               recursive: Boolean = false,
-               filler: Option[String] = None)
-              (callback: Reaction[Response]): Unit =
+    def create(
+      path: String,
+      maybeData: Option[String],
+      persistent: Boolean = false,
+      sequential: Boolean = false)
+      (callback: Reaction[Response]): Unit =
     {
-      val realPath = resolvePath(path)
-
-      if (recursive) {
-        for (parentPath <- parentPaths(realPath)) {
-          create(parentPath, filler, persistent = true,
-                 recursive = false)(default[Response])
-        }
-      }
-
       val data = maybeData.map( _.getBytes("utf8") ).orNull
 
       client.create(
-        realPath, data, AnyACL,
+        resolvePath(path),
+        data,
+        AnyACL,
         createMode(persistent, sequential),
-        OnCreated(callback), null
-      )
+        OnCreated(callback),
+        null)
     }
 
     /**
      * Asynchronous version of [[Zooowner.delete]].
      */
-    def delete(path: String, recursive: Boolean = false, version: Int = AnyVersion)
-              (callback: Reaction[Response]): Unit =
+    def delete
+      (path: String, version: Int = AnyVersion)
+      (callback: Reaction[Response]): Unit =
     {
-      def deleteNode(path: String, hook: OnDeleted): Unit =
-        client.delete(resolvePath(path), version, hook, null)
-
-      def deleteChildren(parent: String, nodeChildren: List[String],
-                         parentCallback: OnDeleted): Unit =
-      {
-        val hook = OnDeleted {
-          case event: NodeDeleted with Counter
-            if (event.count == nodeChildren.size) =>
-              deleteNode(parent, parentCallback)
-        }
-
-        for (child <- nodeChildren) {
-          deleteRecursive(path/child, hook)
-        }
-      }
-
-      def deleteRecursive(path: String, hook: OnDeleted): Unit = {
-        async.children(path) {
-          case NodeChildren(_, Nil) =>
-            deleteNode(path, hook)
-
-          case NodeChildren(_, nodeChildren) =>
-            deleteChildren(path, nodeChildren, hook)
-        }
-      }
-
-      recursive match {
-        case true  => deleteRecursive(path, OnDeleted(callback))
-        case false => deleteNode(path, OnDeleted(callback))
-      }
+      client.delete(
+        resolvePath(path),
+        version,
+        OnDeleted(callback),
+        null)
     }
 
     /**

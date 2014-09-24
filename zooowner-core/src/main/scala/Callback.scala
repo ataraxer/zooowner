@@ -75,11 +75,6 @@ case class OnCreated(reaction: Reaction[Response])
 }
 
 
-trait Counter {
-  def count: Int
-}
-
-
 /**
  * Fires up on node deletion.
  */
@@ -89,11 +84,8 @@ case class OnDeleted(reaction: Reaction[Response])
   private var counter = 0
 
   def processResult(returnCode: Int, path: String, context: Any) = {
-    counter += 1
     processCode(code = returnCode, path = path) {
-      new NodeDeleted(path) with Counter {
-        val count = counter
-      }
+      new NodeDeleted(path)
     }
   }
 }
