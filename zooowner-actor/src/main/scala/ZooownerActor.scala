@@ -5,7 +5,7 @@ import com.ataraxer.zooowner.{Zooowner, Async}
 
 import com.ataraxer.zooowner.message._
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorRef, Stash}
 import akka.actor.Actor.Receive
 import akka.util.Timeout
 import akka.pattern.{ask, pipe}
@@ -14,12 +14,19 @@ import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
 
 
+object ZooownerActor {
+  val StashTimeout = 3.seconds
+  case object StashTimedOut
+}
+
+
 class ZooownerActor(
   server: String,
   timeout: FiniteDuration,
   pathPrefix: Option[String] = None)
-    extends Actor
+    extends Actor with Stash
 {
+  import ZooownerActor._
   import Zooowner.SlashSeparatedPath
 
   implicit val futureTimeout = Timeout(5.seconds)
@@ -41,13 +48,26 @@ class ZooownerActor(
     case message => client ! message
   }
 
-  def receive = active
+  def receive = connecting
+
+  private var stashActive = true
 
   /**
    * Waits for connection to ZooKeeper ensamble.
    */
   def connecting: Receive = {
-    case Connected => context become active
+    case Connected => {
+      unstashAll()
+      context become active
+    }
+
+    case StashTimedOut => {
+      unstashAll()
+      stashActive = false
+    }
+
+    case other
+      if stashActive && active.isDefinedAt(other) => stash()
   }
 
   /**
@@ -58,6 +78,8 @@ class ZooownerActor(
       // since events are being processed via mailbox we need to
       // make sure that connection is still down
       if (!zk.isConnected) {
+        stashActive = true
+        context.system.scheduler.scheduleOnce(StashTimeout, self, StashTimedOut)
         context become connecting
       }
     }
