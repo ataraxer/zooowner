@@ -108,9 +108,14 @@ class Zooowner(servers: String,
       connectionHook(Connected)
     }
 
-    case KeeperState.Disconnected | KeeperState.Expired => {
+    case KeeperState.Disconnected => {
       connectionHook(Disconnected)
       connect()
+    }
+
+    case KeeperState.Expired => {
+      removeAllWatchers()
+      connectionHook(Expired)
     }
   }
 
@@ -217,6 +222,7 @@ class Zooowner(servers: String,
       // such as dead watchres and ephemeral nodes, so application has to
       // deal with it itself
       case e: SessionExpiredException => {
+        removeAllWatchers()
         connectionHook(Expired)
         throw e
       }
