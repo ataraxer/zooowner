@@ -78,11 +78,15 @@ trait Async { this: Zooowner =>
     /**
      * Asynchronous version of [[Zooowner.set]].
      */
-    def set(path: String, data: String, version: Int = AnyVersion)
-           (callback: Reaction[Response]): Unit =
+    def set[T]
+      (path: String, value: T, version: Int = AnyVersion)
+      (callback: Reaction[Response])
+      (implicit encoder: ZKEncoder[T]): Unit =
     {
+      val data = encoder.encode(value).orNull
+
       client.setData(
-        resolvePath(path), data.getBytes, version,
+        resolvePath(path), data, version,
         OnStat(callback), null
       )
     }

@@ -28,6 +28,7 @@ class ZooownerActor(
 {
   import ZooownerActor._
   import Zooowner.SlashSeparatedPath
+  import DefaultSerializers._
 
   implicit val futureTimeout = Timeout(5.seconds)
   implicit val ec = context.dispatcher
