@@ -43,14 +43,15 @@ trait Async { this: Zooowner =>
     /**
      * Asynchronous version of [[Zooowner.create]].
      */
-    def create(
+    def create[T](
       path: String,
-      maybeData: Option[String],
+      value: T = Option.empty[String],
       persistent: Boolean = false,
       sequential: Boolean = false)
-      (callback: Reaction[Response]): Unit =
+      (callback: Reaction[Response])
+      (implicit encoder: ZKEncoder[T]): Unit =
     {
-      val data = maybeData.map( _.getBytes("utf8") ).orNull
+      val data = encoder.encode(value).orNull
 
       client.create(
         resolvePath(path),
