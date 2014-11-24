@@ -292,17 +292,20 @@ class Zooowner(servers: String,
   /**
    * Returns Some(value) of the node if exists, None otherwise.
    */
-  def get(path: String, watcher: Option[EventWatcher] = None) = {
+  def get[T]
+    (path: String, watcher: Option[EventWatcher] = None)
+    (implicit decoder: ZKDecoder[Option[T]]): Option[T] =
+  {
     val maybeData = this { client =>
       catching(classOf[NoNodeException]).opt {
         client.getData(resolvePath(path), resolveWatcher(watcher), null)
       }
     }
 
-    for {
-      data  <- maybeData
-      value <- Option(data)
-    } yield new String(value)
+    // wrap in Option to guard from null
+    val wrappedData = maybeData.flatMap( data => Option(data) );
+
+    decoder.decode(wrappedData)
   }
 
   /**

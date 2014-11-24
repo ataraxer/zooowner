@@ -34,7 +34,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
 
     eventually { done should be (true) }
 
-    zk.get("node") should be (Some("value"))
+    zk.get[String]("node") should be (Some("value"))
   }
 
 
@@ -92,7 +92,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   it should "change values of created nodes asynchronously" in new Env {
     zk.create("node", Some("first value"))
 
-    zk.get("node") should be (Some("first value"))
+    zk.get[String]("node") should be (Some("first value"))
 
     var done = false
 
@@ -102,7 +102,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
 
     eventually { done should be (true) }
 
-    zk.get("node") should be (Some("second value"))
+    zk.get[String]("node") should be (Some("second value"))
   }
 
 

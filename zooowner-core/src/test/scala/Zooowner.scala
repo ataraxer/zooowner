@@ -57,8 +57,8 @@ class ZooownerSpec extends UnitSpec with Eventually {
   it should "create nodes with paths" in new Env {
     zk.create("node/with/long/path", Some("value"), recursive = true)
 
-    zk.get("node/with/long") should be (None)
-    zk.get("node/with/long/path") should be (Some("value"))
+    zk.get[String]("node/with/long") should be (None)
+    zk.get[String]("node/with/long/path") should be (Some("value"))
   }
 
 
@@ -74,30 +74,30 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zkMock.check.created("/prefix/node/with", Some("filler"))
     zkMock.check.created("/prefix/node/with/long", Some("filler"))
 
-    zk.get("node/with/long/path") should be (Some("value"))
+    zk.get[String]("node/with/long/path") should be (Some("value"))
   }
 
 
   it should "return Some(value) if node exists" in new Env {
     zk.create("node", Some("value"))
 
-    zk.get("node") should be (Some("value"))
+    zk.get[String]("node") should be (Some("value"))
   }
 
 
   it should "return None if node doesn't exist" in new Env {
-    zk.get("non-existant-node") should be (None)
+    zk.get[String]("non-existant-node") should be (None)
   }
 
 
   it should "change values of created nodes" in new Env {
     zk.create("node", Some("first value"))
 
-    zk.get("node") should be (Some("first value"))
+    zk.get[String]("node") should be (Some("first value"))
 
     zk.set("node", "second value")
 
-    zk.get("node") should be (Some("second value"))
+    zk.get[String]("node") should be (Some("second value"))
   }
 
 

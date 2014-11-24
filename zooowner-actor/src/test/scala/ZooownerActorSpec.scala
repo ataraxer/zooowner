@@ -69,7 +69,7 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk ! SetNodeValue("foo", "new-value")
     expectMsgPF(5.seconds) { case NodeMeta("/prefix/foo", _) => }
 
-    zk.underlyingActor.zk.get("foo") should be (Some("new-value"))
+    zk.underlyingActor.zk.get[String]("foo") should be (Some("new-value"))
   }
 
 
