@@ -14,12 +14,6 @@ import java.util.{List => JavaList}
 import scala.collection.JavaConversions._
 
 
-object Callback {
-  def serialize(data: ZKData) =
-    Option(data) map { new String(_) }
-}
-
-
 /**
  * Callback class represents abstract callback for asynchronous ZooKeeper
  * operation.
@@ -110,16 +104,16 @@ case class OnStat(reaction: Reaction[Response])
 /**
  * Fires up on node value retrieval.
  */
-case class OnData(reaction: Reaction[Response])
+case class OnData[T](reaction: Reaction[Response], decoder: ZKDecoder[Option[T]])
     extends Callback(reaction) with DataCallback
 {
-  import Callback._
-
   def processResult(returnCode: Int, path: String, context: Any,
                     data: ZKData, stat: Stat): Unit =
   {
     processCode(code = returnCode, path = path) {
-      Node(path, serialize(data), stat.toMeta)
+      // wrap in option to guard from null
+      val wrappedData = Option(data)
+      Node(path, decoder.decode(wrappedData), stat.toMeta)
     }
   }
 }

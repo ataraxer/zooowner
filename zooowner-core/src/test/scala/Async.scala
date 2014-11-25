@@ -54,9 +54,9 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   it should "return Some(value) if node exists asynchronously" in new Env {
     zk.create("node", Some("value"))
 
-    var result = Option.empty[String]
+    var result = Option.empty[Any]
 
-    zk.async.get("node") {
+    zk.async.get[String]("node") {
       case Node(_, data, _) => result = data
     }
 
@@ -65,9 +65,9 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "return None if node doesn't exist asynchronously" in new Env {
-    var result = Option.empty[String]
+    var result = Option.empty[Any]
 
-    zk.async.get("non-existant-node") {
+    zk.async.get[String]("non-existant-node") {
       case Node(_, data, _) => result = data
     }
 

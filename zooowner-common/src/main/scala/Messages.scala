@@ -23,7 +23,7 @@ object message {
   case class NodeMeta(path: String, meta: ZKNodeMeta)
     extends Message with Response
 
-  case class Node(path: String, data: Option[String], meta: ZKNodeMeta)
+  case class Node[T](path: String, data: Option[T], meta: ZKNodeMeta)
     extends Message with Event with Response
 
   case class NodeChildren(path: String, children: List[String])
