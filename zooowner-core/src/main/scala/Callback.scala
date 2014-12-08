@@ -104,16 +104,16 @@ case class OnStat(reaction: Reaction[Response])
 /**
  * Fires up on node value retrieval.
  */
-case class OnData[T](reaction: Reaction[Response], decoder: ZKDecoder[Option[T]])
+case class OnData(reaction: Reaction[Response])
     extends Callback(reaction) with DataCallback
 {
   def processResult(returnCode: Int, path: String, context: Any,
-                    data: ZKData, stat: Stat): Unit =
+                    data: RawZKData, stat: Stat): Unit =
   {
     processCode(code = returnCode, path = path) {
       // wrap in option to guard from null
       val wrappedData = Option(data)
-      Node(path, decoder.decode(wrappedData), stat.toMeta)
+      Node(path, wrappedData, stat.toMeta)
     }
   }
 }

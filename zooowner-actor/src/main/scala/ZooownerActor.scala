@@ -137,7 +137,7 @@ class ZooownerActor(
      * @param path Path of the node which value is requested.
      */
     case GetNodeValue(path) => {
-      zk.async.get[String](path) { passTo(sender) }
+      zk.async.get(path) { passTo(sender) }
     }
 
     /*

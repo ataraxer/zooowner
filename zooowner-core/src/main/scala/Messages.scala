@@ -23,8 +23,13 @@ object message {
   case class NodeMeta(path: String, meta: ZKNodeMeta)
     extends Message with Response
 
-  case class Node[T](path: String, data: Option[T], meta: ZKNodeMeta)
+  case class Node(path: String, data: ZKData, meta: ZKNodeMeta)
     extends Message with Event with Response
+  {
+    def extract[T](implicit decoder: ZKDecoder[T]) = {
+      decoder.decode(data)
+    }
+  }
 
   case class NodeChildren(path: String, children: List[String])
     extends Message with Event with Response
@@ -81,8 +86,6 @@ object message {
       extends Message
 
   case class WatchNode(path: String, persistent: Boolean = true)
-
-  type ZKData = Array[Byte]
 }
 
 

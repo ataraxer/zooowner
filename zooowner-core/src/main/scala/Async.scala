@@ -95,15 +95,14 @@ trait Async { this: Zooowner =>
     /**
      * Asynchronous version of [[Zooowner.get]].
      */
-    def get[T]
+    def get
       (path: String, watcher: Option[EventWatcher] = None)
-      (callback: Reaction[Response])
-      (implicit decoder: ZKDecoder[Option[T]]): Unit =
+      (callback: Reaction[Response]): Unit =
     {
       client.getData(
         resolvePath(path),
         resolveWatcher(watcher),
-        OnData(callback, decoder),
+        OnData(callback),
         null)
     }
 

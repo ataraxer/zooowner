@@ -4,8 +4,6 @@ import scala.language.postfixOps
 
 
 object DefaultSerializers {
-  import ZKSerializer._
-
   private val Encoding = "UTF-8"
 
 
@@ -57,19 +55,12 @@ object DefaultSerializers {
 }
 
 
-object ZKSerializer {
-  type ZKData = Option[Array[Byte]]
-}
-
-
 trait ZKDecoder[+T] {
-  import ZKSerializer._
   def decode(data: ZKData): T
 }
 
 
 trait ZKEncoder[-T] {
-  import ZKSerializer._
   def encode(value: T): ZKData
 }
 
