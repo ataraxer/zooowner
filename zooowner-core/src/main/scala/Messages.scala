@@ -29,6 +29,10 @@ object message {
     def extract[T](implicit decoder: ZKDecoder[T]) = {
       decoder.decode(data)
     }
+
+    def get(implicit defaults: DefaultSerializers): defaults.Type = {
+      defaults.decoder.decode(data)
+    }
   }
 
   case class NodeChildren(path: String, children: List[String])
