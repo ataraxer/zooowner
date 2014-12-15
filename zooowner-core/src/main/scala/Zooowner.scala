@@ -294,7 +294,7 @@ class Zooowner(servers: String,
    */
   def get[T]
     (path: String, watcher: Option[EventWatcher] = None)
-    (implicit decoder: ZKDecoder[Option[T]]): Option[T] =
+    (implicit decoder: ZKDecoder[T]): Option[T] =
   {
     val maybeData = this { client =>
       catching(classOf[NoNodeException]).opt {
@@ -302,8 +302,12 @@ class Zooowner(servers: String,
       }
     }
 
-    // wrap in Option to guard from null
-    val wrappedData = maybeData.flatMap( data => Option(data) );
+    maybeData map { data =>
+      // wrap in Option to guard from null
+      val wrappedData = Option(data)
+      decoder.decode(wrappedData)
+    }
+  }
 
     decoder.decode(wrappedData)
   }
