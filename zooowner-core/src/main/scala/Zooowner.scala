@@ -302,14 +302,11 @@ class Zooowner(servers: String,
       }
     }
 
-    maybeData map { data =>
+    maybeData flatMap { data =>
       // wrap in Option to guard from null
       val wrappedData = Option(data)
-      decoder.decode(wrappedData)
+      Option(decoder.decode(wrappedData))
     }
-  }
-
-    decoder.decode(wrappedData)
   }
 
   /**
