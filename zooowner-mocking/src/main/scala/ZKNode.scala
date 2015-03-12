@@ -1,12 +1,12 @@
-package com.ataraxer.zooowner.common
+package com.ataraxer.zooowner
+package mocking
 
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.data.Stat
 
 import scala.collection.mutable
 
-
-import com.ataraxer.zooowner.common.Constants._
+import ZKNode._
 
 
 object ZKNode {
@@ -27,6 +27,9 @@ object ZKNode {
   def apply(data: String): ZKNode = apply(data, false)
   def apply(persistent: Boolean): ZKNode = apply(None, persistent)
   def apply(): ZKNode = apply(None, false)
+
+  type ZKData = Option[Array[Byte]]
+  val AnyVersion = -1
 }
 
 
@@ -39,7 +42,7 @@ abstract class ZKNode(initialData: ZKData) {
 
 
   protected def checkVersion(version: Int) = {
-    val checkRequired = version != Constants.AnyVersion
+    val checkRequired = version != AnyVersion
     if (checkRequired && version != State.version) {
       throw new BadVersionException
     }
@@ -53,11 +56,11 @@ abstract class ZKNode(initialData: ZKData) {
   def data: ZKData = State.data
 
   def data_=(data: ZKData) = {
-    set(data, version = Constants.AnyVersion)
+    set(data, version = AnyVersion)
   }
 
   def data_=(data: String) = {
-    set(Some(data.getBytes), version = Constants.AnyVersion)
+    set(Some(data.getBytes), version = AnyVersion)
   }
 
   def set(data: ZKData, version: Int): Unit = {
@@ -125,7 +128,7 @@ abstract class ZKNode(initialData: ZKData) {
   def create(child: String): ZKNode = create(child, None, false)
 
 
-  def delete(child: String, version: Int = Constants.AnyVersion): Unit = {
+  def delete(child: String, version: Int = AnyVersion): Unit = {
     val childNode = this.child(child)
     childNode.checkVersion(version)
     if (!childNode.children.isEmpty) throw new NotEmptyException

@@ -1,4 +1,5 @@
-package com.ataraxer.zooowner.mocking
+package com.ataraxer.zooowner
+package mocking
 
 import org.apache.zookeeper.CreateMode
 import org.apache.zookeeper.CreateMode._
@@ -22,8 +23,6 @@ import scala.concurrent.duration.FiniteDuration
 import scala.util.control.Exception.catching
 
 import java.util.{List => JavaList}
-
-import com.ataraxer.zooowner.common.ZKNode
 
 
 class ZKNodeTree {

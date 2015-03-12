@@ -1,12 +1,12 @@
-package com.ataraxer.zooowner.common
+package com.ataraxer.zooowner
+package mocking
 
 import org.apache.zookeeper.KeeperException._
-import com.ataraxer.test.UnitSpec
 import scala.language.implicitConversions
-import Constants.ZKData
 
 
 class NodeTreeSpec extends UnitSpec {
+  import ZKNode._
 
   implicit class StringNode(node: ZKNode) {
     def dataString = node.data.map(new String(_))

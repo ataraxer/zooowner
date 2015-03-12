@@ -4,7 +4,6 @@ package actor
 import akka.actor.ActorSystem
 import akka.testkit.{TestKit, TestActorRef, TestProbe, ImplicitSender}
 
-import com.ataraxer.test.UnitSpec
 import com.ataraxer.zooowner.test.ZooownerMock
 import com.ataraxer.zooowner.mocking.ZKMock
 import com.ataraxer.zooowner.message._

@@ -1,4 +1,5 @@
-package com.ataraxer.zooowner.mocking
+package com.ataraxer.zooowner
+package mocking
 
 import org.apache.zookeeper.AsyncCallback
 import org.apache.zookeeper.AsyncCallback._
@@ -24,8 +25,6 @@ import scala.concurrent.duration.FiniteDuration
 import scala.util.control.Exception.catching
 
 import java.util.{List => JavaList}
-
-import com.ataraxer.zooowner.common.ZKNode
 
 
 object ZKMock {

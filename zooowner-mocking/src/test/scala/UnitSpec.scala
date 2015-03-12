@@ -1,4 +1,5 @@
-package com.ataraxer.test
+package com.ataraxer.zooowner
+package mocking
 
 import org.scalatest._
 
@@ -6,9 +7,6 @@ import org.scalatest._
 trait UnitSpec
   extends FlatSpecLike
   with Matchers
-  with OptionValues
-  with Inside
-  with Inspectors
   with BeforeAndAfter
   with BeforeAndAfterAll
 

@@ -1,8 +1,5 @@
 package com.ataraxer.zooowner
 
-import com.ataraxer.zooowner.common.Constants.AnyVersion
-import com.ataraxer.zooowner.common.ZKNodeMeta
-
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.KeeperException.Code
 

@@ -1,0 +1,13 @@
+package com.ataraxer.test
+
+import org.scalatest._
+
+
+trait UnitSpec
+  extends FlatSpecLike
+  with Matchers
+  with BeforeAndAfter
+  with BeforeAndAfterAll
+
+
+// vim: set ts=2 sw=2 et:

@@ -1,4 +1,4 @@
-package com.ataraxer.zooowner.common
+package com.ataraxer.zooowner
 
 import org.apache.zookeeper.data.Stat
 import scala.language.implicitConversions

@@ -1,6 +1,5 @@
-package com.ataraxer.zooowner.mocking
-
-import com.ataraxer.test.UnitSpec
+package com.ataraxer.zooowner
+package mocking
 
 import org.apache.zookeeper.AsyncCallback._
 import org.apache.zookeeper.CreateMode._

@@ -50,11 +50,14 @@ val publishingSettings = Seq(
 
 
 lazy val zooowner = project.in(file("."))
-  .aggregate(zooownerCore, zooownerActor, zooownerMocking, zooownerCommon)
+  .aggregate(
+    zooownerCore,
+    zooownerActor,
+    zooownerMocking)
 
 lazy val zooownerActor = project.in(file("zooowner-actor"))
   .settings(name := "zooowner-actor")
-  .dependsOn(zooownerCore, zooownerMocking, zooownerCommon)
+  .dependsOn(zooownerCore, zooownerMocking)
   .settings(commonSettings: _*)
   .settings(publishingSettings: _*)
   .settings(dependencies: _*)
@@ -64,25 +67,16 @@ lazy val zooownerActor = project.in(file("zooowner-actor"))
 
 lazy val zooownerCore = project.in(file("zooowner-core"))
   .settings(name := "zooowner-core")
-  .dependsOn(zooownerMocking, zooownerCommon)
+  .dependsOn(zooownerMocking)
   .settings(commonSettings: _*)
   .settings(publishingSettings: _*)
   .settings(dependencies: _*)
 
 lazy val zooownerMocking = project.in(file("zooowner-mocking"))
   .settings(name := "zooowner-mocking")
-  .dependsOn(zooownerCommon)
   .settings(commonSettings: _*)
   .settings(publishingSettings: _*)
   .settings(dependencies: _*)
   .settings(libraryDependencies +=
     "org.mockito" % "mockito-core" % "1.8.5")
-
-lazy val zooownerCommon = project.in(file("zooowner-common"))
-  .settings(name := "zooowner-common")
-  .settings(commonSettings: _*)
-  .settings(publishingSettings: _*)
-  .settings(dependencies: _*)
-  .settings(libraryDependencies +=
-    "org.scalatest" %% "scalatest" % "2.2.0")
 
