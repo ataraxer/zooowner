@@ -1,4 +1,4 @@
-package com.ataraxer.zooowner
+package zooowner
 
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.KeeperException.Code

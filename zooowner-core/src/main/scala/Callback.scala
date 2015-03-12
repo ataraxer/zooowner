@@ -1,13 +1,13 @@
-package com.ataraxer.zooowner
+package zooowner
 
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.AsyncCallback
 import org.apache.zookeeper.AsyncCallback._
 
-import com.ataraxer.zooowner.Zooowner.{Reaction, default}
-import com.ataraxer.zooowner.message._
-import com.ataraxer.zooowner.ZKNodeMeta.StatConverter
+import zooowner.Zooowner.{Reaction, default}
+import zooowner.message._
+import zooowner.ZKNodeMeta.StatConverter
 
 import java.util.{List => JavaList}
 

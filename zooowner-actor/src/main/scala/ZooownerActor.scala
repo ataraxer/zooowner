@@ -1,9 +1,9 @@
-package com.ataraxer.zooowner
+package zooowner
 package actor
 
-import com.ataraxer.zooowner.{Zooowner, Async}
+import zooowner.{Zooowner, Async}
 
-import com.ataraxer.zooowner.message._
+import zooowner.message._
 
 import akka.actor.{Actor, ActorRef, Stash}
 import akka.actor.Actor.Receive

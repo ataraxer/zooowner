@@ -1,5 +1,3 @@
-package com.ataraxer
-
 import org.apache.zookeeper.ZooDefs.Ids
 
 

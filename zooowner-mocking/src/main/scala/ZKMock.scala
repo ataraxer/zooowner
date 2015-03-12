@@ -1,4 +1,4 @@
-package com.ataraxer.zooowner
+package zooowner
 package mocking
 
 import org.apache.zookeeper.AsyncCallback

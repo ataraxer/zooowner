@@ -1,6 +1,6 @@
-package com.ataraxer.zooowner
+package zooowner
 
-import com.ataraxer.zooowner.message._
+import zooowner.message._
 
 import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
 

@@ -1,10 +1,10 @@
-package com.ataraxer.zooowner
+package zooowner
 
 import org.apache.zookeeper.{Watcher => ZKWatcher, WatchedEvent}
 import org.apache.zookeeper.Watcher.{Event => ZKEvent}
 import org.apache.zookeeper.Watcher.Event.{KeeperState, EventType}
 
-import com.ataraxer.zooowner.Zooowner.{Reaction, default}
+import zooowner.Zooowner.{Reaction, default}
 
 
 sealed abstract class Watcher[T]

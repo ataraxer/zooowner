@@ -1,4 +1,4 @@
-package com.ataraxer.test
+package zooowner
 
 import org.scalatest._
 

@@ -1,4 +1,4 @@
-package com.ataraxer.zooowner
+package zooowner
 
 import scala.language.postfixOps
 

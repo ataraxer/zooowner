@@ -1,12 +1,12 @@
-package com.ataraxer.zooowner
+package zooowner
 package actor
 
 import akka.actor.ActorSystem
 import akka.testkit.{TestKit, TestActorRef, TestProbe, ImplicitSender}
 
-import com.ataraxer.zooowner.test.ZooownerMock
-import com.ataraxer.zooowner.mocking.ZKMock
-import com.ataraxer.zooowner.message._
+import zooowner.test.ZooownerMock
+import zooowner.mocking.ZKMock
+import zooowner.message._
 
 import org.scalatest.concurrent.Eventually
 

@@ -1,4 +1,4 @@
-package com.ataraxer.zooowner
+package zooowner
 package actor
 
 import org.scalatest._

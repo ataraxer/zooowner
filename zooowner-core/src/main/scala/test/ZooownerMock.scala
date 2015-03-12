@@ -1,4 +1,4 @@
-package com.ataraxer.zooowner
+package zooowner
 package test
 
 import org.apache.zookeeper.ZooKeeper

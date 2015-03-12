@@ -1,9 +1,8 @@
-package com.ataraxer.zooowner
+package zooowner
 
-import com.ataraxer.test.UnitSpec
-import com.ataraxer.zooowner.test.ZooownerMock
-import com.ataraxer.zooowner.mocking.ZKMock
-import com.ataraxer.zooowner.message._
+import zooowner.test.ZooownerMock
+import zooowner.mocking.ZKMock
+import zooowner.message._
 
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.Watcher.Event.KeeperState
@@ -138,7 +137,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "set one-time watches on nodes" in new Env {
-    import com.ataraxer.zooowner.Zooowner.Reaction
+    import zooowner.Zooowner.Reaction
 
     var created = false
     var changed = false

@@ -1,7 +1,7 @@
-package com.ataraxer.zooowner
+package zooowner
 
-import com.ataraxer.zooowner.message._
-import com.ataraxer.zooowner.ZKNodeMeta.StatConverter
+import zooowner.message._
+import zooowner.ZKNodeMeta.StatConverter
 
 import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.ZooKeeper.States
