@@ -89,6 +89,8 @@ class Zooowner(servers: String,
   protected var connectionHook: Reaction[ConnectionEvent] =
     default[ConnectionEvent]
 
+  private val connectionFlag = new Object
+
   /**
    * Internal watcher, that controls ZooKeeper connection life-cycle.
    */
@@ -104,6 +106,10 @@ class Zooowner(servers: String,
       }
 
       connectionHook(Connected)
+
+      connectionFlag synchronized {
+        connectionFlag.notify()
+      }
     }
 
     case KeeperState.Disconnected => {
@@ -187,6 +193,17 @@ class Zooowner(servers: String,
   def watchConnection(reaction: Reaction[ConnectionEvent]) = {
     connectionHook = reaction orElse default[ConnectionEvent]
     if (isConnected) connectionHook(Connected)
+  }
+
+  /**
+   * Blocks until client is connected.
+   */
+  def waitConnection(): Unit = {
+    if (!isConnected) {
+      connectionFlag synchronized {
+        connectionFlag.wait()
+      }
+    }
   }
 
   /**

@@ -38,6 +38,13 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
+  it should "wait for connection on `waitConnection`" in new ZKMock {
+    val zk = new ZooownerMock(zkMock.createMock _)
+    zk.waitConnection()
+    zk.isConnected should be (true)
+  }
+
+
   it should "create root node on connection" in new Env {
     zkMock.check.created("/prefix")
   }
