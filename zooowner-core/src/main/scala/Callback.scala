@@ -113,7 +113,8 @@ case class OnData(reaction: Reaction[Response])
     processCode(code = returnCode, path = path) {
       // wrap in option to guard from null
       val wrappedData = Option(data)
-      Node(path, wrappedData, stat.toMeta)
+      val node = ZKNode(path, wrappedData, stat.toMeta)
+      Node(node)
     }
   }
 }

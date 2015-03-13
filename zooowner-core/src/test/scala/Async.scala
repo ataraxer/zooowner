@@ -56,7 +56,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var result = Option.empty[String]
 
     zk.async.get("node") {
-      case node: Node => result = Some(node.extract[String])
+      case Node(node) => result = Some(node.extract[String])
     }
 
     eventually { result should be (Some("value")) }
@@ -67,7 +67,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
     var result = Option.empty[Any]
 
     zk.async.get("non-existant-node") {
-      case node: Node => result = node.data
+      case Node(node) => result = node.data
     }
 
     eventually { result should be (None) }

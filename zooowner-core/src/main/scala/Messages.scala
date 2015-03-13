@@ -20,17 +20,8 @@ object message {
   case class NodeMeta(path: String, meta: ZKNodeMeta)
     extends Message with Response
 
-  case class Node(path: String, data: ZKData, meta: ZKNodeMeta)
+  case class Node(node: ZKNode)
     extends Message with Event with Response
-  {
-    def extract[T](implicit decoder: ZKDecoder[T]) = {
-      decoder.decode(data)
-    }
-
-    def get(implicit defaults: DefaultSerializers): defaults.Type = {
-      defaults.decoder.decode(data)
-    }
-  }
 
   case class NodeChildren(path: String, children: List[String])
     extends Message with Event with Response

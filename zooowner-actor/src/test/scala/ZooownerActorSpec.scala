@@ -77,7 +77,7 @@ class ZooownerActorSpec(_system: ActorSystem)
 
     zk ! GetNodeValue("foo")
     expectMsgPF(3.seconds) {
-      case node: Node => {
+      case Node(node) => {
         node.path should be ("/prefix/foo")
         node.extract[String] should be ("value")
       }
