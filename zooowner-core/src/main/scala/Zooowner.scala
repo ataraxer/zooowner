@@ -199,9 +199,13 @@ class Zooowner(servers: String,
    * Blocks until client is connected.
    */
   def waitConnection(): Unit = {
-    if (!isConnected) {
+    while (!isConnected) {
       connectionFlag synchronized {
-        connectionFlag.wait()
+        connectionFlag.wait(timeout.toMillis.toLong)
+        if (!isConnected) {
+          throw new ZKConnectionTimeoutException(
+            "Can't connect to ZooKeeper within %s timeout".format(timeout))
+        }
       }
     }
   }
