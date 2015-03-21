@@ -1,7 +1,14 @@
 package zooowner
 
+import scala.concurrent.TimeoutException
 
-class ZKConnectionTimeoutException(message: String) extends Exception(message)
+
+trait ZKException { self: Exception => }
+
+
+class ZKConnectionTimeoutException(message: String)
+  extends TimeoutException(message)
+  with ZKException
 
 
 // vim: set ts=2 sw=2 et sts=2:

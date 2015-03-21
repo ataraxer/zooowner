@@ -10,6 +10,7 @@ import org.apache.zookeeper.CreateMode._
 import org.apache.zookeeper.KeeperException
 import org.apache.zookeeper.KeeperException._
 
+import scala.concurrent.{Promise, Await, TimeoutException}
 import scala.concurrent.duration._
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
@@ -89,7 +90,7 @@ class Zooowner(servers: String,
   protected var connectionHook: Reaction[ConnectionEvent] =
     default[ConnectionEvent]
 
-  private val connectionFlag = new Object
+  private val connectionFlag = Promise[Unit]()
 
   /**
    * Internal watcher, that controls ZooKeeper connection life-cycle.
@@ -107,9 +108,7 @@ class Zooowner(servers: String,
 
       connectionHook(Connected)
 
-      connectionFlag synchronized {
-        connectionFlag.notify()
-      }
+      connectionFlag.success(Unit)
     }
 
     case KeeperState.Disconnected => {
@@ -199,14 +198,12 @@ class Zooowner(servers: String,
    * Blocks until client is connected.
    */
   def waitConnection(): Unit = {
-    while (!isConnected) {
-      connectionFlag synchronized {
-        connectionFlag.wait(timeout.toMillis.toLong)
-        if (!isConnected) {
-          throw new ZKConnectionTimeoutException(
-            "Can't connect to ZooKeeper within %s timeout".format(timeout))
-        }
-      }
+    try {
+      Await.result(connectionFlag.future, timeout)
+    } catch {
+      case _: TimeoutException =>
+        throw new ZKConnectionTimeoutException(
+          "Can't connect to ZooKeeper within %s timeout".format(timeout))
     }
   }
 
