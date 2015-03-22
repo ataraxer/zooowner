@@ -2,30 +2,41 @@
 
 ZooKeeper client that doesn't make you cry.
 
+
 ## Installation
 
-If you're using SBT, simply add following lines to your build config (usually
-found in `build.sbt`):
-```scala
-resolvers += "Ataraxer Nexus" at "http://nexus.ataraxer.com/repo/releases"
+Zooowner is cross compiled for Scala 2.10 and 2.11.
 
-libraryDependencies += "com.ataraxer" %% "zooowner" % "0.2.1"
+Just add follwing lines to `build.sbt`:
+
+```scala
+resolvers += Resolver.sonatypeRepo("snapshots")
+
+libraryDependencies += "com.ataraxer" %% "zooowner-core" % "0.3.0-SNAPSHOT"
 ```
+
 
 ## Synchronous API
 
 Create new Zooowner client which will operate on nodes under specified preifx:
-```scala
-import com.ataraxer.zooowner.Zooowner
 
-val zk = new Zooowner("localhost:2181", timeout = 30.seconds, "prefix")
+```scala
+import zooowner.Zooowner
+import scala.concurrent.duration._
+
+val zk = Zooowner(
+  servers = "localhost:2181",
+  timeout = 5.seconds,
+  prefix = Some("/prefix"))
 ```
+
 
 ### Monitor connection
 
 Set up callbacks on connection status:
+
 ```scala
-import com.ataraxer.zooowner.messages._
+import zooowner.messages._
 
 zk.watchConnection {
   case Connected    => println("Yay!")
@@ -35,11 +46,12 @@ zk.watchConnection {
 
 
 ### Create nodes
+
 ```scala
 // Ephemeral node with no value (null)
 zk.create("node")
 // Ephermeral node with provided value
-zk.create("node", Some("value"))
+zk.create("node", "value")
 // Persistent node
 zk.create("node", persistent = true)
 // Sequential node
@@ -50,11 +62,22 @@ zk.create("node", persistent = true, sequential = true)
 // it's predecesors -- no value (null)
 zk.create("node", Some("value"), recursive = true)
 // Same as previous, but predecessors will be created with filler-value
-zk.create("node", Some("value"), recursive = true, filler = Some("filler"))
+zk.create("node", "foo", filler = "bar", recursive = true)
+```
+
+
+### Get node value
+
+```
+// as a byte array
+zk.get[Array[Byte]]("node")
+// as a UTF-8 encoded string
+zk.get[String]("node")
 ```
 
 
 ### Delete nodes
+
 ```scala
 // Delete only node itself
 zk.delete("node")
@@ -66,6 +89,7 @@ zk.delete("node", recursive = true)
 
 
 ### Get nodes children
+
 ```scala
 // Get list of node's children names
 zk.children("node")
@@ -73,14 +97,17 @@ zk.children("node")
 zk.children("node", absolutePaths = true)
 ```
 
+
 ### Watch node values and children
+
 ```scala
-// Type declaration is just for demonstration
+import zooowner.message._
+
 zk.watch("node") {
-  case NodeCreated(node: String, value: Option[String]) =>
-  case NodeChanged(node: String, value: Option[String]) =>
-  case NodeDeleted(node: String) =>
-  case NodeChildrenChanged(node: String, children: Seq[String]) =>
+  case NodeCreated(path, value) =>
+  case NodeChanged(path, value) =>
+  case NodeDeleted(path) =>
+  case NodeChildrenChanged(path, children) =>
 }
 ```
 

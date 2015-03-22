@@ -34,7 +34,7 @@ trait AsyncZooowner { this: Zooowner =>
 
   object async {
     /**
-     * Asynchronous version of [[Zooowner.stat]].
+     * Asynchronous version of `stat`.
      */
     def stat
       (path: String, watcher: Option[EventWatcher] = None)

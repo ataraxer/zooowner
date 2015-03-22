@@ -1,11 +1,13 @@
+import SonatypeKeys._
+
 val commonSettings = Seq(
-  version := "0.2.4",
+  version := "0.3.0-SNAPSHOT",
   organization := "com.ataraxer",
   homepage := Some(url("http://github.com/ataraxer/zooowner")),
   licenses := Seq("MIT License" -> url(
     "http://www.opensource.org/licenses/mit-license.php")),
-  scalaVersion := "2.11.2",
-  crossScalaVersions := Seq("2.10.4", "2.11.2"),
+  scalaVersion := "2.11.6",
+  crossScalaVersions := Seq("2.10.5", "2.11.6"),
   scalacOptions ++= Seq(
     "-g:vars",
     "-deprecation",
@@ -23,18 +25,9 @@ val dependencies = Seq(
       ExclusionRule(organization = "com.sun.jmx"),
       ExclusionRule(organization = "javax.jmx"))))
 
-val publishingSettings = Seq(
-  publishTo <<= version { (ver: String) =>
-    val nexus = "http://nexus.ataraxer.com/nexus/"
-    if (ver.trim.endsWith("SNAPSHOT")) {
-      Some("Snapshots" at nexus + "content/repositories/snapshots")
-    } else {
-      Some("Releases"  at nexus + "content/repositories/releases")
-    }
-  },
-  publishMavenStyle := true,
+val publishingSettings = sonatypeSettings ++ Seq(
   publishArtifact in Test := false,
-  pomIncludeRepository := { case _ => false },
+  profileName := "ataraxer",
   pomExtra := (
     <scm>
       <url>git@github.com:ataraxer/zooowner.git</url>

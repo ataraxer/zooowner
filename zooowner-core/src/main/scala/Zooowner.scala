@@ -143,7 +143,7 @@ class Zooowner(servers: String, timeout: FiniteDuration)
   }
 
   /**
-   * Attempts to extract a [[Watcher]] from Option, add it to the active
+   * Attempts to extract a [[EventWatcher]] from Option, add it to the active
    * watchers set and return extracted watcher on success or just returns null
    * to be passed to ZooKeeper otherwise.
    */
@@ -296,10 +296,7 @@ class Zooowner(servers: String, timeout: FiniteDuration)
   /**
    * Returns Some[ZKNode] if node exists, Non otherwise.
    */
-  def getNode(
-    path: String,
-    watcher: Option[EventWatcher] = None) =
-  {
+  def getNode(path: String, watcher: Option[EventWatcher] = None) = {
     val meta = new Stat
 
     val maybeData = this { client =>
