@@ -1,11 +1,9 @@
 package zooowner
 package actor
 
-import zooowner.{Zooowner, Async}
-
 import zooowner.message._
 
-import akka.actor.{Actor, ActorRef, Stash}
+import akka.actor.{Actor, ActorRef, Stash, Props}
 import akka.actor.Actor.Receive
 import akka.util.Timeout
 import akka.pattern.{ask, pipe}
@@ -17,14 +15,24 @@ import scala.concurrent.ExecutionContext
 object ZooownerActor {
   val StashTimeout = 3.seconds
   case object StashTimedOut
+
+  def props(
+    server: String,
+    timeout: FiniteDuration,
+    pathPrefix: Option[String] = None) =
+  {
+    Props {
+      new ZooownerActor(server, timeout, pathPrefix)
+    }
+  }
 }
 
 
 class ZooownerActor(
-  server: String,
-  timeout: FiniteDuration,
-  pathPrefix: Option[String] = None)
-    extends Actor with Stash
+    server: String,
+    timeout: FiniteDuration,
+    pathPrefix: Option[String] = None)
+  extends Actor with Stash
 {
   import ZooownerActor._
   import Zooowner.SlashSeparatedPath
@@ -33,7 +41,10 @@ class ZooownerActor(
   implicit val futureTimeout = Timeout(5.seconds)
   implicit val ec = context.dispatcher
 
-  val zk = new Zooowner(server, timeout, pathPrefix) with Async
+  val zk = AsyncZooowner(server, timeout, pathPrefix)
+
+  private var stashActive = true
+
 
   override def preStart(): Unit = {
     // forward all connection events to current actor's
@@ -41,17 +52,15 @@ class ZooownerActor(
     zk watchConnection { case event => self ! event }
   }
 
-
   /**
    * Generates a partial function which will pass messages to specified actor.
    */
-  def passTo(client: ActorRef): Zooowner.Reaction[Response] = {
+  def passTo(client: ActorRef): Zooowner.Reaction[ZKResponse] = {
     case message => client ! message
   }
 
-  def receive = connecting
 
-  private var stashActive = true
+  def receive = connecting
 
   /**
    * Waits for connection to ZooKeeper ensamble.
@@ -67,8 +76,11 @@ class ZooownerActor(
       stashActive = false
     }
 
-    case other
-      if stashActive && active.isDefinedAt(other) => stash()
+    case other => {
+      if (stashActive && active.isDefinedAt(other)) {
+        stash()
+      }
+    }
   }
 
   /**
@@ -148,7 +160,6 @@ class ZooownerActor(
     case GetNodeChildren(path) => {
       zk.async.children(path) { passTo(sender) }
     }
-
 
     /*
      * Sets up a watcher on a node.

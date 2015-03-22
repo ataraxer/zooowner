@@ -2,7 +2,7 @@ package zooowner
 package actor
 
 import akka.actor.ActorSystem
-import akka.testkit.{TestKit, TestActorRef, TestProbe, ImplicitSender}
+import akka.testkit._
 
 import zooowner.test.ZooownerMock
 import zooowner.mocking.ZKMock
@@ -29,7 +29,9 @@ class ZooownerActorSpec(_system: ActorSystem)
   before {
     zk = TestActorRef {
       new ZooownerActor("", 1.second, Some("/prefix")) with ZKMock {
-        override val zk = new ZooownerMock(zkMock.createMock _) with Async
+        override val zk = {
+          new ZooownerMock(zkMock.createMock _) with AsyncZooowner
+        }
       }
     }
 

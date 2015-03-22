@@ -20,21 +20,15 @@ import scala.language.implicitConversions
 
 
 object Zooowner {
-  type Action = () => Unit
-  type Reaction[T] = PartialFunction[T, Unit]
+  private[zooowner] type Reaction[T] = PartialFunction[T, Unit]
 
-  def default[T]: Reaction[T] = { case _ => }
-
-  val Root = ""
-
-  implicit def durationToInt(duration: FiniteDuration) =
-    duration.toMillis.toInt
-
-  implicit class SlashSeparatedPath(path: String) {
-    def / (subpath: String) = path + "/" + subpath
+  private[zooowner] object Reaction {
+    def empty[T]: Reaction[T] = { case _ => }
   }
 
-  def createMode(persistent: Boolean, sequential: Boolean) = {
+  private[zooowner] val Root = ""
+
+  private[zooowner] def createMode(persistent: Boolean, sequential: Boolean) = {
     (persistent, sequential) match {
       case (true, true)   => PERSISTENT_SEQUENTIAL
       case (true, false)  => PERSISTENT
@@ -43,18 +37,34 @@ object Zooowner {
     }
   }
 
-  def parentPaths(path: String) = {
-    var parentPath = ""
+
+  private[zooowner] def parentPaths(path: String) = {
+    var parentPath = new StringBuffer
     var result = ArrayBuffer.empty[String]
 
     val cleanPath = path.stripPrefix("/").stripSuffix("/")
 
     for (nextPart <- cleanPath.split("/")) {
-      parentPath = parentPath/nextPart
-      if (parentPath != path) result += parentPath
+      parentPath append "/"
+      parentPath append nextPart
+      if (parentPath.toString != path) result += parentPath.toString
     }
 
     result
+  }
+
+
+  implicit class SlashSeparatedPath(path: String) {
+    def / (subpath: String) = path + "/" + subpath
+  }
+
+
+  def apply(
+    servers: String,
+    timeout: FiniteDuration,
+    pathPrefix: Option[String] = None) =
+  {
+    new Zooowner(servers, timeout, pathPrefix)
   }
 }
 
@@ -67,9 +77,10 @@ object Zooowner {
  * @param timeout Connection timeout.
  * @param pathPrefix Default prefix for operations via that client instance.
  */
-class Zooowner(servers: String,
-               timeout: FiniteDuration,
-               val pathPrefix: Option[String] = None)
+class Zooowner(
+  servers: String,
+  timeout: FiniteDuration,
+  val pathPrefix: Option[String] = None)
 {
   import Zooowner._
   import DefaultSerializers._
@@ -83,14 +94,13 @@ class Zooowner(servers: String,
       "path prefix shouldn't end with slash ('/')")
   }
 
+  private val connectionFlag = Promise[Unit]()
+
   /*
    * Hook-function, that will be called when connection to ZooKeeper
    * server is established.
    */
-  protected var connectionHook: Reaction[ConnectionEvent] =
-    default[ConnectionEvent]
-
-  private val connectionFlag = Promise[Unit]()
+  protected var connectionHook = Reaction.empty[ConnectionEvent]
 
   /**
    * Internal watcher, that controls ZooKeeper connection life-cycle.
@@ -111,10 +121,12 @@ class Zooowner(servers: String,
       connectionFlag.success(Unit)
     }
 
+
     case KeeperState.Disconnected => {
       connectionHook(Disconnected)
       connect()
     }
+
 
     case KeeperState.Expired => {
       removeAllWatchers()
@@ -149,8 +161,9 @@ class Zooowner(servers: String,
    * Path resolver, that distincts between absolute paths starting with `/`
    * character and paths relative to [[pathPrefix]].
    */
-  protected def resolvePath(path: String) =
+  protected def resolvePath(path: String) = {
     if (path startsWith "/") path else prefixedPath(path)
+  }
 
   /**
    * Initiates connection to ZooKeeper server.
@@ -163,8 +176,9 @@ class Zooowner(servers: String,
   /**
    * Generates new ZooKeeper client.
    */
-  protected def generateClient =
+  protected def generateClient = {
     new ZooKeeper(servers, timeout.toMillis.toInt, watcher)
+  }
 
   /**
    * Disconnects from ZooKeeper server.
@@ -190,7 +204,7 @@ class Zooowner(servers: String,
    * connection status change.
    */
   def watchConnection(reaction: Reaction[ConnectionEvent]) = {
-    connectionHook = reaction orElse default[ConnectionEvent]
+    connectionHook = reaction orElse Reaction.empty[ConnectionEvent]
     if (isConnected) connectionHook(Connected)
   }
 
@@ -210,8 +224,9 @@ class Zooowner(servers: String,
   /**
    * Tests whether the connection to ZooKeeper server is established.
    */
-  def isConnected =
+  def isConnected = {
     client != null && client.getState == States.CONNECTED
+  }
 
   /**
    * Initiates disonnection from ZooKeeper server and performs clean up.
@@ -343,9 +358,11 @@ class Zooowner(servers: String,
    * @param recursive Specifies whether all sub-nodes should be deleted.
    * @param version Version of a node to be deleted.
    */
-  def delete(path: String,
-             recursive: Boolean = false,
-             version: Int = AnyVersion): Unit = {
+  def delete(
+    path: String,
+    recursive: Boolean = false,
+    version: Int = AnyVersion): Unit =
+  {
     if (recursive) {
       for (child <- children(path)) {
         val childPath = path/child
@@ -361,9 +378,10 @@ class Zooowner(servers: String,
   /**
    * Returns list of children of the node.
    */
-  def children(path: String,
-               absolutePaths: Boolean = false,
-               watcher: Option[EventWatcher] = None) =
+  def children(
+    path: String,
+    absolutePaths: Boolean = false,
+    watcher: Option[EventWatcher] = None) =
   {
     val maybeWatcher = resolveWatcher(watcher)
     this { client =>
@@ -375,13 +393,18 @@ class Zooowner(servers: String,
   /**
    * Tests whether the node is ephemeral.
    */
-  def isEphemeral(path: String) = meta(path).map(_.ephemeral).getOrElse(false)
+  def isEphemeral(path: String) = {
+    meta(path).map(_.ephemeral).getOrElse(false)
+  }
 
   /**
    * Stores all active node watchers.
    */
   protected var activeWatchers = List.empty[EventWatcher]
 
+  /**
+   * Stops and removes all active watchers.
+   */
   def removeAllWatchers(): Unit = {
     activeWatchers foreach { _.stop() }
     activeWatchers = Nil
@@ -390,10 +413,11 @@ class Zooowner(servers: String,
   /**
    * Sets up a callback for node events.
    */
-  def watch(path: String, persistent: Boolean = true)
-           (reaction: Reaction[Event]): EventWatcher =
+  def watch
+    (path: String, persistent: Boolean = true)
+    (reaction: Reaction[ZKEvent]): EventWatcher =
   {
-    val reactOn = reaction orElse default[Event]
+    val reactOn = reaction orElse Reaction.empty[ZKEvent]
 
     val watcher = new EventWatcher {
       def self: Option[EventWatcher] =
@@ -436,11 +460,15 @@ class Zooowner(servers: String,
     watcher
   }
 
-  def watchData(path: String, watcher: EventWatcher): Unit =
-    exists(path, watcher = Some(watcher))
 
-  def watchChildren(path: String, watcher: EventWatcher): Unit =
+  private def watchData(path: String, watcher: EventWatcher): Unit = {
+    exists(path, watcher = Some(watcher))
+  }
+
+
+  private def watchChildren(path: String, watcher: EventWatcher): Unit = {
     children(path, watcher = Some(watcher))
+  }
 }
 
 

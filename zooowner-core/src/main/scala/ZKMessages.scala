@@ -5,53 +5,53 @@ import org.apache.zookeeper.KeeperException.Code
 
 
 object message {
-  sealed trait Message
-  sealed trait Response
-  sealed trait Event extends Response
-  sealed trait ConnectionEvent extends Event
+  sealed trait ZKMessage
+  sealed trait ZKResponse
+  sealed trait ZKEvent extends ZKResponse
+  sealed trait ConnectionEvent extends ZKEvent
 
   case object Connected extends ConnectionEvent
   case object Disconnected extends ConnectionEvent
   case object Expired extends ConnectionEvent
 
-  case object ReadOnly extends Response
-  case object BadVersion extends Response
+  case object ReadOnly extends ZKResponse
+  case object BadVersion extends ZKResponse
 
   case class NodeMeta(path: String, meta: ZKNodeMeta)
-    extends Message with Response
+    extends ZKMessage with ZKResponse
 
   case class Node(node: ZKNode)
-    extends Message with Event with Response
+    extends ZKMessage with ZKEvent with ZKResponse
 
   case class NodeChildren(path: String, children: List[String])
-    extends Message with Event with Response
+    extends ZKMessage with ZKEvent with ZKResponse
 
   case class NodeCreated(path: String, data: Option[String])
-    extends Message with Event with Response
+    extends ZKMessage with ZKEvent with ZKResponse
 
   case class NodeChanged(path: String, data: Option[String])
-    extends Message with Event
+    extends ZKMessage with ZKEvent
 
   case class NodeChildrenChanged(path: String, children: Seq[String])
-    extends Message with Event
+    extends ZKMessage with ZKEvent
 
   case class NodeDeleted(path: String)
-    extends Message with Event with Response
+    extends ZKMessage with ZKEvent with ZKResponse
 
   case class NoNode(path: String)
-    extends Message with Response
+    extends ZKMessage with ZKResponse
 
   case class NotEmpty(path: String)
-    extends Message with Response
+    extends ZKMessage with ZKResponse
 
   case class NodeExists(path: String)
-    extends Message with Response
+    extends ZKMessage with ZKResponse
 
   case class NodeIsEphemeral(path: String)
-    extends Message with Response
+    extends ZKMessage with ZKResponse
 
   case class Error(code: Code)
-    extends Message with Response
+    extends ZKMessage with ZKResponse
 
   case class CreateNode(
     path: String,
@@ -60,22 +60,22 @@ object message {
     sequential: Boolean = false,
     recursive: Boolean = false,
     filler: Option[String] = None)
-      extends Message
+      extends ZKMessage
 
   case class DeleteNode(
     path: String,
     recursive: Boolean = false,
     version: Int = AnyVersion)
-      extends Message
+      extends ZKMessage
 
   case class SetNodeValue(path: String, data: String, version: Int = AnyVersion)
-      extends Message
+      extends ZKMessage
 
   case class GetNodeValue(path: String)
-      extends Message
+      extends ZKMessage
 
   case class GetNodeChildren(path: String)
-      extends Message
+      extends ZKMessage
 
   case class WatchNode(path: String, persistent: Boolean = true)
 }

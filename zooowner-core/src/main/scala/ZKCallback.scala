@@ -5,7 +5,7 @@ import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.AsyncCallback
 import org.apache.zookeeper.AsyncCallback._
 
-import zooowner.Zooowner.{Reaction, default}
+import zooowner.Zooowner.Reaction
 import zooowner.message._
 import zooowner.ZKNodeMeta.StatConverter
 
@@ -18,19 +18,15 @@ import scala.collection.JavaConversions._
  * Callback class represents abstract callback for asynchronous ZooKeeper
  * operation.
  */
-sealed abstract class Callback
-  (reaction: Reaction[Response])
-    extends AsyncCallback
-{
+private[zooowner] sealed trait ZKCallback extends AsyncCallback {
   import Code._
 
-  protected val reactOn = reaction orElse default[Response]
+  def reaction: Reaction[ZKResponse]
+
+  protected val reactOn = reaction orElse Reaction.empty[ZKResponse]
 
 
-  protected def processCode
-    (code: Int, path: String)
-    (response: => Response) =
-  {
+  protected def processCode(code: Int, path: String)(response: => ZKResponse) = {
     reactOn {
       Code.get(code) match {
         case OK => response
@@ -56,8 +52,8 @@ sealed abstract class Callback
 /**
  * Fires up on node creation.
  */
-case class OnCreated(reaction: Reaction[Response])
-  extends Callback(reaction) with StringCallback
+private[zooowner] case class OnCreated(reaction: Reaction[ZKResponse])
+  extends ZKCallback with StringCallback
 {
   def processResult(returnCode: Int, path: String, context: Any,
                     name: String) =
@@ -72,11 +68,9 @@ case class OnCreated(reaction: Reaction[Response])
 /**
  * Fires up on node deletion.
  */
-case class OnDeleted(reaction: Reaction[Response])
-    extends Callback(reaction) with VoidCallback
+private[zooowner] case class OnDeleted(reaction: Reaction[ZKResponse])
+  extends ZKCallback with VoidCallback
 {
-  private var counter = 0
-
   def processResult(returnCode: Int, path: String, context: Any) = {
     processCode(code = returnCode, path = path) {
       new NodeDeleted(path)
@@ -88,11 +82,14 @@ case class OnDeleted(reaction: Reaction[Response])
 /**
  * Fires up on node stat retreival.
  */
-case class OnStat(reaction: Reaction[Response])
-    extends Callback(reaction) with StatCallback
+private[zooowner] case class OnStat(reaction: Reaction[ZKResponse])
+  extends ZKCallback with StatCallback
 {
-  def processResult(returnCode: Int, path: String, context: Any,
-                    stat: Stat) =
+  def processResult(
+    returnCode: Int,
+    path: String,
+    context: Any,
+    stat: Stat) =
   {
     processCode(code = returnCode, path = path) {
       NodeMeta(path, stat.toMeta)
@@ -104,11 +101,15 @@ case class OnStat(reaction: Reaction[Response])
 /**
  * Fires up on node value retrieval.
  */
-case class OnData(reaction: Reaction[Response])
-    extends Callback(reaction) with DataCallback
+private[zooowner] case class OnData(reaction: Reaction[ZKResponse])
+  extends ZKCallback with DataCallback
 {
-  def processResult(returnCode: Int, path: String, context: Any,
-                    data: RawZKData, stat: Stat): Unit =
+  def processResult(
+    returnCode: Int,
+    path: String,
+    context: Any,
+    data: RawZKData,
+    stat: Stat): Unit =
   {
     processCode(code = returnCode, path = path) {
       // wrap in option to guard from null
@@ -123,11 +124,15 @@ case class OnData(reaction: Reaction[Response])
 /**
  * Fire up on node's children retreival.
  */
-case class OnChildren(reaction: Reaction[Response])
-  extends Callback(reaction) with Children2Callback
+private[zooowner] case class OnChildren(reaction: Reaction[ZKResponse])
+  extends ZKCallback with Children2Callback
 {
-  def processResult(returnCode: Int, path: String, context: Any,
-                    children: JavaList[String], stat: Stat) =
+  def processResult(
+    returnCode: Int,
+    path: String,
+    context: Any,
+    children: JavaList[String],
+    stat: Stat) =
   {
     processCode(code = returnCode, path = path) {
       NodeChildren(path, children.toList)

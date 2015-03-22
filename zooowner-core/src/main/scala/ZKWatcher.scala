@@ -1,25 +1,25 @@
 package zooowner
 
-import org.apache.zookeeper.{Watcher => ZKWatcher, WatchedEvent}
+import org.apache.zookeeper.{Watcher, WatchedEvent}
 import org.apache.zookeeper.Watcher.{Event => ZKEvent}
 import org.apache.zookeeper.Watcher.Event.{KeeperState, EventType}
 
-import zooowner.Zooowner.{Reaction, default}
+import zooowner.Zooowner.Reaction
 
 
-sealed abstract class Watcher[T]
-    extends ZKWatcher
-{
+sealed trait ZKWatcher[T] extends Watcher {
+  def reaction: Reaction[T]
+  def extract(event: WatchedEvent): T
+
+
   def process(event: WatchedEvent) = {
     if (active) {
-      (reaction orElse default[T]) {
+      (reaction orElse Reaction.empty[T]) {
         extract(event)
       }
     }
   }
 
-  def reaction: Reaction[T]
-  def extract(event: WatchedEvent): T
 
   private var active = true
 
@@ -29,11 +29,12 @@ sealed abstract class Watcher[T]
 }
 
 
-abstract class StateWatcher extends Watcher[KeeperState] {
+abstract class StateWatcher extends ZKWatcher[KeeperState] {
   def extract(event: WatchedEvent) = event.getState
 }
 
-abstract class EventWatcher extends Watcher[EventType] {
+
+abstract class EventWatcher extends ZKWatcher[EventType] {
   def extract(event: WatchedEvent) = event.getType
 }
 
@@ -43,6 +44,7 @@ object StateWatcher {
     new StateWatcher { def reaction = react }
   }
 }
+
 
 object EventWatcher {
   def apply(react: Reaction[EventType]) = {

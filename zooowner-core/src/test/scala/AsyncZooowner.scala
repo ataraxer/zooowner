@@ -14,12 +14,11 @@ import scala.concurrent.duration._
 class AsyncZooownerSpec extends UnitSpec with Eventually {
   import DefaultSerializers._
 
-  implicit val eventuallyConfig =
-    PatienceConfig(timeout = 3.seconds)
+  implicit val eventuallyConfig = PatienceConfig(timeout = 3.seconds)
 
 
   trait Env extends ZKMock {
-    val zk = new ZooownerMock(zkMock.createMock _) with Async
+    val zk = new ZooownerMock(zkMock.createMock _) with AsyncZooowner
     zk.isConnected should be (true)
   }
 

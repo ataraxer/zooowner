@@ -2,35 +2,47 @@ package zooowner
 
 import zooowner.message._
 
-import org.apache.zookeeper.{ZooKeeper, Watcher => ZKWatcher}
+import org.apache.zookeeper.{ZooKeeper, Watcher}
 
 import scala.concurrent.duration._
 import scala.language.implicitConversions
 import scala.util.control.Exception._
 
 
+object AsyncZooowner {
+  def apply(
+    servers: String,
+    timeout: FiniteDuration,
+    pathPrefix: Option[String] = None) =
+  {
+    new Zooowner(servers, timeout, pathPrefix) with AsyncZooowner
+  }
+}
+
+
 /**
  * Plug-in trait which extends Zooowner client with asynchronous API.
  *
  * {{{
- * val zk = new ZooKeeper("localhost:2181", 5.seconds, Some("prefix")) with Async
+ * val zk = AsyncZooowner("localhost:2181", 5.seconds, Some("prefix"))
  * }}}
  */
-trait Async { this: Zooowner =>
+trait AsyncZooowner { this: Zooowner =>
   import Zooowner._
 
   protected var client: ZooKeeper
   protected var activeWatchers: List[EventWatcher]
   protected def resolvePath(path: String): String
-  protected def resolveWatcher(maybeWatcher: Option[EventWatcher]): ZKWatcher
+  protected def resolveWatcher(maybeWatcher: Option[EventWatcher]): Watcher
+
 
   object async {
-
     /**
      * Asynchronous version of [[Zooowner.stat]].
      */
-    def stat(path: String, watcher: Option[EventWatcher] = None)
-            (callback: Reaction[Response]): Unit =
+    def stat
+      (path: String, watcher: Option[EventWatcher] = None)
+      (callback: Reaction[ZKResponse]): Unit =
     {
       client.exists(
         resolvePath(path),
@@ -47,7 +59,7 @@ trait Async { this: Zooowner =>
       value: T = Option.empty[String],
       persistent: Boolean = false,
       sequential: Boolean = false)
-      (callback: Reaction[Response])
+      (callback: Reaction[ZKResponse])
       (implicit encoder: ZKEncoder[T]): Unit =
     {
       val data = encoder.encode(value).orNull
@@ -66,7 +78,7 @@ trait Async { this: Zooowner =>
      */
     def delete
       (path: String, version: Int = AnyVersion)
-      (callback: Reaction[Response]): Unit =
+      (callback: Reaction[ZKResponse]): Unit =
     {
       client.delete(
         resolvePath(path),
@@ -80,7 +92,7 @@ trait Async { this: Zooowner =>
      */
     def set[T]
       (path: String, value: T, version: Int = AnyVersion)
-      (callback: Reaction[Response])
+      (callback: Reaction[ZKResponse])
       (implicit encoder: ZKEncoder[T]): Unit =
     {
       val data = encoder.encode(value).orNull
@@ -96,7 +108,7 @@ trait Async { this: Zooowner =>
      */
     def get
       (path: String, watcher: Option[EventWatcher] = None)
-      (callback: Reaction[Response]): Unit =
+      (callback: Reaction[ZKResponse]): Unit =
     {
       client.getData(
         resolvePath(path),
@@ -108,8 +120,9 @@ trait Async { this: Zooowner =>
     /**
      * Asynchronous version of [[Zooowner.children]].
      */
-    def children(path: String, watcher: Option[EventWatcher] = None)
-                (callback: Reaction[Response]): Unit =
+    def children
+      (path: String, watcher: Option[EventWatcher] = None)
+      (callback: Reaction[ZKResponse]): Unit =
     {
       client.getChildren(
         resolvePath(path),

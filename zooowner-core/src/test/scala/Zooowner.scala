@@ -151,7 +151,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
     var deleted = false
     var childCreated = false
 
-    val reaction: Zooowner.Reaction[Event] = {
+    val reaction: Zooowner.Reaction[ZKEvent] = {
       case NodeCreated("some-node", Some("value")) =>
         created = true
       case NodeChanged("some-node", Some("new-value")) =>
