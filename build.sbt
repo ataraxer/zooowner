@@ -41,6 +41,20 @@ val publishingSettings = sonatypeSettings ++ Seq(
       </developer>
     </developers>))
 
+val ghPagesSettings = {
+  site.settings ++
+  ghpages.settings ++
+  site.includeScaladoc("") ++ Seq {
+    git.remoteRepo := "git@github.com:ataraxer/zooowner.git"
+  }
+}
+
+val projectSettings = {
+  commonSettings ++
+  publishingSettings ++
+  dependencies
+}
+
 
 lazy val zooowner = project.in(file("."))
   .aggregate(
@@ -48,28 +62,23 @@ lazy val zooowner = project.in(file("."))
     zooownerActor,
     zooownerMocking)
 
+lazy val zooownerCore = project.in(file("zooowner-core"))
+  .settings(name := "zooowner-core")
+  .dependsOn(zooownerMocking)
+  .settings(projectSettings: _*)
+  .settings(ghPagesSettings: _*)
+
 lazy val zooownerActor = project.in(file("zooowner-actor"))
   .settings(name := "zooowner-actor")
   .dependsOn(zooownerCore, zooownerMocking)
-  .settings(commonSettings: _*)
-  .settings(publishingSettings: _*)
-  .settings(dependencies: _*)
+  .settings(projectSettings: _*)
   .settings(libraryDependencies ++= Seq(
     "com.typesafe.akka" %% "akka-actor"   % "2.3.4",
     "com.typesafe.akka" %% "akka-testkit" % "2.3.4" % "test"))
 
-lazy val zooownerCore = project.in(file("zooowner-core"))
-  .settings(name := "zooowner-core")
-  .dependsOn(zooownerMocking)
-  .settings(commonSettings: _*)
-  .settings(publishingSettings: _*)
-  .settings(dependencies: _*)
-
 lazy val zooownerMocking = project.in(file("zooowner-mocking"))
   .settings(name := "zooowner-mocking")
-  .settings(commonSettings: _*)
-  .settings(publishingSettings: _*)
-  .settings(dependencies: _*)
+  .settings(projectSettings: _*)
   .settings(libraryDependencies +=
     "org.mockito" % "mockito-core" % "1.8.5")
 
