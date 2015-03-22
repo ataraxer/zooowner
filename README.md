@@ -68,7 +68,7 @@ zk.create("node", "foo", filler = "bar", recursive = true)
 
 ### Get node value
 
-```
+```scala
 // as a byte array
 zk.get[Array[Byte]]("node")
 // as a UTF-8 encoded string
