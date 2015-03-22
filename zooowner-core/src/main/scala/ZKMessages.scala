@@ -26,10 +26,10 @@ object message {
   case class NodeChildren(path: String, children: List[String])
     extends ZKMessage with ZKEvent with ZKResponse
 
-  case class NodeCreated(path: String, data: Option[String])
+  case class NodeCreated(path: String, data: Option[ZKNode])
     extends ZKMessage with ZKEvent with ZKResponse
 
-  case class NodeChanged(path: String, data: Option[String])
+  case class NodeChanged(path: String, data: Option[ZKNode])
     extends ZKMessage with ZKEvent
 
   case class NodeChildrenChanged(path: String, children: Seq[String])
@@ -54,28 +54,28 @@ object message {
     extends ZKMessage with ZKResponse
 
   case class CreateNode(
-    path: String,
-    maybeData: Option[String] = None,
-    persistent: Boolean = false,
-    sequential: Boolean = false,
-    recursive: Boolean = false,
-    filler: Option[String] = None)
-      extends ZKMessage
+      path: String,
+      maybeData: Option[String] = None,
+      persistent: Boolean = false,
+      sequential: Boolean = false,
+      recursive: Boolean = false,
+      filler: Option[String] = None)
+    extends ZKMessage
 
   case class DeleteNode(
-    path: String,
-    recursive: Boolean = false,
-    version: Int = AnyVersion)
-      extends ZKMessage
+      path: String,
+      recursive: Boolean = false,
+      version: Int = AnyVersion)
+    extends ZKMessage
 
   case class SetNodeValue(path: String, data: String, version: Int = AnyVersion)
-      extends ZKMessage
+    extends ZKMessage
 
   case class GetNodeValue(path: String)
-      extends ZKMessage
+    extends ZKMessage
 
   case class GetNodeChildren(path: String)
-      extends ZKMessage
+    extends ZKMessage
 
   case class WatchNode(path: String, persistent: Boolean = true)
 }

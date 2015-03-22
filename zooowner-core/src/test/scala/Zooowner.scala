@@ -134,9 +134,11 @@ class ZooownerSpec extends UnitSpec with Eventually {
     var childCreated = false
 
     val reaction: Zooowner.Reaction[ZKEvent] = {
-      case NodeCreated("some-node", Some("value")) =>
+      case NodeCreated("some-node", Some(node)) =>
+        node.get should be ("value")
         created = true
-      case NodeChanged("some-node", Some("new-value")) =>
+      case NodeChanged("some-node", Some(node)) =>
+        node.get should be ("new-value")
         changed = true
       case NodeDeleted("some-node") =>
         deleted = true
@@ -171,9 +173,11 @@ class ZooownerSpec extends UnitSpec with Eventually {
     var childCreated = false
 
     zk.watch("some-node") {
-      case NodeCreated("some-node", Some("value")) =>
+      case NodeCreated("some-node", Some(node)) =>
+        node.get should be ("value")
         created = true
-      case NodeChanged("some-node", Some("new-value")) =>
+      case NodeChanged("some-node", Some(node)) =>
+        node.get should be ("new-value")
         changed = true
       case NodeDeleted("some-node") =>
         deleted = true
@@ -200,7 +204,8 @@ class ZooownerSpec extends UnitSpec with Eventually {
     var deleted = false
 
     val watcher = zk.watch("some-node") {
-      case NodeCreated("some-node", Some("value")) =>
+      case NodeCreated("some-node", Some(node)) =>
+        node.get should be ("value")
         created = true
       case NodeDeleted("some-node") =>
         deleted = true
@@ -224,14 +229,16 @@ class ZooownerSpec extends UnitSpec with Eventually {
     var deletedB = false
 
     val watcherA = zk.watch("some-node") {
-      case NodeCreated("some-node", Some("value")) =>
+      case NodeCreated("some-node", Some(node)) =>
+        node.get should be ("value")
         createdA = true
       case NodeDeleted("some-node") =>
         deletedA = true
     }
 
     val watcherB = zk.watch("other-node") {
-      case NodeCreated("other-node", Some("value")) =>
+      case NodeCreated("other-node", Some(node)) =>
+        node.get should be ("value")
         createdB = true
       case NodeDeleted("other-node") =>
         deletedB = true

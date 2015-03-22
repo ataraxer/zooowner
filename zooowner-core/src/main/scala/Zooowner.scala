@@ -77,7 +77,6 @@ object Zooowner {
 class Zooowner(servers: String, timeout: FiniteDuration)
 {
   import Zooowner._
-  import DefaultSerializers._
 
   private val connectionFlag = Promise[Unit]()
 
@@ -114,16 +113,10 @@ class Zooowner(servers: String, timeout: FiniteDuration)
   protected var client: ZooKeeper = generateClient
 
   /**
-   * Returns path prefixed with [[pathPrefix]], if defined.
-   */
-  protected def prefixedPath(path: String) = Root/path
-
-  /**
-   * Path resolver, that distincts between absolute paths starting with `/`
-   * character and paths relative to [[pathPrefix]].
+   * Returns path prefixed by slash.
    */
   protected def resolvePath(path: String) = {
-    if (path startsWith "/") path else prefixedPath(path)
+    if (path startsWith "/") path else Root/path
   }
 
   /**
@@ -241,14 +234,21 @@ class Zooowner(servers: String, timeout: FiniteDuration)
     sequential: Boolean = false,
     recursive: Boolean = false,
     filler: F = Option.empty[String])
-    (implicit valueEncoder: ZKEncoder[V], fillerEncoder: ZKEncoder[F]): Unit =
+    (implicit
+      valueEncoder: ZKEncoder[V],
+      fillerEncoder: ZKEncoder[F]): Unit =
   {
     val realPath = resolvePath(path)
 
     if (recursive) {
       for (parentPath <- parentPaths(realPath)) {
         ignoring(classOf[NodeExistsException]) {
-          create(parentPath, filler, persistent = true, recursive = false)
+          create(
+            path = parentPath,
+            value = filler,
+            filler = filler,
+            persistent = true,
+            recursive = false)
         }
       }
     }
@@ -288,16 +288,28 @@ class Zooowner(servers: String, timeout: FiniteDuration)
     (path: String, watcher: Option[EventWatcher] = None)
     (implicit decoder: ZKDecoder[T]): Option[T] =
   {
+    getNode(path) flatMap { node =>
+      Option(decoder.decode(node.data))
+    }
+  }
+
+  /**
+   * Returns Some[ZKNode] if node exists, Non otherwise.
+   */
+  def getNode(
+    path: String,
+    watcher: Option[EventWatcher] = None) =
+  {
+    val meta = new Stat
+
     val maybeData = this { client =>
-      catching(classOf[NoNodeException]).opt {
-        client.getData(resolvePath(path), resolveWatcher(watcher), null)
+      catching(classOf[NoNodeException]) opt {
+        client.getData(resolvePath(path), resolveWatcher(watcher), meta)
       }
     }
 
-    maybeData flatMap { data =>
-      // wrap in Option to guard from null
-      val wrappedData = Option(data)
-      Option(decoder.decode(wrappedData))
+    maybeData map { data =>
+      ZKNode(path, Option(data), meta)
     }
   }
 
@@ -387,12 +399,12 @@ class Zooowner(servers: String, timeout: FiniteDuration)
       def reaction = {
         case EventType.NodeCreated => {
           if (persistent) watchChildren(path, watcher = this)
-          reactOn { NodeCreated(path, get(path)) }
+          reactOn { NodeCreated(path, getNode(path)) }
         }
 
         case EventType.NodeDataChanged => reactOn {
           if (persistent) watchChildren(path, watcher = this)
-          NodeChanged(path, get(path, watcher = self))
+          NodeChanged(path, getNode(path, watcher = self))
         }
 
         case EventType.NodeChildrenChanged => reactOn {

@@ -106,7 +106,11 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk ! WatchNode("foo")
 
     zk.underlyingActor.zk.set("foo", "new-value")
-    expectMsg { NodeChanged("foo", Some("new-value")) }
+
+    expectMsgPF(5.seconds) {
+      case NodeChanged("foo", Some(node)) =>
+        node.get should be ("new-value")
+    }
   }
 
 }
