@@ -25,28 +25,10 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  "Zooowner" should "be initialized with simple path prefix " +
-                    "without slashes" in
-  {
-    val stubAddress = "localhost:2181"
-
-    lazy val zkOne = new Zooowner(stubAddress, 15.seconds, Some("prefix"))
-    an [IllegalArgumentException] should be thrownBy zkOne
-
-    lazy val zkTwo = new Zooowner(stubAddress, 15.seconds, Some("prefix/"))
-    an [IllegalArgumentException] should be thrownBy zkTwo
-  }
-
-
-  it should "wait for connection on `waitConnection`" in new ZKMock {
+  "Zooowner" should "wait for connection on `waitConnection`" in new ZKMock {
     val zk = new ZooownerMock(zkMock.createMock _)
     zk.waitConnection()
     zk.isConnected should be (true)
-  }
-
-
-  it should "create root node on connection" in new Env {
-    zkMock.check.created("/prefix")
   }
 
 
@@ -76,9 +58,9 @@ class ZooownerSpec extends UnitSpec with Eventually {
       filler = Some("filler")
     )
 
-    zkMock.check.created("/prefix/node", Some("filler"))
-    zkMock.check.created("/prefix/node/with", Some("filler"))
-    zkMock.check.created("/prefix/node/with/long", Some("filler"))
+    zkMock.check.created("/node", Some("filler"))
+    zkMock.check.created("/node/with", Some("filler"))
+    zkMock.check.created("/node/with/long", Some("filler"))
 
     zk.get[String]("node/with/long/path") should be (Some("value"))
   }

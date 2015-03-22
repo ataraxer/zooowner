@@ -16,22 +16,15 @@ object ZooownerActor {
   val StashTimeout = 3.seconds
   case object StashTimedOut
 
-  def props(
-    server: String,
-    timeout: FiniteDuration,
-    pathPrefix: Option[String] = None) =
-  {
+  def props(server: String, timeout: FiniteDuration) = {
     Props {
-      new ZooownerActor(server, timeout, pathPrefix)
+      new ZooownerActor(server, timeout)
     }
   }
 }
 
 
-class ZooownerActor(
-    server: String,
-    timeout: FiniteDuration,
-    pathPrefix: Option[String] = None)
+class ZooownerActor(server: String, timeout: FiniteDuration)
   extends Actor with Stash
 {
   import ZooownerActor._
@@ -41,7 +34,7 @@ class ZooownerActor(
   implicit val futureTimeout = Timeout(5.seconds)
   implicit val ec = context.dispatcher
 
-  val zk = AsyncZooowner(server, timeout, pathPrefix)
+  val zk = AsyncZooowner(server, timeout)
 
   private var stashActive = true
 

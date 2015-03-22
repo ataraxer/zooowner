@@ -10,12 +10,8 @@ import scala.util.control.Exception._
 
 
 object AsyncZooowner {
-  def apply(
-    servers: String,
-    timeout: FiniteDuration,
-    pathPrefix: Option[String] = None) =
-  {
-    new Zooowner(servers, timeout, pathPrefix) with AsyncZooowner
+  def apply(servers: String, timeout: FiniteDuration) = {
+    new Zooowner(servers, timeout) with AsyncZooowner
   }
 }
 

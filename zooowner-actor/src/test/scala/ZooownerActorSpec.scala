@@ -14,10 +14,10 @@ import scala.concurrent.duration._
 
 
 class ZooownerActorSpec(_system: ActorSystem)
-    extends TestKit(_system)
-    with ImplicitSender
-    with Eventually
-    with UnitSpec
+  extends TestKit(_system)
+  with ImplicitSender
+  with Eventually
+  with UnitSpec
 {
   import DefaultSerializers._
 
@@ -28,7 +28,7 @@ class ZooownerActorSpec(_system: ActorSystem)
 
   before {
     zk = TestActorRef {
-      new ZooownerActor("", 1.second, Some("/prefix")) with ZKMock {
+      new ZooownerActor("", 1.second) with ZKMock {
         override val zk = {
           new ZooownerMock(zkMock.createMock _) with AsyncZooowner
         }
@@ -49,7 +49,7 @@ class ZooownerActorSpec(_system: ActorSystem)
 
   "ZooownerActor" should "create nodes with paths asynchronously" in {
     zk ! CreateNode("foo", Some("value"))
-    expectMsg { NodeCreated("/prefix/foo", None) }
+    expectMsg { NodeCreated("/foo", None) }
   }
 
 
@@ -58,7 +58,7 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk.underlyingActor.zk.exists("foo") should be (true)
 
     zk ! DeleteNode("foo")
-    expectMsgPF(5.seconds) { case NodeDeleted("/prefix/foo") => }
+    expectMsgPF(5.seconds) { case NodeDeleted("/foo") => }
 
     zk.underlyingActor.zk.exists("foo") should be (false)
   }
@@ -68,7 +68,7 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk.underlyingActor.zk.create("foo", Some("value"))
 
     zk ! SetNodeValue("foo", "new-value")
-    expectMsgPF(5.seconds) { case NodeMeta("/prefix/foo", _) => }
+    expectMsgPF(5.seconds) { case NodeMeta("/foo", _) => }
 
     zk.underlyingActor.zk.get[String]("foo") should be (Some("new-value"))
   }
@@ -80,7 +80,7 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk ! GetNodeValue("foo")
     expectMsgPF(3.seconds) {
       case Node(node) => {
-        node.path should be ("/prefix/foo")
+        node.path should be ("/foo")
         node.extract[String] should be ("value")
       }
     }
@@ -94,7 +94,7 @@ class ZooownerActorSpec(_system: ActorSystem)
 
     zk ! GetNodeChildren("foo")
     expectMsgPF(5.seconds) {
-      case NodeChildren("/prefix/foo", children) =>
+      case NodeChildren("/foo", children) =>
         children should contain only ("a", "b")
     }
   }

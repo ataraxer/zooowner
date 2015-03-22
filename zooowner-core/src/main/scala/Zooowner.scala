@@ -3,9 +3,11 @@ package zooowner
 import zooowner.message._
 import zooowner.ZKNodeMeta.StatConverter
 
+import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.Watcher.Event.{KeeperState, EventType}
+import org.apache.zookeeper.CreateMode
 import org.apache.zookeeper.CreateMode._
 import org.apache.zookeeper.KeeperException
 import org.apache.zookeeper.KeeperException._
@@ -59,12 +61,8 @@ object Zooowner {
   }
 
 
-  def apply(
-    servers: String,
-    timeout: FiniteDuration,
-    pathPrefix: Option[String] = None) =
-  {
-    new Zooowner(servers, timeout, pathPrefix)
+  def apply(servers: String, timeout: FiniteDuration) = {
+    new Zooowner(servers, timeout)
   }
 }
 
@@ -75,24 +73,11 @@ object Zooowner {
  * @param servers Connection string, consisting of comma separated host:port
  * values.
  * @param timeout Connection timeout.
- * @param pathPrefix Default prefix for operations via that client instance.
  */
-class Zooowner(
-  servers: String,
-  timeout: FiniteDuration,
-  val pathPrefix: Option[String] = None)
+class Zooowner(servers: String, timeout: FiniteDuration)
 {
   import Zooowner._
   import DefaultSerializers._
-
-  pathPrefix foreach { prefix =>
-    require(
-      prefix startsWith "/",
-      "path prefix should start at root node ('/')")
-    require(
-      !(prefix endsWith "/"),
-      "path prefix shouldn't end with slash ('/')")
-  }
 
   private val connectionFlag = Promise[Unit]()
 
@@ -107,26 +92,14 @@ class Zooowner(
    */
   protected[zooowner] val watcher = StateWatcher {
     case KeeperState.SyncConnected => {
-      assert { isConnected == true }
-
-      // make sure that path prefix exists
-      pathPrefix foreach { prefix =>
-        ignoring(classOf[NodeExistsException]) {
-          create(prefix, persistent = true, recursive = true)
-        }
-      }
-
       connectionHook(Connected)
-
       connectionFlag.success(Unit)
     }
-
 
     case KeeperState.Disconnected => {
       connectionHook(Disconnected)
       connect()
     }
-
 
     case KeeperState.Expired => {
       removeAllWatchers()
@@ -143,19 +116,7 @@ class Zooowner(
   /**
    * Returns path prefixed with [[pathPrefix]], if defined.
    */
-  protected def prefixedPath(path: String) = {
-    require(
-      !(path startsWith "/"),
-      "path shouldn't start from slash")
-
-    pathPrefix match {
-      case Some(prefix) =>
-        prefix/path
-
-      case None =>
-        Root/path
-    }
-  }
+  protected def prefixedPath(path: String) = Root/path
 
   /**
    * Path resolver, that distincts between absolute paths starting with `/`

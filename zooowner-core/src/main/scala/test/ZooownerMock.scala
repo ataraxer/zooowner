@@ -7,7 +7,7 @@ import scala.concurrent.duration._
 
 
 class ZooownerMock(generator: () => ZooKeeper)
-  extends Zooowner("", 1.second, Some("/prefix"))
+  extends Zooowner("", 1.second)
 {
   override def generateClient = generator()
 
