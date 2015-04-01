@@ -38,7 +38,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zk.watchConnection { case Connected => hookRan = true }
     eventually { hookRan should be (true) }
 
-    zk.close()
+    zk.disconnect()
   }
 
 

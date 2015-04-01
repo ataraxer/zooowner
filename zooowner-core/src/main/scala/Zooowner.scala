@@ -147,7 +147,7 @@ class Zooowner(servers: String, timeout: FiniteDuration)
   /**
    * Disconnects from ZooKeeper server.
    */
-  protected def disconnect(): Unit = {
+  def disconnect(): Unit = {
     client.close()
     connectionHook(Disconnected)
   }
@@ -188,16 +188,12 @@ class Zooowner(servers: String, timeout: FiniteDuration)
   /**
    * Tests whether the connection to ZooKeeper server is established.
    */
-  def isConnected = {
-    client != null && client.getState == States.CONNECTED
-  }
+  def isConnected = client.getState == States.CONNECTED
 
   /**
-   * Initiates disonnection from ZooKeeper server and performs clean up.
+   * Establishes new sesssion if current one is expired.
    */
-  def close(): Unit = {
-    disconnect()
-  }
+  def reconnect(): Unit = if (!isConnected) connect()
 
   /**
    * Takes a function to be called on client taking care of ensuring that it's
