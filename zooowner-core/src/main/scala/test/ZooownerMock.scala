@@ -13,10 +13,16 @@ class ZooownerMock(generator: () => ZooKeeper)
 
   override def connect() = {
     super.connect()
-    watcher.reaction(KeeperState.SyncConnected)
+    connectionWatcher foreach { watcher =>
+      watcher.reaction(KeeperState.SyncConnected)
+    }
   }
 
-  watcher.reaction(KeeperState.SyncConnected)
+  connectionWatcher = Some(generateWatcher(connectionFlag))
+
+  connectionWatcher foreach { watcher =>
+    watcher.reaction(KeeperState.SyncConnected)
+  }
 }
 
 

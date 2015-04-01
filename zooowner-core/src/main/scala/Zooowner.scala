@@ -78,7 +78,7 @@ class Zooowner(servers: String, timeout: FiniteDuration)
 {
   import Zooowner._
 
-  private val connectionFlag = Promise[Unit]()
+  protected var connectionFlag = Promise[Unit]()
 
   /*
    * Hook-function, that will be called when connection to ZooKeeper
@@ -86,25 +86,32 @@ class Zooowner(servers: String, timeout: FiniteDuration)
    */
   protected var connectionHook = Reaction.empty[ConnectionEvent]
 
+  /*
+   * Generates new connection watcher.
+   */
+  protected[zooowner] def generateWatcher(connectionFlag: Promise[Unit]) = {
+    StateWatcher {
+      case KeeperState.SyncConnected => {
+        connectionHook(Connected)
+        connectionFlag.success(Unit)
+      }
+
+      case KeeperState.Disconnected => {
+        connectionHook(Disconnected)
+        connect()
+      }
+
+      case KeeperState.Expired => {
+        removeAllWatchers()
+        connectionHook(Expired)
+      }
+    }
+  }
+
   /**
    * Internal watcher, that controls ZooKeeper connection life-cycle.
    */
-  protected[zooowner] val watcher = StateWatcher {
-    case KeeperState.SyncConnected => {
-      connectionHook(Connected)
-      connectionFlag.success(Unit)
-    }
-
-    case KeeperState.Disconnected => {
-      connectionHook(Disconnected)
-      connect()
-    }
-
-    case KeeperState.Expired => {
-      removeAllWatchers()
-      connectionHook(Expired)
-    }
-  }
+  protected[zooowner] var connectionWatcher = Option.empty[StateWatcher]
 
   /**
    * Internal ZooKeeper client, through which all interactions with ZK are
@@ -131,6 +138,9 @@ class Zooowner(servers: String, timeout: FiniteDuration)
    * Generates new ZooKeeper client.
    */
   protected def generateClient = {
+    connectionFlag = Promise[Unit]()
+    val watcher = generateWatcher(connectionFlag)
+    connectionWatcher = Some(watcher)
     new ZooKeeper(servers, timeout.toMillis.toInt, watcher)
   }
 
