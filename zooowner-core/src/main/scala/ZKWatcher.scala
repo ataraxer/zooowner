@@ -8,40 +8,39 @@ import zooowner.Zooowner.Reaction
 
 
 sealed trait ZKWatcher[T] extends Watcher {
-  def reaction: Reaction[T]
-  def extract(event: WatchedEvent): T
+  protected def reaction: Reaction[T]
+  protected def extract(event: WatchedEvent): T
 
-
-  def process(event: WatchedEvent) = {
-    if (active) {
-      (reaction orElse Reaction.empty[T]) {
-        extract(event)
-      }
-    }
-  }
-
+  private val processor = reaction orElse Reaction.empty[T]
 
   private var active = true
 
-  def stop(): Unit = {
-    active = false
+  def isActive = active
+  def stop(): Unit = active = false
+
+  def dispatch(event: T): Unit = {
+    if (isActive) processor(event)
+  }
+
+  def process(event: WatchedEvent): Unit = {
+    dispatch(extract(event))
   }
 }
 
 
-abstract class StateWatcher extends ZKWatcher[KeeperState] {
-  def extract(event: WatchedEvent) = event.getState
+abstract class ZKStateWatcher extends ZKWatcher[KeeperState] {
+  protected def extract(event: WatchedEvent) = event.getState
 }
 
 
 abstract class EventWatcher extends ZKWatcher[EventType] {
-  def extract(event: WatchedEvent) = event.getType
+  protected def extract(event: WatchedEvent) = event.getType
 }
 
 
-object StateWatcher {
+object ZKStateWatcher {
   def apply(react: Reaction[KeeperState]) = {
-    new StateWatcher { def reaction = react }
+    new ZKStateWatcher { def reaction = react }
   }
 }
 

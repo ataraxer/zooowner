@@ -90,7 +90,7 @@ class Zooowner(servers: String, timeout: FiniteDuration)
    * Generates new connection watcher.
    */
   protected[zooowner] def generateWatcher(connectionFlag: Promise[Unit]) = {
-    StateWatcher {
+    ZKStateWatcher {
       case KeeperState.SyncConnected => {
         connectionHook(Connected)
         connectionFlag.success(Unit)
@@ -111,7 +111,7 @@ class Zooowner(servers: String, timeout: FiniteDuration)
   /**
    * Internal watcher, that controls ZooKeeper connection life-cycle.
    */
-  protected[zooowner] var connectionWatcher = Option.empty[StateWatcher]
+  protected[zooowner] var connectionWatcher = Option.empty[ZKStateWatcher]
 
   /**
    * Internal ZooKeeper client, through which all interactions with ZK are
