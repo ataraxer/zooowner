@@ -1,4 +1,5 @@
-<!DOCTYPE html >
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
           <title>zooowner - zooowner</title>
@@ -8,11 +9,6 @@
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../lib/template.js"></script>
-      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
@@ -30,11 +26,7 @@
       <div id="definition">
         <img src="../lib/package_big.png" />
         
-        <h1>zooowner</h1><span class="permalink">
-      <a href="../index.html#zooowner.package" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+        <h1>zooowner</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -89,7 +81,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="zooowner.AsyncZooowner" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="zooowner.AsyncZooowner" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="AsyncZooownerextendsAnyRef"></a>
       <a id="AsyncZooowner:AsyncZooowner"></a>
       <h4 class="signature">
@@ -100,12 +92,8 @@
       <span class="symbol">
         <a href="AsyncZooowner.html"><span class="name">AsyncZooowner</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@AsyncZooownerextendsAnyRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Plug-in trait which extends Zooowner client with asynchronous API.</p><div class="fullcomment"><div class="comment cmt"><p>Plug-in trait which extends Zooowner client with asynchronous API.</p><pre><span class="kw">val</span> zk = AsyncZooowner(<span class="lit">"localhost:2181"</span>, <span class="num">5.</span>seconds, <span class="std">Some</span>(<span class="lit">"prefix"</span>))</pre></div></div>
+      </h4>
+      <p class="comment cmt">Plug-in trait which extends Zooowner client with asynchronous API.</p>
     </li><li name="zooowner.DefaultSerializers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="DefaultSerializersextendsAnyRef"></a>
       <a id="DefaultSerializers:DefaultSerializers"></a>
@@ -117,11 +105,7 @@
       <span class="symbol">
         <a href="DefaultSerializers.html"><span class="name">DefaultSerializers</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@DefaultSerializersextendsAnyRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.EventWatcher" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="EventWatcherextendsZKWatcher[org.apache.zookeeper.Watcher.Event.EventType]"></a>
@@ -134,11 +118,7 @@
       <span class="symbol">
         <a href="EventWatcher.html"><span class="name">EventWatcher</span></a><span class="result"> extends <a href="ZKWatcher.html" class="extype" name="zooowner.ZKWatcher">ZKWatcher</a>[<span class="extype" name="org.apache.zookeeper.Watcher.Event.EventType">EventType</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@EventWatcherextendsZKWatcher[org.apache.zookeeper.Watcher.Event.EventType]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.RawZKData" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="RawZKData=Array[Byte]"></a>
@@ -151,11 +131,7 @@
       <span class="symbol">
         <span class="name">RawZKData</span><span class="result"> = <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@RawZKData=Array[Byte]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.StateWatcher" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="StateWatcherextendsZKWatcher[org.apache.zookeeper.Watcher.Event.KeeperState]"></a>
@@ -168,11 +144,7 @@
       <span class="symbol">
         <a href="StateWatcher.html"><span class="name">StateWatcher</span></a><span class="result"> extends <a href="ZKWatcher.html" class="extype" name="zooowner.ZKWatcher">ZKWatcher</a>[<span class="extype" name="org.apache.zookeeper.Watcher.Event.KeeperState">KeeperState</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@StateWatcherextendsZKWatcher[org.apache.zookeeper.Watcher.Event.KeeperState]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.ZKConnectionTimeoutException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ZKConnectionTimeoutExceptionextendsconcurrent.TimeoutExceptionwithZKException"></a>
@@ -185,11 +157,7 @@
       <span class="symbol">
         <a href="ZKConnectionTimeoutException.html"><span class="name">ZKConnectionTimeoutException</span></a><span class="result"> extends <span class="extype" name="scala.concurrent.TimeoutException">TimeoutException</span> with <a href="ZKException.html" class="extype" name="zooowner.ZKException">ZKException</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKConnectionTimeoutExceptionextendsconcurrent.TimeoutExceptionwithZKException" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.ZKData" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ZKData=Option[zooowner.package.RawZKData]"></a>
@@ -202,11 +170,7 @@
       <span class="symbol">
         <span class="name">ZKData</span><span class="result"> = <span class="extype" name="scala.Option">Option</span>[<a href="#RawZKData=Array[Byte]" class="extmbr" name="zooowner.RawZKData">RawZKData</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKData=Option[zooowner.package.RawZKData]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.ZKDecoder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ZKDecoder[+T]extendsAnyRef"></a>
@@ -219,11 +183,7 @@
       <span class="symbol">
         <a href="ZKDecoder.html"><span class="name">ZKDecoder</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKDecoder[+T]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.ZKEncoder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ZKEncoder[-T]extendsAnyRef"></a>
@@ -236,11 +196,7 @@
       <span class="symbol">
         <a href="ZKEncoder.html"><span class="name">ZKEncoder</span></a><span class="tparams">[<span name="T">-T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKEncoder[-T]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.ZKException" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ZKExceptionextendsAnyRef"></a>
@@ -253,11 +209,7 @@
       <span class="symbol">
         <a href="ZKException.html"><span class="name">ZKException</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKExceptionextendsAnyRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.ZKNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ZKNodeextendsProductwithSerializable"></a>
@@ -270,11 +222,7 @@
       <span class="symbol">
         <a href="ZKNode.html"><span class="name">ZKNode</span></a><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="data">data: <a href="#ZKData=Option[zooowner.package.RawZKData]" class="extmbr" name="zooowner.ZKData">ZKData</a></span>, <span name="meta">meta: <a href="ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKNodeextendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.ZKNodeMeta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ZKNodeMetaextendsProductwithSerializable"></a>
@@ -287,11 +235,7 @@
       <span class="symbol">
         <a href="ZKNodeMeta.html"><span class="name">ZKNodeMeta</span></a><span class="params">(<span name="creationTime">creationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="modificationTime">modificationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="size">size: <span class="extype" name="scala.Long">Long</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenVersion">childrenVersion: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenNumber">childrenNumber: <span class="extype" name="scala.Int">Int</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="session">session: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKNodeMetaextendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.ZKWatcher" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ZKWatcher[T]extendsWatcher"></a>
@@ -304,11 +248,7 @@
       <span class="symbol">
         <a href="ZKWatcher.html"><span class="name">ZKWatcher</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="org.apache.zookeeper.Watcher">Watcher</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKWatcher[T]extendsWatcher" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.Zooowner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ZooownerextendsAnyRef"></a>
@@ -321,12 +261,8 @@
       <span class="symbol">
         <a href="Zooowner.html"><span class="name">Zooowner</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZooownerextendsAnyRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">ZooKeeper client that doesn't make you cry.</p>
+      </h4>
+      <p class="comment cmt">ZooKeeper client that doesn't make you cry.</p>
     </li></ol>
             </div>
 
@@ -334,7 +270,7 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="zooowner#AnyACL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="zooowner.package#AnyACL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AnyACL:java.util.ArrayList[org.apache.zookeeper.data.ACL]"></a>
       <a id="AnyACL:ArrayList[ACL]"></a>
       <h4 class="signature">
@@ -345,13 +281,9 @@
       <span class="symbol">
         <span class="name">AnyACL</span><span class="result">: <span class="extype" name="java.util.ArrayList">ArrayList</span>[<span class="extype" name="org.apache.zookeeper.data.ACL">ACL</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@AnyACL:java.util.ArrayList[org.apache.zookeeper.data.ACL]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
-    </li><li name="zooowner#AnyVersion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="zooowner.package#AnyVersion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AnyVersion:Int"></a>
       <a id="AnyVersion:Int"></a>
       <h4 class="signature">
@@ -362,11 +294,7 @@
       <span class="symbol">
         <span class="name">AnyVersion</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@AnyVersion:Int" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.AsyncZooowner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AsyncZooowner"></a>
@@ -379,11 +307,7 @@
       <span class="symbol">
         <a href="AsyncZooowner$.html"><span class="name">AsyncZooowner</span></a>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@AsyncZooowner" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.DefaultSerializers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DefaultSerializers"></a>
@@ -396,11 +320,7 @@
       <span class="symbol">
         <a href="DefaultSerializers$.html"><span class="name">DefaultSerializers</span></a>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@DefaultSerializers" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.EventWatcher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="EventWatcher"></a>
@@ -413,11 +333,7 @@
       <span class="symbol">
         <a href="EventWatcher$.html"><span class="name">EventWatcher</span></a>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@EventWatcher" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.StateWatcher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="StateWatcher"></a>
@@ -430,11 +346,7 @@
       <span class="symbol">
         <a href="StateWatcher$.html"><span class="name">StateWatcher</span></a>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@StateWatcher" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.ZKNodeMeta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ZKNodeMeta"></a>
@@ -447,11 +359,7 @@
       <span class="symbol">
         <a href="ZKNodeMeta$.html"><span class="name">ZKNodeMeta</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKNodeMeta" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.Zooowner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Zooowner"></a>
@@ -464,11 +372,7 @@
       <span class="symbol">
         <a href="Zooowner$.html"><span class="name">Zooowner</span></a>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@Zooowner" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.message" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="message"></a>
@@ -481,11 +385,7 @@
       <span class="symbol">
         <a href="message/package.html"><span class="name">message</span></a>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@message" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li><li name="zooowner.test" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="test"></a>
@@ -498,11 +398,7 @@
       <span class="symbol">
         <a href="test/package.html"><span class="name">test</span></a>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@test" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
+      </h4>
       
     </li></ol>
             </div>
@@ -533,7 +429,6 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../lib/template.js"></script>
     </body>
       </html>
