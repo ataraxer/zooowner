@@ -5,6 +5,9 @@ package object zooowner {
   type RawZKData = Array[Byte]
   type ZKData = Option[RawZKData]
 
+  type ZKSessionId = Long
+  type ZKSessionPassword = Array[Byte]
+
   val AnyVersion = -1
   val AnyACL = Ids.OPEN_ACL_UNSAFE
 }
