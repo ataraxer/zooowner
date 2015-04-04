@@ -34,16 +34,17 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
   implicit val futureTimeout = Timeout(5.seconds)
   implicit val ec = context.dispatcher
 
-  val zk = AsyncZooowner(server, timeout)
+  val connection = ZKConnection(
+    connectionString = server,
+    sessionTimeout = timeout,
+    // forward all connection events to current actor's
+    // mailbox in order to preserve absolute order of events
+    connectionWatcher = { case event => self ! event })
+
+  val zk = AsyncZooowner(connection)
 
   private var stashActive = true
 
-
-  override def preStart(): Unit = {
-    // forward all connection events to current actor's
-    // mailbox in order to preserve absolute order of events
-    zk watchConnection { case event => self ! event }
-  }
 
   /**
    * Generates a partial function which will pass messages to specified actor.

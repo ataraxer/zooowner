@@ -18,7 +18,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
 
 
   trait Env extends ZKMock {
-    val zk = new ZooownerMock(zkMock.createMock _) with AsyncZooowner
+    val zk = new ZooownerMock(zkMock.createMock _) with AsyncAPI
     zk.isConnected should be (true)
   }
 

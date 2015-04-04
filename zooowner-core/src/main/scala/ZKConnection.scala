@@ -1,23 +1,15 @@
 package zooowner
 
 import zooowner.message._
-import zooowner.ZKNodeMeta.StatConverter
 import zooowner.Zooowner.Reaction
 
-import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.ZooKeeper.States
-import org.apache.zookeeper.Watcher.Event.{KeeperState, EventType}
-import org.apache.zookeeper.CreateMode
-import org.apache.zookeeper.CreateMode._
-import org.apache.zookeeper.KeeperException
+import org.apache.zookeeper.Watcher.Event.KeeperState
 import org.apache.zookeeper.KeeperException._
 
 import scala.concurrent.{Promise, Await, TimeoutException}
 import scala.concurrent.duration._
-import scala.collection.JavaConversions._
-import scala.collection.mutable.ArrayBuffer
-import scala.util.control.Exception._
 
 import ZKConnection._
 
@@ -28,6 +20,21 @@ case class ZKSession(id: ZKSessionId, password: ZKSessionPassword)
 object ZKConnection {
   def apply(servers: String, timeout: FiniteDuration) = {
     new ZKConnection(servers, timeout)
+  }
+
+  def apply(
+    connectionString: String,
+    sessionTimeout: FiniteDuration,
+    connectionWatcher: ConnectionWatcher = NoWatcher,
+    connectionTimeout: FiniteDuration = 5.seconds,
+    session: Option[ZKSession] = None) =
+  {
+    new ZKConnection(
+      connectionString,
+      sessionTimeout,
+      connectionWatcher,
+      connectionTimeout,
+      session)
   }
 
   type ConnectionWatcher = Reaction[ConnectionEvent]
@@ -57,7 +64,7 @@ class ZKConnection(
    * Internal promise which is resolved with active connection
    * once it is initially established.
    */
-  private var connectionPromise = Promise[ZKConnection]()
+  private val connectionPromise = Promise[ZKConnection]()
 
   /**
    * Future which is resolved with active connection
@@ -66,21 +73,30 @@ class ZKConnection(
   val whenConnected = connectionPromise.future
 
   /**
+   * Safely dispatches event to a connection watcher.
+   */
+  private val dispatchEvent = {
+    connectionWatcher orElse Reaction.empty[ConnectionEvent]
+  }
+
+  /**
    * Internal watcher, that controls ZooKeeper connection life-cycle.
    */
-  private val stateWatcher = {
+  protected val stateWatcher = {
     ZKStateWatcher {
       case KeeperState.SyncConnected => {
-        connectionWatcher(Connected)
-        connectionPromise.success(this)
+        dispatchEvent(Connected)
+        if (connectionPromise.isCompleted) {
+          connectionPromise.success(this)
+        }
       }
 
       case KeeperState.Disconnected => {
-        connectionWatcher(Disconnected)
+        dispatchEvent(Disconnected)
       }
 
       case KeeperState.Expired => {
-        connectionWatcher(Expired)
+        dispatchEvent(Expired)
       }
     }
   }
@@ -89,7 +105,7 @@ class ZKConnection(
    * Active  ZooKeeper client, through which all interactions with ZK are
    * being performed.
    */
-  val client: ZooKeeper = {
+  val client = {
     val timeoutMillis = sessionTimeout.toMillis.toInt
     new ZooKeeper(connectionString, timeoutMillis, stateWatcher)
   }
@@ -115,9 +131,24 @@ class ZKConnection(
   /**
    * Disconnects from ZooKeeper server.
    */
-  def disconnect(): Unit = {
+  def close(): Unit = {
     client.close()
-    connectionWatcher(Disconnected)
+    dispatchEvent(Disconnected)
+  }
+
+  /**
+   * Closes current connection and returns a new connection with the same
+   * arguments as this one.
+   */
+  def recreate(): ZKConnection = {
+    close()
+
+    new ZKConnection(
+      connectionString,
+      sessionTimeout,
+      connectionWatcher,
+      connectionTimeout,
+      session)
   }
 
   /**
@@ -127,12 +158,12 @@ class ZKConnection(
   def apply[T](call: ZooKeeper => T): T = {
     try call(client) catch {
       case exception: SessionExpiredException => {
-        connectionWatcher(Expired)
+        dispatchEvent(Expired)
         throw exception
       }
 
       case exception: ConnectionLossException => {
-        connectionWatcher(Disconnected)
+        dispatchEvent(Disconnected)
         throw exception
       }
 

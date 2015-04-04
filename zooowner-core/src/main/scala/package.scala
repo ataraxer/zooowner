@@ -8,6 +8,8 @@ package object zooowner {
   type ZKSessionId = Long
   type ZKSessionPassword = Array[Byte]
 
+  type AsyncZooowner = Zooowner with AsyncAPI
+
   val AnyVersion = -1
   val AnyACL = Ids.OPEN_ACL_UNSAFE
 }

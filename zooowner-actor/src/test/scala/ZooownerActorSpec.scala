@@ -4,6 +4,7 @@ package actor
 import akka.actor.ActorSystem
 import akka.testkit._
 
+import zooowner.ZKConnection.ConnectionWatcher
 import zooowner.test.ZooownerMock
 import zooowner.mocking.ZKMock
 import zooowner.message._
@@ -30,7 +31,11 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk = TestActorRef {
       new ZooownerActor("", 1.second) with ZKMock {
         override val zk = {
-          new ZooownerMock(zkMock.createMock _) with AsyncZooowner
+          val watcher: ConnectionWatcher = {
+            case event => self ! event
+          }
+
+          new ZooownerMock(zkMock.createMock _, watcher) with AsyncAPI
         }
       }
     }

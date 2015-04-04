@@ -10,8 +10,13 @@ import scala.util.control.Exception._
 
 
 object AsyncZooowner {
-  def apply(servers: String, timeout: FiniteDuration) = {
-    new Zooowner(servers, timeout) with AsyncZooowner
+  def apply(servers: String, timeout: FiniteDuration): AsyncZooowner = {
+    val connection = new ZKConnection(servers, timeout)
+    AsyncZooowner(connection)
+  }
+
+  def apply(connection: ZKConnection): AsyncZooowner = {
+    new Zooowner(connection) with AsyncAPI
   }
 }
 
@@ -23,12 +28,11 @@ object AsyncZooowner {
  * val zk = AsyncZooowner("localhost:2181", 5.seconds, Some("prefix"))
  * }}}
  */
-trait AsyncZooowner { this: Zooowner =>
+trait AsyncAPI { this: Zooowner =>
   import Zooowner._
 
-  protected var client: ZooKeeper
+  protected def client: ZooKeeper
   protected var activeWatchers: List[EventWatcher]
-  protected def resolvePath(path: String): String
   protected def resolveWatcher(maybeWatcher: Option[EventWatcher]): Watcher
 
 

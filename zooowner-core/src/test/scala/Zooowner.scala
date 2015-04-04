@@ -25,20 +25,21 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  "Zooowner" should "wait for connection on `waitConnection`" in new ZKMock {
+  "Zooowner" should "wait for connection on `awaitConnection`" in new ZKMock {
     val zk = new ZooownerMock(zkMock.createMock _)
-    zk.waitConnection()
+    zk.awaitConnection()
     zk.isConnected should be (true)
   }
 
 
-  it should "run provided hook on connection" in new Env {
+  it should "run provided hook on connection" in new ZKMock {
     var hookRan = false
 
-    zk.watchConnection { case Connected => hookRan = true }
-    eventually { hookRan should be (true) }
+    val zk = new ZooownerMock(
+      zkMock.createMock _,
+      connectionWatcher = { case Connected => hookRan = true })
 
-    zk.disconnect()
+    eventually { hookRan should be (true) }
   }
 
 
@@ -263,13 +264,13 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "fail and pass Expired event to registered callback " +
-            "on session expiration" in new Env
+            "on session expiration" in new ZKMock
   {
     var hookRan = false
 
-    zk.watchConnection {
-      case Expired => hookRan = true
-    }
+    val zk = new ZooownerMock(
+      zkMock.createMock _,
+      connectionWatcher = { case Expired => hookRan = true })
 
     zkMock.expireSession()
 
