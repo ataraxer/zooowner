@@ -81,24 +81,19 @@ object Zooowner {
   }
 
 
-  private[zooowner] def parentPaths(path: String) = {
-    var parentPath = new StringBuffer
-    var result = ArrayBuffer.empty[String]
-
-    val cleanPath = path.stripPrefix("/").stripSuffix("/")
-
-    for (nextPart <- cleanPath.split("/")) {
-      parentPath append "/"
-      parentPath append nextPart
-      if (parentPath.toString != path) result += parentPath.toString
-    }
-
-    result
+  private[zooowner] def parent(path: String) = {
+    val clean = path.stripPrefix("/").stripSuffix("/")
+    if (clean.isEmpty) "/" else "/" + clean.split("/").init.mkString("/")
   }
 
 
   private[zooowner] def resolvePath(path: String) = {
     if (path startsWith "/") path else Root/path
+  }
+
+
+  private def encode[T](data: T)(implicit encoder: ZKEncoder[T]) = {
+    encoder.encode(data)
   }
 
 
@@ -177,47 +172,78 @@ class Zooowner(connection: ZKConnection) {
   }
 
   /**
-   * Creates new node.
+   * Creates a node with raw data.
+   */
+  private def _create(
+    path: String,
+    data: ZKData,
+    persistent: Boolean = false,
+    sequential: Boolean = false): Unit =
+  {
+    val mode = createMode(persistent, sequential)
+
+    this { client =>
+      client.create(path, data.orNull, AnyACL, mode)
+    }
+  }
+
+  /**
+   * Creates new node, ensuring that persisten path to it exists.
+   * All missing nodes on a path are filled with null's.
    *
    * @param path Path of node to be created.
    * @param value Optional data that should be stored in created node.
    * @param persistent Specifies whether created node should be persistent.
    * @param sequential Specifies whether created node should be sequential.
-   * @param recursive Specifies whether path to the node should be created.
-   * @param filler Optional value with which path nodes should be created.
    */
-  def create[V, F](
+  def create[T: ZKEncoder](
     path: String,
-    value: V = Option.empty[String],
+    value: T = None,
     persistent: Boolean = false,
-    sequential: Boolean = false,
-    recursive: Boolean = false,
-    filler: F = Option.empty[String])
-    (implicit
-      valueEncoder: ZKEncoder[V],
-      fillerEncoder: ZKEncoder[F]): Unit =
+    sequential: Boolean = false) =
   {
     val realPath = resolvePath(path)
+    createPathTo(realPath)
+    _create(realPath, encode(value), persistent, sequential)
+  }
 
-    if (recursive) {
-      for (parentPath <- parentPaths(realPath)) {
-        ignoring(classOf[NodeExistsException]) {
-          create(
-            path = parentPath,
-            value = filler,
-            filler = filler,
-            persistent = true,
-            recursive = false)
-        }
-      }
-    }
+  /**
+   * Creates a new node under existing persistent one.
+   *
+   * @param path Path of parent node.
+   * @param child Name of a child to be created.
+   * @param value Optional data that should be stored in created node.
+   * @param persistent Specifies whether created node should be persistent.
+   * @param sequential Specifies whether created node should be sequential.
+   */
+  def createChild[T: ZKEncoder](
+    path: String,
+    child: String,
+    value: T = None,
+    persistent: Boolean = false,
+    sequential: Boolean = false) =
+  {
+    val realPath = resolvePath(path / child)
+    _create(realPath, encode(value), persistent, sequential)
+  }
 
-    val data = valueEncoder.encode(value).orNull
+  /**
+   * Creates persistent path, creating each missing node with null value.
+   */
+  def createPath(path: String) = createPathTo(path / "fake")
 
-    this { client =>
-      client.create(
-        realPath, data, AnyACL,
-        createMode(persistent, sequential))
+  /**
+   * Ensures persistent path exists by creating all missing nodes with
+   * null value.
+   *
+   * @param node Node path to which has to be created.
+   */
+  private def createPathTo(node: String): Unit = {
+    val realPath = parent(resolvePath(node))
+
+    if (!exists(realPath)) {
+      createPathTo(realPath)
+      _create(realPath, None, persistent = true)
     }
   }
 

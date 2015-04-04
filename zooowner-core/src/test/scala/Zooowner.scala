@@ -44,24 +44,19 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "create nodes with paths" in new Env {
-    zk.create("node/with/long/path", Some("value"), recursive = true)
+    zk.create("node/with/long/path", "value")
 
     zk.get[String]("node/with/long") should be (None)
     zk.get[String]("node/with/long/path") should be (Some("value"))
   }
 
 
-  it should "create nodes with paths filled with specified value" in new Env {
-    zk.create(
-      "node/with/long/path",
-      Some("value"),
-      recursive = true,
-      filler = Some("filler")
-    )
+  it should "create nodes with paths filled with nulls" in new Env {
+    zk.create("node/with/long/path", "value")
 
-    zkMock.check.created("/node", Some("filler"))
-    zkMock.check.created("/node/with", Some("filler"))
-    zkMock.check.created("/node/with/long", Some("filler"))
+    zkMock.check.created("/node", None)
+    zkMock.check.created("/node/with", None)
+    zkMock.check.created("/node/with/long", None)
 
     zk.get[String]("node/with/long/path") should be (Some("value"))
   }
