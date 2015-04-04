@@ -96,7 +96,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="zooowner.ZKConnection#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(connectionString:String,sessionTimeout:scala.concurrent.duration.FiniteDuration,connectionWatcher:zooowner.ZKConnection.ConnectionWatcher,connectionTimeout:scala.concurrent.duration.FiniteDuration,session:Option[zooowner.ZKSession]):zooowner.ZKConnection"></a>
+      <a id="&lt;init&gt;(connectionString:String,sessionTimeout:scala.concurrent.duration.FiniteDuration,connectionWatcher:zooowner.ZKConnection.ConnectionWatcher,session:Option[zooowner.ZKSession]):zooowner.ZKConnection"></a>
       <a id="&lt;init&gt;:ZKConnection"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -104,10 +104,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ZKConnection</span><span class="params">(<span name="connectionString">connectionString: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="sessionTimeout">sessionTimeout: <span class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</span></span>, <span name="connectionWatcher">connectionWatcher: <a href="ZKConnection$.html#ConnectionWatcher=zooowner.Zooowner.Reaction[zooowner.message.ConnectionEvent]" class="extmbr" name="zooowner.ZKConnection.ConnectionWatcher">ConnectionWatcher</a> = <span class="symbol"><span class="name"><a href="ZKConnection$.html">NoWatcher</a></span></span></span>, <span name="connectionTimeout">connectionTimeout: <span class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</span> = <span class="symbol">5.seconds</span></span>, <span name="session">session: <span class="extype" name="scala.Option">Option</span>[<a href="ZKSession.html" class="extype" name="zooowner.ZKSession">ZKSession</a>] = <span class="symbol">None</span></span>)</span>
+        <span class="name">ZKConnection</span><span class="params">(<span name="connectionString">connectionString: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="sessionTimeout">sessionTimeout: <span class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</span></span>, <span name="connectionWatcher">connectionWatcher: <a href="ZKConnection$.html#ConnectionWatcher=zooowner.Zooowner.Reaction[zooowner.message.ConnectionEvent]" class="extmbr" name="zooowner.ZKConnection.ConnectionWatcher">ConnectionWatcher</a> = <span class="symbol"><span class="name"><a href="ZKConnection$.html">NoWatcher</a></span></span></span>, <span name="session">session: <span class="extype" name="scala.Option">Option</span>[<a href="ZKSession.html" class="extype" name="zooowner.ZKSession">ZKSession</a>] = <span class="symbol">None</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@&lt;init&gt;(connectionString:String,sessionTimeout:scala.concurrent.duration.FiniteDuration,connectionWatcher:zooowner.ZKConnection.ConnectionWatcher,connectionTimeout:scala.concurrent.duration.FiniteDuration,session:Option[zooowner.ZKSession]):zooowner.ZKConnection" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.ZKConnection@&lt;init&gt;(connectionString:String,sessionTimeout:scala.concurrent.duration.FiniteDuration,connectionWatcher:zooowner.ZKConnection.ConnectionWatcher,session:Option[zooowner.ZKSession]):zooowner.ZKConnection" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -209,23 +209,25 @@ called with active instance of ZooKeeper client.</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="zooowner.ZKConnection#awaitConnection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="awaitConnection():Unit"></a>
-      <a id="awaitConnection():Unit"></a>
+    </li><li name="zooowner.ZKConnection#awaitConnection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="awaitConnection(timeout:scala.concurrent.duration.FiniteDuration):Unit"></a>
+      <a id="awaitConnection(FiniteDuration):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">awaitConnection</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">awaitConnection</span><span class="params">(<span name="timeout">timeout: <span class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@awaitConnection():Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.ZKConnection@awaitConnection(timeout:scala.concurrent.duration.FiniteDuration):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Blocks until client is connected.</p>
+      <p class="shortcomment cmt">Waits for connection to esablish within given timeout.</p><div class="fullcomment"><div class="comment cmt"><p>Waits for connection to esablish within given timeout.
+</p></div><dl class="paramcmts block"><dt class="param">timeout</dt><dd class="cmt"><p>Amount of time to wait for connection
+</p></dd></dl></div>
     </li><li name="zooowner.ZKConnection#client" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="client:org.apache.zookeeper.ZooKeeper"></a>
       <a id="client:ZooKeeper"></a>

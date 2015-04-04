@@ -204,23 +204,24 @@ called with active instance of ZooKeeper client.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="zooowner.ZKConnection#awaitConnection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="awaitConnection():Unit"></a>
-      <a id="awaitConnection():Unit"></a>
+      <a id="awaitConnection(timeout:scala.concurrent.duration.FiniteDuration):Unit"></a>
+      <a id="awaitConnection(FiniteDuration):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">awaitConnection</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">awaitConnection</span><span class="params">(<span name="timeout">timeout: <span class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZKConnectionMock@awaitConnection():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZKConnectionMock@awaitConnection(timeout:scala.concurrent.duration.FiniteDuration):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Blocks until client is connected.</p><div class="fullcomment"><div class="comment cmt"><p>Blocks until client is connected.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
+      <p class="shortcomment cmt">Waits for connection to esablish within given timeout.</p><div class="fullcomment"><div class="comment cmt"><p>Waits for connection to esablish within given timeout.
+</p></div><dl class="paramcmts block"><dt class="param">timeout</dt><dd class="cmt"><p>Amount of time to wait for connection
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
     </li><li name="zooowner.test.ZKConnectionMock#client" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="client:org.apache.zookeeper.ZooKeeper"></a>
       <a id="client:ZooKeeper"></a>
