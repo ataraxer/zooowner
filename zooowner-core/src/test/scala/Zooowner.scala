@@ -218,8 +218,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
     watcher.stop()
 
     zk.delete("some-node")
-    Thread.sleep(500)
-    deleted should be (false)
+    eventually { deleted should be (false) }
   }
 
 
@@ -251,15 +250,13 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zk.create("other-node", Some("value"))
     eventually { createdB should be (true) }
 
-    zk.removeAllWatchers()
+    zk.clearWatchers()
 
     zk.delete("some-node")
-    Thread.sleep(500)
-    deletedA should be (false)
+    eventually { deletedA should be (false) }
 
     zk.delete("other-node")
-    Thread.sleep(500)
-    deletedB should be (false)
+    eventually { deletedB should be (false) }
   }
 
 

@@ -330,7 +330,7 @@ class Zooowner(connection: ZKConnection) {
   /**
    * Stops and removes all active watchers.
    */
-  def removeAllWatchers(): Unit = {
+  def clearWatchers(): Unit = {
     activeWatchers foreach { _.stop() }
     activeWatchers = Nil
   }
