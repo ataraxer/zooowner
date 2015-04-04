@@ -326,8 +326,11 @@ class Zooowner(connection: ZKConnection) {
     persistent: Boolean = true) =
   {
     if (exists(path)) {
+      val bothPersistent = persistent && isPersistent(path)
+      val bothEphemeral = !persistent && isEphemeral(path)
+
       require(
-        persistent && isPersistent(path),
+        bothPersistent || bothEphemeral,
         "Exising node should have the same creation mode as requested")
 
       set(path, value)
