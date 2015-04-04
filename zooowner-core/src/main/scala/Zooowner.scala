@@ -297,13 +297,43 @@ class Zooowner(connection: ZKConnection) {
 
   /**
    * Sets a new value for the node.
+   *
+   * @param path Path of a node to be updated.
+   * @param value Value to be saved into node.
+   * @param version Expected version of an existing node.
+   * @param force Create node if it does not exist.
    */
-  def set[T]
-    (path: String, value: T, version: Int = AnyVersion)
-    (implicit encoder: ZKEncoder[T]): Unit =
+  def set[T: ZKEncoder](
+    path: String,
+    value: T,
+    version: Int = AnyVersion) =
   {
-    val data = encoder.encode(value).orNull
-    this { _.setData(resolvePath(path), data, version) }
+    val realPath = resolvePath(path)
+    val data = encode(value)
+    this { _.setData(realPath, data.orNull, version) }
+  }
+
+  /**
+   * Sets a new value if node exists, creates it otherwise.
+   *
+   * @param path Path of a node to be updated.
+   * @param value Value to be saved into node.
+   * @param persistent Specifies whether created node should be persistent.
+   */
+  def forceSet[T: ZKEncoder](
+    path: String,
+    value: T,
+    persistent: Boolean = true) =
+  {
+    if (exists(path)) {
+      require(
+        persistent && isPersistent(path),
+        "Exising node should have the same creation mode as requested")
+
+      set(path, value)
+    } else {
+      create(path, value, persistent = persistent)
+    }
   }
 
   /**
@@ -351,6 +381,11 @@ class Zooowner(connection: ZKConnection) {
   def isEphemeral(path: String) = {
     meta(path).map(_.ephemeral).getOrElse(false)
   }
+
+  /**
+   * Tests whether the node is persistent.
+   */
+  def isPersistent(path: String) = !isEphemeral(path)
 
   /**
    * Stores all active node watchers.
