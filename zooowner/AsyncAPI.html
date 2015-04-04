@@ -1,22 +1,22 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Connected - zooowner.message.Connected</title>
-          <meta name="description" content="Connected - zooowner.message.Connected" />
-          <meta name="keywords" content="Connected zooowner.message.Connected" />
+          <title>AsyncAPI - zooowner.AsyncAPI</title>
+          <meta name="description" content="AsyncAPI - zooowner.AsyncAPI" />
+          <meta name="keywords" content="AsyncAPI zooowner.AsyncAPI" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
-      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../lib/template.js"></script>
-      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
       
       <script type="text/javascript">
          if(top === self) {
-            var url = '../../index.html';
-            var hash = 'zooowner.message.Connected$';
+            var url = '../index.html';
+            var hash = 'zooowner.AsyncAPI';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,15 +26,15 @@
    	  </script>
     
         </head>
-        <body class="value">
+        <body class="type">
       <div id="definition">
-        <img src="../../lib/object_big.png" />
-        <p id="owner"><a href="../package.html" class="extype" name="zooowner">zooowner</a>.<a href="package.html" class="extype" name="zooowner.message">message</a></p>
-        <h1>Connected</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="zooowner.message">package message</a>
+        <img src="../lib/trait_big.png" />
+        <p id="owner"><a href="package.html" class="extype" name="zooowner">zooowner</a></p>
+        <h1>AsyncAPI</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="zooowner">package zooowner</a>
           </div></span></h3><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       </div>
@@ -42,16 +42,16 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Connected</span><span class="result"> extends <a href="ConnectionEvent.html" class="extype" name="zooowner.message.ConnectionEvent">ConnectionEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">AsyncAPI</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Plug-in trait which extends Zooowner client with asynchronous API.</p><pre><span class="kw">val</span> zk = AsyncZooowner(<span class="lit">"localhost:2181"</span>, <span class="num">5.</span>seconds, <span class="std">Some</span>(<span class="lit">"prefix"</span>))</pre></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="zooowner.AsyncAPI">AsyncAPI</a> with <a href="Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="ConnectionEvent.html" class="extype" name="zooowner.message.ConnectionEvent">ConnectionEvent</a>, <a href="ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a>, <a href="ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>, <a href="ZKMessage.html" class="extype" name="zooowner.message.ZKMessage">ZKMessage</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="zooowner.message.Connected"><span>Connected</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="zooowner.message.ConnectionEvent"><span>ConnectionEvent</span></li><li class="in" name="zooowner.message.ZKEvent"><span>ZKEvent</span></li><li class="in" name="zooowner.message.ZKResponse"><span>ZKResponse</span></li><li class="in" name="zooowner.message.ZKMessage"><span>ZKMessage</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="zooowner.AsyncAPI"><span>AsyncAPI</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -91,10 +91,64 @@
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="zooowner.AsyncAPI#activeWatchers" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="activeWatchers:List[zooowner.EventWatcher]"></a>
+      <a id="activeWatchers:List[EventWatcher]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">activeWatchers</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncAPI@activeWatchers:List[zooowner.EventWatcher]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="zooowner.AsyncAPI#client" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="client:org.apache.zookeeper.ZooKeeper"></a>
+      <a id="client:ZooKeeper"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">client</span><span class="result">: <span class="extype" name="org.apache.zookeeper.ZooKeeper">ZooKeeper</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncAPI@client:org.apache.zookeeper.ZooKeeper" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="zooowner.AsyncAPI#resolveWatcher" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="resolveWatcher(maybeWatcher:Option[zooowner.EventWatcher]):org.apache.zookeeper.Watcher"></a>
+      <a id="resolveWatcher(Option[EventWatcher]):Watcher"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">resolveWatcher</span><span class="params">(<span name="maybeWatcher">maybeWatcher: <span class="extype" name="scala.Option">Option</span>[<a href="EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>]</span>)</span><span class="result">: <span class="extype" name="org.apache.zookeeper.Watcher">Watcher</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncAPI@resolveWatcher(maybeWatcher:Option[zooowner.EventWatcher]):org.apache.zookeeper.Watcher" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li></ol>
+            </div>
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -107,8 +161,8 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -124,8 +178,8 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@##():Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@##():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -141,8 +195,8 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -158,11 +212,28 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="zooowner.AsyncAPI.async" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="async"></a>
+      <a id="async:async"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AsyncAPI$async$.html"><span class="name">async</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncAPI@async" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -175,11 +246,11 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@clone():Object" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@clone():Object" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
@@ -198,8 +269,8 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -215,8 +286,8 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -232,11 +303,11 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@finalize():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
@@ -255,8 +326,25 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncAPI@hashCode():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -272,8 +360,8 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -289,8 +377,8 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -306,8 +394,8 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@notify():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@notify():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -323,8 +411,8 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -340,11 +428,28 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncAPI@toString():String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -357,8 +462,8 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@wait():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@wait():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -380,8 +485,8 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -403,8 +508,8 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Connected$@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
+      <a href="../index.html#zooowner.AsyncAPI@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -423,23 +528,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.Product">
-              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
-            </div><div class="parent" name="zooowner.message.ConnectionEvent">
-              <h3>Inherited from <a href="ConnectionEvent.html" class="extype" name="zooowner.message.ConnectionEvent">ConnectionEvent</a></h3>
-            </div><div class="parent" name="zooowner.message.ZKEvent">
-              <h3>Inherited from <a href="ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a></h3>
-            </div><div class="parent" name="zooowner.message.ZKResponse">
-              <h3>Inherited from <a href="ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a></h3>
-            </div><div class="parent" name="zooowner.message.ZKMessage">
-              <h3>Inherited from <a href="ZKMessage.html" class="extype" name="zooowner.message.ZKMessage">ZKMessage</a></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
