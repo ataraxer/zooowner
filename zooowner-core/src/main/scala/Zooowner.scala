@@ -144,9 +144,13 @@ class Zooowner(connection: ZKConnection) {
   }
 
   /**
-   * Blocks until client is connected.
+   * Waits for connection to esablish within given timeout.
+   *
+   * @param timeout Amount of time to wait for connection
    */
-  def awaitConnection(): Unit = connection.awaitConnection
+  def awaitConnection(timeout: FiniteDuration = 5.seconds): Unit = {
+    connection.awaitConnection(timeout)
+  }
 
   /**
    * Tests whether the connection to ZooKeeper server is established.

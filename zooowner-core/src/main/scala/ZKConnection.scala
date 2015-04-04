@@ -26,14 +26,12 @@ object ZKConnection {
     connectionString: String,
     sessionTimeout: FiniteDuration,
     connectionWatcher: ConnectionWatcher = NoWatcher,
-    connectionTimeout: FiniteDuration = 5.seconds,
     session: Option[ZKSession] = None) =
   {
     new ZKConnection(
       connectionString,
       sessionTimeout,
       connectionWatcher,
-      connectionTimeout,
       session)
   }
 
@@ -55,7 +53,6 @@ class ZKConnection(
   connectionString: String,
   sessionTimeout: FiniteDuration,
   connectionWatcher: ConnectionWatcher = NoWatcher,
-  connectionTimeout: FiniteDuration = 5.seconds,
   session: Option[ZKSession] = None)
 {
   import ZKConnection._
@@ -116,15 +113,17 @@ class ZKConnection(
   def isConnected = client.getState == States.CONNECTED
 
   /**
-   * Blocks until client is connected.
+   * Waits for connection to esablish within given timeout.
+   *
+   * @param timeout Amount of time to wait for connection
    */
-  def awaitConnection(): Unit = {
+  def awaitConnection(timeout: FiniteDuration): Unit = {
     try {
-      if (!isConnected) Await.result(whenConnected, connectionTimeout)
+      if (!isConnected) Await.result(whenConnected, timeout)
     } catch {
       case _: TimeoutException =>
         throw new ZKConnectionTimeoutException(
-          "Can't connect to ZooKeeper within %s timeout".format(connectionTimeout))
+          "Can't connect to ZooKeeper within %s timeout".format(timeout))
     }
   }
 
@@ -147,7 +146,6 @@ class ZKConnection(
       connectionString,
       sessionTimeout,
       connectionWatcher,
-      connectionTimeout,
       session)
   }
 
