@@ -45,13 +45,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ZooownerMock</span><span class="result"> extends <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></span>
+        <span class="name">ZooownerMock</span><span class="result"> extends <span class="extype" name="zooowner.impl.ZooownerImpl">ZooownerImpl</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="zooowner.impl.ZooownerImpl">ZooownerImpl</span>, <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="zooowner.test.ZooownerMock"><span>ZooownerMock</span></li><li class="in" name="zooowner.Zooowner"><span>Zooowner</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="zooowner.test.ZooownerMock"><span>ZooownerMock</span></li><li class="in" name="zooowner.impl.ZooownerImpl"><span>ZooownerImpl</span></li><li class="in" name="zooowner.Zooowner"><span>Zooowner</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -98,7 +98,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ZooownerMock</span><span class="params">(<span name="createClient">createClient: () ⇒ <span class="extype" name="org.apache.zookeeper.ZooKeeper">ZooKeeper</span></span>, <span name="connectionWatcher">connectionWatcher: <a href="../ZKConnection$.html#ConnectionWatcher=zooowner.Zooowner.Reaction[zooowner.message.ConnectionEvent]" class="extmbr" name="zooowner.ZKConnection.ConnectionWatcher">ConnectionWatcher</a> = <span class="symbol"><span class="name"><a href="../package.html">NoWatcher</a></span></span></span>)</span>
+        <span class="name">ZooownerMock</span><span class="params">(<span name="createClient">createClient: () ⇒ <span class="extype" name="org.apache.zookeeper.ZooKeeper">org.apache.zookeeper.ZooKeeper</span></span>, <span name="connectionWatcher">connectionWatcher: <a href="../ZKConnection$.html#ConnectionWatcher=zooowner.Reaction[zooowner.message.ConnectionEvent]" class="extmbr" name="zooowner.ZKConnection.ConnectionWatcher">ConnectionWatcher</a> = <span class="symbol"><span class="name"><a href="../package.html">NoWatcher</a></span></span></span>)</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.test.ZooownerMock@&lt;init&gt;(createClient:()=&gt;org.apache.zookeeper.ZooKeeper,connectionWatcher:zooowner.ZKConnection.ConnectionWatcher):zooowner.test.ZooownerMock" title="Permalink" target="_top">
@@ -166,34 +166,16 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="zooowner.Zooowner#activeWatchers" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="activeWatchers:List[zooowner.EventWatcher]"></a>
-      <a id="activeWatchers:List[EventWatcher]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">activeWatchers</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="../EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@activeWatchers:List[zooowner.EventWatcher]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Stores all active node watchers.</p><div class="fullcomment"><div class="comment cmt"><p>Stores all active node watchers.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZooownerImpl#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply[T](call:org.apache.zookeeper.ZooKeeper=&gt;T):T"></a>
-      <a id="apply[T]((ZooKeeper)⇒T):T"></a>
+      <a id="apply[T]((org.apache.zookeeper.ZooKeeper)⇒T):T"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="call">call: (<span class="extype" name="org.apache.zookeeper.ZooKeeper">ZooKeeper</span>) ⇒ <span class="extype" name="zooowner.Zooowner.apply.T">T</span></span>)</span><span class="result">: <span class="extype" name="zooowner.Zooowner.apply.T">T</span></span>
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="call">call: (<span class="extype" name="org.apache.zookeeper.ZooKeeper">org.apache.zookeeper.ZooKeeper</span>) ⇒ <span class="extype" name="zooowner.impl.ZooownerImpl.apply.T">T</span></span>)</span><span class="result">: <span class="extype" name="zooowner.impl.ZooownerImpl.apply.T">T</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.test.ZooownerMock@apply[T](call:org.apache.zookeeper.ZooKeeper=&gt;T):T" title="Permalink" target="_top">
@@ -203,7 +185,7 @@
       <p class="shortcomment cmt">Takes a function to be called on client taking care of ensuring that it's
 called with active instance of ZooKeeper client.</p><div class="fullcomment"><div class="comment cmt"><p>Takes a function to be called on client taking care of ensuring that it's
 called with active instance of ZooKeeper client.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -221,7 +203,7 @@ called with active instance of ZooKeeper client.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="zooowner.Zooowner#awaitConnection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZooownerImpl#awaitConnection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="awaitConnection(timeout:scala.concurrent.duration.FiniteDuration):Unit"></a>
       <a id="awaitConnection(FiniteDuration):Unit"></a>
       <h4 class="signature">
@@ -239,45 +221,27 @@ called with active instance of ZooKeeper client.
     </span>
       <p class="shortcomment cmt">Waits for connection to esablish within given timeout.</p><div class="fullcomment"><div class="comment cmt"><p>Waits for connection to esablish within given timeout.
 </p></div><dl class="paramcmts block"><dt class="param">timeout</dt><dd class="cmt"><p>Amount of time to wait for connection
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#children" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="children(path:String,absolutePaths:Boolean,watcher:Option[zooowner.EventWatcher]):List[String]"></a>
-      <a id="children(String,Boolean,Option[EventWatcher]):List[String]"></a>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#children" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="children(path:String,absolutePaths:Boolean,watcher:Option[zooowner.EventWatcher]):Seq[String]"></a>
+      <a id="children(String,Boolean,Option[EventWatcher]):Seq[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">children</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="absolutePaths">absolutePaths: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="../EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="java.lang.String">String</span>]</span>
+        <span class="name">children</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="absolutePaths">absolutePaths: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="../EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@children(path:String,absolutePaths:Boolean,watcher:Option[zooowner.EventWatcher]):List[String]" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@children(path:String,absolutePaths:Boolean,watcher:Option[zooowner.EventWatcher]):Seq[String]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Returns list of children of the node.</p><div class="fullcomment"><div class="comment cmt"><p>Returns list of children of the node.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#clearWatchers" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="clearWatchers():Unit"></a>
-      <a id="clearWatchers():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">clearWatchers</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@clearWatchers():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Stops and removes all active watchers.</p><div class="fullcomment"><div class="comment cmt"><p>Stops and removes all active watchers.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#client" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="client:org.apache.zookeeper.ZooKeeper"></a>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#client" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="client:zooowner.ZooKeeper"></a>
       <a id="client:ZooKeeper"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -285,14 +249,14 @@ called with active instance of ZooKeeper client.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">client</span><span class="result">: <span class="extype" name="org.apache.zookeeper.ZooKeeper">ZooKeeper</span></span>
+        <span class="name">client</span><span class="result">: <a href="../package.html#ZooKeeper=org.apache.zookeeper.ZooKeeper" class="extmbr" name="zooowner.ZooKeeper">ZooKeeper</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@client:org.apache.zookeeper.ZooKeeper" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@client:zooowner.ZooKeeper" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -316,7 +280,7 @@ called with active instance of ZooKeeper client.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="zooowner.Zooowner#create" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZooownerImpl#create" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$1:zooowner.ZKEncoder[T]):Unit"></a>
       <a id="create[T](String,T,Boolean,Boolean)(ZKEncoder[T]):Unit"></a>
       <h4 class="signature">
@@ -325,7 +289,7 @@ called with active instance of ZooKeeper client.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.create.T">T</span> = <span class="symbol">None</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.create.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.impl.ZooownerImpl.create.T">T</span> = <span class="symbol">None</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.impl.ZooownerImpl.create.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.test.ZooownerMock@create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$1:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
@@ -335,8 +299,8 @@ called with active instance of ZooKeeper client.
       <p class="shortcomment cmt">Creates new node, ensuring that persisten path to it exists.</p><div class="fullcomment"><div class="comment cmt"><p>Creates new node, ensuring that persisten path to it exists.
 All missing nodes on a path are filled with null's.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of node to be created.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Optional data that should be stored in created node.</p></dd><dt class="param">persistent</dt><dd class="cmt"><p>Specifies whether created node should be persistent.</p></dd><dt class="param">sequential</dt><dd class="cmt"><p>Specifies whether created node should be sequential.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#createChild" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#createChild" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createChild[T](path:String,child:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$2:zooowner.ZKEncoder[T]):Unit"></a>
       <a id="createChild[T](String,String,T,Boolean,Boolean)(ZKEncoder[T]):Unit"></a>
       <h4 class="signature">
@@ -345,7 +309,7 @@ All missing nodes on a path are filled with null's.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createChild</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="child">child: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.createChild.T">T</span> = <span class="symbol">None</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.createChild.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">createChild</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="child">child: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.impl.ZooownerImpl.createChild.T">T</span> = <span class="symbol">None</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.impl.ZooownerImpl.createChild.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.test.ZooownerMock@createChild[T](path:String,child:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$2:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
@@ -354,8 +318,8 @@ All missing nodes on a path are filled with null's.
     </span>
       <p class="shortcomment cmt">Creates a new node under existing persistent one.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new node under existing persistent one.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of parent node.</p></dd><dt class="param">child</dt><dd class="cmt"><p>Name of a child to be created.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Optional data that should be stored in created node.</p></dd><dt class="param">persistent</dt><dd class="cmt"><p>Specifies whether created node should be persistent.</p></dd><dt class="param">sequential</dt><dd class="cmt"><p>Specifies whether created node should be sequential.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#createPath" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#createPath" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createPath(path:String):Unit"></a>
       <a id="createPath(String):Unit"></a>
       <h4 class="signature">
@@ -372,8 +336,8 @@ All missing nodes on a path are filled with null's.
       </a>
     </span>
       <p class="shortcomment cmt">Creates persistent path, creating each missing node with null value.</p><div class="fullcomment"><div class="comment cmt"><p>Creates persistent path, creating each missing node with null value.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#delete" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#delete" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="delete(path:String,recursive:Boolean,version:Int):Unit"></a>
       <a id="delete(String,Boolean,Int):Unit"></a>
       <h4 class="signature">
@@ -391,8 +355,8 @@ All missing nodes on a path are filled with null's.
     </span>
       <p class="shortcomment cmt">Deletes node.</p><div class="fullcomment"><div class="comment cmt"><p>Deletes node.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of the node to be deleted.</p></dd><dt class="param">recursive</dt><dd class="cmt"><p>Specifies whether all sub-nodes should be deleted.</p></dd><dt class="param">version</dt><dd class="cmt"><p>Version of a node to be deleted.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#disconnect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#disconnect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="disconnect():Unit"></a>
       <a id="disconnect():Unit"></a>
       <h4 class="signature">
@@ -409,7 +373,7 @@ All missing nodes on a path are filled with null's.
       </a>
     </span>
       <p class="shortcomment cmt">Disconnects from ZooKeeper server.</p><div class="fullcomment"><div class="comment cmt"><p>Disconnects from ZooKeeper server.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -486,18 +450,18 @@ All missing nodes on a path are filled with null's.
               
         </dd></dl></div>
     </li><li name="zooowner.Zooowner#forceSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="forceSet[T](path:String,value:T,persistent:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):Any"></a>
-      <a id="forceSet[T](String,T,Boolean)(ZKEncoder[T]):Any"></a>
+      <a id="forceSet[T](path:String,value:T,persistent:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):Unit"></a>
+      <a id="forceSet[T](String,T,Boolean)(ZKEncoder[T]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">forceSet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.forceSet.T">T</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.forceSet.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Any">Any</span></span>
+        <span class="name">forceSet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.forceSet.T">T</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.forceSet.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@forceSet[T](path:String,value:T,persistent:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):Any" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@forceSet[T](path:String,value:T,persistent:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -539,7 +503,7 @@ All missing nodes on a path are filled with null's.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="zooowner.Zooowner#getNode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZooownerImpl#getNode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getNode(path:String,watcher:Option[zooowner.EventWatcher]):Option[zooowner.ZKNode]"></a>
       <a id="getNode(String,Option[EventWatcher]):Option[ZKNode]"></a>
       <h4 class="signature">
@@ -556,7 +520,7 @@ All missing nodes on a path are filled with null's.
       </a>
     </span>
       <p class="shortcomment cmt">Returns Some[ZKNode] if node exists, Non otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Returns Some[ZKNode] if node exists, Non otherwise.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -574,7 +538,7 @@ All missing nodes on a path are filled with null's.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="zooowner.Zooowner#isConnected" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZooownerImpl#isConnected" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isConnected:Boolean"></a>
       <a id="isConnected:Boolean"></a>
       <h4 class="signature">
@@ -591,8 +555,8 @@ All missing nodes on a path are filled with null's.
       </a>
     </span>
       <p class="shortcomment cmt">Tests whether the connection to ZooKeeper server is established.</p><div class="fullcomment"><div class="comment cmt"><p>Tests whether the connection to ZooKeeper server is established.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#isEphemeral" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#isEphemeral" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isEphemeral(path:String):Boolean"></a>
       <a id="isEphemeral(String):Boolean"></a>
       <h4 class="signature">
@@ -609,7 +573,7 @@ All missing nodes on a path are filled with null's.
       </a>
     </span>
       <p class="shortcomment cmt">Tests whether the node is ephemeral.</p><div class="fullcomment"><div class="comment cmt"><p>Tests whether the node is ephemeral.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -645,7 +609,7 @@ All missing nodes on a path are filled with null's.
     </span>
       <p class="shortcomment cmt">Tests whether the node is persistent.</p><div class="fullcomment"><div class="comment cmt"><p>Tests whether the node is persistent.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#meta" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZooownerImpl#meta" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="meta(path:String,watcher:Option[zooowner.EventWatcher]):Option[zooowner.ZKNodeMeta]"></a>
       <a id="meta(String,Option[EventWatcher]):Option[ZKNodeMeta]"></a>
       <h4 class="signature">
@@ -662,7 +626,7 @@ All missing nodes on a path are filled with null's.
       </a>
     </span>
       <p class="shortcomment cmt">Gets node state and optionally sets watcher.</p><div class="fullcomment"><div class="comment cmt"><p>Gets node state and optionally sets watcher.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -714,7 +678,7 @@ All missing nodes on a path are filled with null's.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="zooowner.Zooowner#reconnect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZooownerImpl#reconnect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reconnect(force:Boolean):Unit"></a>
       <a id="reconnect(Boolean):Unit"></a>
       <h4 class="signature">
@@ -732,47 +696,25 @@ All missing nodes on a path are filled with null's.
     </span>
       <p class="shortcomment cmt">Establishes new sesssion if current one is expired.</p><div class="fullcomment"><div class="comment cmt"><p>Establishes new sesssion if current one is expired.
 </p></div><dl class="paramcmts block"><dt class="param">force</dt><dd class="cmt"><p>Reconnect even if current connection is active.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#resolveWatcher" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="resolveWatcher(maybeWatcher:Option[zooowner.EventWatcher]):zooowner.EventWatcher"></a>
-      <a id="resolveWatcher(Option[EventWatcher]):EventWatcher"></a>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#set" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="set[T](path:String,value:T,version:Int)(implicitevidence$3:zooowner.ZKEncoder[T]):Unit"></a>
+      <a id="set[T](String,T,Int)(ZKEncoder[T]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resolveWatcher</span><span class="params">(<span name="maybeWatcher">maybeWatcher: <span class="extype" name="scala.Option">Option</span>[<a href="../EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>]</span>)</span><span class="result">: <a href="../EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a></span>
+        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.impl.ZooownerImpl.set.T">T</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="../package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.impl.ZooownerImpl.set.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@resolveWatcher(maybeWatcher:Option[zooowner.EventWatcher]):zooowner.EventWatcher" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Attempts to extract a <a href="../EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a> from Option, add it to the active
-watchers set and return extracted watcher on success or just returns null
-to be passed to ZooKeeper otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Attempts to extract a <a href="../EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a> from Option, add it to the active
-watchers set and return extracted watcher on success or just returns null
-to be passed to ZooKeeper otherwise.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#set" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="set[T](path:String,value:T,version:Int)(implicitevidence$3:zooowner.ZKEncoder[T]):org.apache.zookeeper.data.Stat"></a>
-      <a id="set[T](String,T,Int)(ZKEncoder[T]):Stat"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.set.T">T</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="../package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.set.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="org.apache.zookeeper.data.Stat">Stat</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@set[T](path:String,value:T,version:Int)(implicitevidence$3:zooowner.ZKEncoder[T]):org.apache.zookeeper.data.Stat" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@set[T](path:String,value:T,version:Int)(implicitevidence$3:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Sets a new value for the node.</p><div class="fullcomment"><div class="comment cmt"><p>Sets a new value for the node.
-</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of a node to be updated.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Value to be saved into node.</p></dd><dt class="param">version</dt><dd class="cmt"><p>Expected version of an existing node.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of a node to be updated.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Value to be saved into node.</p></dd><dt class="param">version</dt><dd class="cmt"><p>Expected version of an existing node.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -876,7 +818,7 @@ to be passed to ZooKeeper otherwise.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="zooowner.Zooowner#watch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZooownerImpl#watch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="watch(path:String,watcher:zooowner.EventWatcher):zooowner.EventWatcher"></a>
       <a id="watch(String,EventWatcher):EventWatcher"></a>
       <h4 class="signature">
@@ -893,9 +835,9 @@ to be passed to ZooKeeper otherwise.
       </a>
     </span>
       <p class="shortcomment cmt">Sets up a watcher on node events.</p><div class="fullcomment"><div class="comment cmt"><p>Sets up a watcher on node events.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#watch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="watch(path:String,persistent:Boolean)(reaction:zooowner.Zooowner.Reaction[zooowner.message.ZKEvent]):zooowner.EventWatcher"></a>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#watch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="watch(path:String,persistent:Boolean)(reaction:zooowner.Reaction[zooowner.message.ZKEvent]):zooowner.EventWatcher"></a>
       <a id="watch(String,Boolean)(Reaction[ZKEvent]):EventWatcher"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -903,15 +845,15 @@ to be passed to ZooKeeper otherwise.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">watch</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span name="reaction">reaction: <span class="extype" name="zooowner.Zooowner.Reaction">Reaction</span>[<a href="../message/ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a>]</span>)</span><span class="result">: <a href="../EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a></span>
+        <span class="name">watch</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span name="reaction">reaction: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="../message/ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a>]</span>)</span><span class="result">: <a href="../EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@watch(path:String,persistent:Boolean)(reaction:zooowner.Zooowner.Reaction[zooowner.message.ZKEvent]):zooowner.EventWatcher" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@watch(path:String,persistent:Boolean)(reaction:zooowner.Reaction[zooowner.message.ZKEvent]):zooowner.EventWatcher" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Sets up a callback for node events.</p><div class="fullcomment"><div class="comment cmt"><p>Sets up a callback for node events.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -921,7 +863,9 @@ to be passed to ZooKeeper otherwise.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="zooowner.Zooowner">
+        <div class="parent" name="zooowner.impl.ZooownerImpl">
+              <h3>Inherited from <span class="extype" name="zooowner.impl.ZooownerImpl">ZooownerImpl</span></h3>
+            </div><div class="parent" name="zooowner.Zooowner">
               <h3>Inherited from <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>

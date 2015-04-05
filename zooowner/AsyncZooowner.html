@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>SlashSeparatedPath - zooowner.Zooowner.SlashSeparatedPath</title>
-          <meta name="description" content="SlashSeparatedPath - zooowner.Zooowner.SlashSeparatedPath" />
-          <meta name="keywords" content="SlashSeparatedPath zooowner.Zooowner.SlashSeparatedPath" />
+          <title>AsyncZooowner - zooowner.AsyncZooowner</title>
+          <meta name="description" content="AsyncZooowner - zooowner.AsyncZooowner" />
+          <meta name="keywords" content="AsyncZooowner zooowner.AsyncZooowner" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
-            var hash = 'zooowner.Zooowner$$SlashSeparatedPath';
+            var hash = 'zooowner.AsyncZooowner';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -28,12 +28,14 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../lib/class_big.png" />
-        <p id="owner"><a href="package.html" class="extype" name="zooowner">zooowner</a>.<a href="Zooowner$.html" class="extype" name="zooowner.Zooowner">Zooowner</a></p>
-        <h1>SlashSeparatedPath</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="Zooowner$.html" class="extype" name="zooowner.Zooowner">package Zooowner</a>
+        <a href="AsyncZooowner$.html" title="See companion object"><img src="../lib/trait_to_object_big.png" /></a>
+        <p id="owner"><a href="package.html" class="extype" name="zooowner">zooowner</a></p>
+        <h1><a href="AsyncZooowner$.html" title="See companion object">AsyncZooowner</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="AsyncZooowner$.html" title="See companion object">object AsyncZooowner</a>
+            | <a href="package.html" class="extype" name="zooowner">package zooowner</a>
           </div></span></h3><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -41,11 +43,11 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">SlashSeparatedPath</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">AsyncZooowner</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -69,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="zooowner.Zooowner.SlashSeparatedPath"><span>SlashSeparatedPath</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="zooowner.AsyncZooowner"><span>AsyncZooowner</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -87,34 +89,119 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="zooowner.Zooowner.SlashSeparatedPath#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(path:String):zooowner.Zooowner.SlashSeparatedPath"></a>
-      <a id="&lt;init&gt;:SlashSeparatedPath"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">SlashSeparatedPath</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@&lt;init&gt;(path:String):zooowner.Zooowner.SlashSeparatedPath" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
-
         
 
         
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Abstract Value Members</h3>
+              <ol><li name="zooowner.AsyncZooowner#children" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="children(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
+      <a id="children(String,Option[EventWatcher])(Reaction[ZKResponse]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">children</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncZooowner@children(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#children(path:String,absolutePaths:Boolean,watcher:Option[zooowner.EventWatcher]):Seq[String]" class="extmbr" name="zooowner.Zooowner#children">Zooowner.children</a>.</p>
+    </li><li name="zooowner.AsyncZooowner#create" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit"></a>
+      <a id="create[T](String,T,Boolean,Boolean)(Reaction[ZKResponse])(ZKEncoder[T]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.create.T">T</span> = <span class="symbol">Option.empty[String]</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="encoder">encoder: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.create.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncZooowner@create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$1:zooowner.ZKEncoder[T]):Unit" class="extmbr" name="zooowner.Zooowner#create">Zooowner.create</a>.</p>
+    </li><li name="zooowner.AsyncZooowner#delete" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="delete(path:String,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
+      <a id="delete(String,Int)(Reaction[ZKResponse]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">delete</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncZooowner@delete(path:String,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#delete(path:String,recursive:Boolean,version:Int):Unit" class="extmbr" name="zooowner.Zooowner#delete">Zooowner.delete</a>.</p>
+    </li><li name="zooowner.AsyncZooowner#get" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="get(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
+      <a id="get(String,Option[EventWatcher])(Reaction[ZKResponse]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">get</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncZooowner@get(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#get[T](path:String,watcher:Option[zooowner.EventWatcher])(implicitdecoder:zooowner.ZKDecoder[T]):Option[T]" class="extmbr" name="zooowner.Zooowner#get">Zooowner.get</a>.</p>
+    </li><li name="zooowner.AsyncZooowner#set" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="set[T](path:String,value:T,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit"></a>
+      <a id="set[T](String,T,Int)(Reaction[ZKResponse])(ZKEncoder[T]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.set.T">T</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="encoder">encoder: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.set.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncZooowner@set[T](path:String,value:T,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#set[T](path:String,value:T,version:Int)(implicitevidence$3:zooowner.ZKEncoder[T]):Unit" class="extmbr" name="zooowner.Zooowner#set">Zooowner.set</a>.</p>
+    </li><li name="zooowner.AsyncZooowner#stat" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="stat(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
+      <a id="stat(String,Option[EventWatcher])(Reaction[ZKResponse]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stat</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.AsyncZooowner@stat(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Asynchronous version of <code>stat</code>.</p>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -127,7 +214,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -144,28 +231,11 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@##():Int" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@##():Int" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="zooowner.Zooowner.SlashSeparatedPath#/" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="/(subpath:String):String"></a>
-      <a id="/(String):String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $div" class="name">/</span><span class="params">(<span name="subpath">subpath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@/(subpath:String):String" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
@@ -178,7 +248,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -195,7 +265,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -212,7 +282,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@clone():Object" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@clone():Object" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -235,7 +305,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -252,7 +322,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -269,7 +339,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@finalize():Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@finalize():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -292,7 +362,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -309,7 +379,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@hashCode():Int" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@hashCode():Int" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -326,7 +396,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -343,7 +413,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -360,7 +430,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@notify():Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@notify():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -377,7 +447,7 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -394,7 +464,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -411,7 +481,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@toString():String" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@toString():String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -428,7 +498,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@wait():Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@wait():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -451,7 +521,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -474,7 +544,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner$$SlashSeparatedPath@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

@@ -45,13 +45,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ZKConnectionMock</span><span class="result"> extends <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></span>
+        <span class="name">ZKConnectionMock</span><span class="result"> extends <a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a>, <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="zooowner.test.ZKConnectionMock"><span>ZKConnectionMock</span></li><li class="in" name="zooowner.ZKConnection"><span>ZKConnection</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="zooowner.test.ZKConnectionMock"><span>ZKConnectionMock</span></li><li class="in" name="zooowner.impl.ZKConnectionImpl"><span>ZKConnectionImpl</span></li><li class="in" name="zooowner.ZKConnection"><span>ZKConnection</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -98,7 +98,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ZKConnectionMock</span><span class="params">(<span name="client">client: <span class="extype" name="org.apache.zookeeper.ZooKeeper">ZooKeeper</span></span>, <span name="connectionWatcher">connectionWatcher: <a href="../ZKConnection$.html#ConnectionWatcher=zooowner.Zooowner.Reaction[zooowner.message.ConnectionEvent]" class="extmbr" name="zooowner.ZKConnection.ConnectionWatcher">ConnectionWatcher</a></span>)</span>
+        <span class="name">ZKConnectionMock</span><span class="params">(<span name="client">client: <span class="extype" name="org.apache.zookeeper.ZooKeeper">org.apache.zookeeper.ZooKeeper</span></span>, <span name="connectionWatcher">connectionWatcher: <a href="../ZKConnection$.html#ConnectionWatcher=zooowner.Reaction[zooowner.message.ConnectionEvent]" class="extmbr" name="zooowner.ZKConnection.ConnectionWatcher">ConnectionWatcher</a></span>)</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.test.ZKConnectionMock@&lt;init&gt;(client:org.apache.zookeeper.ZooKeeper,connectionWatcher:zooowner.ZKConnection.ConnectionWatcher):zooowner.test.ZKConnectionMock" title="Permalink" target="_top">
@@ -166,8 +166,8 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="zooowner.ZKConnection#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[T](call:org.apache.zookeeper.ZooKeeper=&gt;T):T"></a>
+    </li><li name="zooowner.impl.ZKConnectionImpl#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[T](call:zooowner.ZooKeeper=&gt;T):T"></a>
       <a id="apply[T]((ZooKeeper)⇒T):T"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -175,17 +175,17 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="call">call: (<span class="extype" name="org.apache.zookeeper.ZooKeeper">ZooKeeper</span>) ⇒ <span class="extype" name="zooowner.ZKConnection.apply.T">T</span></span>)</span><span class="result">: <span class="extype" name="zooowner.ZKConnection.apply.T">T</span></span>
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="call">call: (<a href="../package.html#ZooKeeper=org.apache.zookeeper.ZooKeeper" class="extmbr" name="zooowner.ZooKeeper">ZooKeeper</a>) ⇒ <span class="extype" name="zooowner.impl.ZKConnectionImpl.apply.T">T</span></span>)</span><span class="result">: <span class="extype" name="zooowner.impl.ZKConnectionImpl.apply.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZKConnectionMock@apply[T](call:org.apache.zookeeper.ZooKeeper=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZKConnectionMock@apply[T](call:zooowner.ZooKeeper=&gt;T):T" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Takes a function to be called on client taking care of ensuring that it's
 called with active instance of ZooKeeper client.</p><div class="fullcomment"><div class="comment cmt"><p>Takes a function to be called on client taking care of ensuring that it's
 called with active instance of ZooKeeper client.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a> → <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -203,7 +203,7 @@ called with active instance of ZooKeeper client.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="zooowner.ZKConnection#awaitConnection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZKConnectionImpl#awaitConnection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="awaitConnection(timeout:scala.concurrent.duration.FiniteDuration):Unit"></a>
       <a id="awaitConnection(FiniteDuration):Unit"></a>
       <h4 class="signature">
@@ -221,17 +221,17 @@ called with active instance of ZooKeeper client.
     </span>
       <p class="shortcomment cmt">Waits for connection to esablish within given timeout.</p><div class="fullcomment"><div class="comment cmt"><p>Waits for connection to esablish within given timeout.
 </p></div><dl class="paramcmts block"><dt class="param">timeout</dt><dd class="cmt"><p>Amount of time to wait for connection
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a> → <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
     </li><li name="zooowner.test.ZKConnectionMock#client" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="client:org.apache.zookeeper.ZooKeeper"></a>
-      <a id="client:ZooKeeper"></a>
+      <a id="client:org.apache.zookeeper.ZooKeeper"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">client</span><span class="result">: <span class="extype" name="org.apache.zookeeper.ZooKeeper">ZooKeeper</span></span>
+        <span class="name">client</span><span class="result">: <span class="extype" name="org.apache.zookeeper.ZooKeeper">org.apache.zookeeper.ZooKeeper</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.test.ZKConnectionMock@client:org.apache.zookeeper.ZooKeeper" title="Permalink" target="_top">
@@ -241,7 +241,7 @@ called with active instance of ZooKeeper client.
       <p class="shortcomment cmt">Active  ZooKeeper client, through which all interactions with ZK are
 being performed.</p><div class="fullcomment"><div class="comment cmt"><p>Active  ZooKeeper client, through which all interactions with ZK are
 being performed.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="zooowner.test.ZKConnectionMock">ZKConnectionMock</a> → <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="zooowner.test.ZKConnectionMock">ZKConnectionMock</a> → <a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a> → <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -265,7 +265,7 @@ being performed.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="zooowner.ZKConnection#close" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZKConnectionImpl#close" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="close():Unit"></a>
       <a id="close():Unit"></a>
       <h4 class="signature">
@@ -282,7 +282,7 @@ being performed.
       </a>
     </span>
       <p class="shortcomment cmt">Disconnects from ZooKeeper server.</p><div class="fullcomment"><div class="comment cmt"><p>Disconnects from ZooKeeper server.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a> → <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -374,7 +374,7 @@ being performed.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="zooowner.ZKConnection#isConnected" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZKConnectionImpl#isConnected" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isConnected:Boolean"></a>
       <a id="isConnected:Boolean"></a>
       <h4 class="signature">
@@ -391,7 +391,7 @@ being performed.
       </a>
     </span>
       <p class="shortcomment cmt">Tests whether the connection to ZooKeeper server is established.</p><div class="fullcomment"><div class="comment cmt"><p>Tests whether the connection to ZooKeeper server is established.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a> → <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -460,7 +460,7 @@ being performed.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="zooowner.ZKConnection#recreate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZKConnectionImpl#recreate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="recreate():zooowner.ZKConnection"></a>
       <a id="recreate():ZKConnection"></a>
       <h4 class="signature">
@@ -479,8 +479,8 @@ being performed.
       <p class="shortcomment cmt">Closes current connection and returns a new connection with the same
 arguments as this one.</p><div class="fullcomment"><div class="comment cmt"><p>Closes current connection and returns a new connection with the same
 arguments as this one.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
-    </li><li name="zooowner.ZKConnection#stateWatcher" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a> → <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZKConnectionImpl#stateWatcher" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stateWatcher:zooowner.ZKStateWatcher"></a>
       <a id="stateWatcher:ZKStateWatcher"></a>
       <h4 class="signature">
@@ -496,8 +496,7 @@ arguments as this one.
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Internal watcher, that controls ZooKeeper connection life-cycle.</p><div class="fullcomment"><div class="comment cmt"><p>Internal watcher, that controls ZooKeeper connection life-cycle.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -601,7 +600,7 @@ arguments as this one.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="zooowner.ZKConnection#whenConnected" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZKConnectionImpl#whenConnected" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="whenConnected:scala.concurrent.Future[zooowner.ZKConnection]"></a>
       <a id="whenConnected:Future[ZKConnection]"></a>
       <h4 class="signature">
@@ -620,7 +619,7 @@ arguments as this one.
       <p class="shortcomment cmt">Future which is resolved with active connection
 once is is initially established.</p><div class="fullcomment"><div class="comment cmt"><p>Future which is resolved with active connection
 once is is initially established.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a> → <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -630,7 +629,9 @@ once is is initially established.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="zooowner.ZKConnection">
+        <div class="parent" name="zooowner.impl.ZKConnectionImpl">
+              <h3>Inherited from <a href="../impl/ZKConnectionImpl.html" class="extype" name="zooowner.impl.ZKConnectionImpl">ZKConnectionImpl</a></h3>
+            </div><div class="parent" name="zooowner.ZKConnection">
               <h3>Inherited from <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
