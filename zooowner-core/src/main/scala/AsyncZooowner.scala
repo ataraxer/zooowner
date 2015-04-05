@@ -8,7 +8,7 @@ trait AsyncZooowner {
   /**
    * Asynchronous version of `stat`.
    */
-  def stat
+  def meta
     (path: String, watcher: Option[EventWatcher] = None)
     (callback: Reaction[ZKResponse]): Unit
 

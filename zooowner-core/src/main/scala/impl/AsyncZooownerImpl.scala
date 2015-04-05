@@ -13,7 +13,7 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
   def client = zooowner.client
 
 
-  def stat
+  def meta
     (path: String, watcher: Option[EventWatcher] = None)
     (callback: Reaction[ZKResponse]): Unit =
   {

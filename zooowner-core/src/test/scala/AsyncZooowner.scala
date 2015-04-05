@@ -36,13 +36,13 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "return stat of the node asynchronously" in new Env {
+  it should "return node meta of the node asynchronously" in new Env {
     zk.create("node", Some("value"))
 
     var result = Option.empty[ZKNodeMeta]
 
-    zk.async.stat("node") {
-      case NodeMeta(_, stat) => result = Some(stat)
+    zk.async.meta("node") {
+      case NodeMeta(_, meta) => result = Some(meta)
     }
 
     eventually { result should not be (None) }
