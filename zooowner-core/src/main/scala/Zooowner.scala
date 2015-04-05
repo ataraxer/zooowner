@@ -1,8 +1,6 @@
 package zooowner
 
 import zooowner.message._
-import zooowner.ZKConnection.{ConnectionWatcher, NoWatcher}
-
 import scala.concurrent.duration._
 
 
@@ -205,7 +203,7 @@ object Zooowner {
   def apply(
     servers: String,
     timeout: FiniteDuration,
-    connectionWatcher: ConnectionWatcher = NoWatcher,
+    connectionWatcher: ZKConnectionWatcher = NoWatcher,
     session: Option[ZKSession] = None)
   {
     val connection = ZKConnection(
@@ -231,7 +229,7 @@ object Zooowner {
     servers: String,
     timeout: FiniteDuration,
     session: Option[ZKSession] = None)
-    (connectionWatcher: ConnectionWatcher = NoWatcher) =
+    (connectionWatcher: ZKConnectionWatcher = NoWatcher) =
   {
     Zooowner(servers, timeout, connectionWatcher, session)
   }

@@ -71,7 +71,7 @@ object ZKConnection {
   def apply(
     connectionString: String,
     sessionTimeout: FiniteDuration,
-    connectionWatcher: ConnectionWatcher = NoWatcher,
+    connectionWatcher: ZKConnectionWatcher = NoWatcher,
     session: Option[ZKSession] = None): ZKConnection =
   {
     new impl.ZKConnectionImpl(
@@ -85,10 +85,6 @@ object ZKConnection {
   def apply(servers: String, timeout: FiniteDuration): ZKConnection = {
     ZKConnection(servers, timeout)
   }
-
-
-  type ConnectionWatcher = Reaction[ConnectionEvent]
-  val NoWatcher = Reaction.empty[ConnectionEvent]
 }
 
 

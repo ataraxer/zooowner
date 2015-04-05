@@ -1,6 +1,8 @@
 import org.apache.zookeeper.ZooDefs.Ids
 import org.apache.zookeeper.{KeeperException => KE}
 
+import zooowner.message.ZKConnectionEvent
+
 
 package object zooowner {
   type ZKClient = org.apache.zookeeper.ZooKeeper
@@ -10,6 +12,9 @@ package object zooowner {
 
   type ZKSessionId = Long
   type ZKSessionPassword = Array[Byte]
+
+  type ZKConnectionWatcher = Reaction[ZKConnectionEvent]
+  type Reaction[T] = PartialFunction[T, Unit]
 
   val AnyVersion = -1
   val AnyACL = Ids.OPEN_ACL_UNSAFE
@@ -28,11 +33,12 @@ package object zooowner {
   type NodeNotEmptyException = KE.NotEmptyException
   type SessionExpiredException = KE.SessionExpiredException
 
-  private[zooowner] type Reaction[T] = PartialFunction[T, Unit]
-
+  /* === Internal utils === */
   private[zooowner] object Reaction {
     def empty[T]: Reaction[T] = { case _ => }
   }
+
+  private[zooowner] val NoWatcher = Reaction.empty[ZKConnectionEvent]
 }
 
 

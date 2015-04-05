@@ -15,11 +15,11 @@ sealed trait ZKFailure extends ZKResponse
 
 sealed trait ZKEvent extends ZKResponse
 
-sealed trait ConnectionEvent extends ZKEvent
+sealed trait ZKConnectionEvent extends ZKEvent
 
-case object Connected extends ConnectionEvent
-case object Disconnected extends ConnectionEvent
-case object Expired extends ConnectionEvent
+case object Connected extends ZKConnectionEvent
+case object Disconnected extends ZKConnectionEvent
+case object Expired extends ZKConnectionEvent
 
 case object ReadOnly extends ZKFailure
 case object BadVersion extends ZKFailure

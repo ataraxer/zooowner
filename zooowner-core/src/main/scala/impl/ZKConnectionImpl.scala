@@ -15,7 +15,7 @@ import ZKConnection._
 private[zooowner] class ZKConnectionImpl(
     connectionString: String,
     sessionTimeout: FiniteDuration,
-    connectionWatcher: ConnectionWatcher,
+    connectionWatcher: ZKConnectionWatcher,
     session: Option[ZKSession])
   extends ZKConnection
 {
@@ -39,10 +39,7 @@ private[zooowner] class ZKConnectionImpl(
 
   def isConnected = client.getState == States.CONNECTED
 
-
-  private val dispatchEvent = {
-    connectionWatcher orElse Reaction.empty[ConnectionEvent]
-  }
+  private val dispatchEvent = connectionWatcher orElse NoWatcher
 
 
   protected val stateWatcher = {

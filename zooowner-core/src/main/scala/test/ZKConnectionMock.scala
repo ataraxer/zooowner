@@ -1,7 +1,6 @@
 package zooowner
 package test
 
-import zooowner.ZKConnection.ConnectionWatcher
 import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.Watcher.Event.KeeperState
 import scala.concurrent.duration._
@@ -9,7 +8,7 @@ import scala.concurrent.duration._
 
 class ZKConnectionMock(
     override val client: ZooKeeper,
-    connectionWatcher: ConnectionWatcher)
+    connectionWatcher: ZKConnectionWatcher)
   extends impl.ZKConnectionImpl("", 1.second, connectionWatcher, None)
 {
   stateWatcher.dispatch(KeeperState.SyncConnected)

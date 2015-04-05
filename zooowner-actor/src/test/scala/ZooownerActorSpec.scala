@@ -4,7 +4,6 @@ package actor
 import akka.actor.ActorSystem
 import akka.testkit._
 
-import zooowner.ZKConnection.ConnectionWatcher
 import zooowner.test.ZooownerMock
 import zooowner.mocking.ZKMock
 import zooowner.message._
@@ -31,7 +30,7 @@ class ZooownerActorSpec(_system: ActorSystem)
     zk = TestActorRef {
       new ZooownerActor("", 1.second) with ZKMock {
         override val zk = {
-          val watcher: ConnectionWatcher = {
+          val watcher: ZKConnectionWatcher = {
             case event => self ! event
           }
 
