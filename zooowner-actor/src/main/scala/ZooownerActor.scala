@@ -92,9 +92,6 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
     }
 
     case Expired => {
-      // all watchers are being unregistered on session expiration
-      // and rendered useless, so a cleanup is required
-      zk.clearWatchers()
       throw new Exception("ZK Session has expired")
     }
 

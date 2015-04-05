@@ -31,10 +31,6 @@ object AsyncZooowner {
 trait AsyncAPI { this: Zooowner =>
   import Zooowner._
 
-  protected def client: ZooKeeper
-  protected var activeWatchers: List[EventWatcher]
-  protected def resolveWatcher(maybeWatcher: Option[EventWatcher]): Watcher
-
 
   object async {
     /**
@@ -46,7 +42,7 @@ trait AsyncAPI { this: Zooowner =>
     {
       client.exists(
         resolvePath(path),
-        resolveWatcher(watcher),
+        watcher.orNull,
         OnStat(callback),
         null)
     }
@@ -112,7 +108,7 @@ trait AsyncAPI { this: Zooowner =>
     {
       client.getData(
         resolvePath(path),
-        resolveWatcher(watcher),
+        watcher.orNull,
         OnData(callback),
         null)
     }
@@ -126,7 +122,7 @@ trait AsyncAPI { this: Zooowner =>
     {
       client.getChildren(
         resolvePath(path),
-        resolveWatcher(watcher),
+        watcher.orNull,
         OnChildren(callback),
         null)
     }

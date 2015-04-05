@@ -127,17 +127,6 @@ class Zooowner(connection: ZKConnection) {
   def disconnect(): Unit = connection.close()
 
   /**
-   * Attempts to extract a [[EventWatcher]] from Option, add it to the active
-   * watchers set and return extracted watcher on success or just returns null
-   * to be passed to ZooKeeper otherwise.
-   */
-  protected def resolveWatcher(maybeWatcher: Option[EventWatcher]) = {
-    val watcher = maybeWatcher.orNull
-    if (maybeWatcher.isDefined) activeWatchers :+= watcher
-    watcher
-  }
-
-  /**
    * Waits for connection to esablish within given timeout.
    *
    * @param timeout Amount of time to wait for connection
@@ -252,7 +241,7 @@ class Zooowner(connection: ZKConnection) {
   def meta(path: String, watcher: Option[EventWatcher] = None) = {
     this { client =>
       val maybeStat = Option {
-        client.exists(resolvePath(path), resolveWatcher(watcher))
+        client.exists(resolvePath(path), watcher.orNull)
       }
       maybeStat.map(_.toMeta)
     }
@@ -285,7 +274,7 @@ class Zooowner(connection: ZKConnection) {
 
     val maybeData = this { client =>
       catching(classOf[NoNodeException]) opt {
-        client.getData(resolvePath(path), resolveWatcher(watcher), meta)
+        client.getData(resolvePath(path), watcher.orNull, meta)
       }
     }
 
@@ -370,9 +359,8 @@ class Zooowner(connection: ZKConnection) {
     absolutePaths: Boolean = false,
     watcher: Option[EventWatcher] = None) =
   {
-    val maybeWatcher = resolveWatcher(watcher)
     this { client =>
-      val raw = client.getChildren(resolvePath(path), maybeWatcher).toList
+      val raw = client.getChildren(resolvePath(path), watcher.orNull).toList
       if (absolutePaths) raw map { path/_ } else raw
     }
   }
@@ -388,19 +376,6 @@ class Zooowner(connection: ZKConnection) {
    * Tests whether the node is persistent.
    */
   def isPersistent(path: String) = !isEphemeral(path)
-
-  /**
-   * Stores all active node watchers.
-   */
-  protected var activeWatchers = List.empty[EventWatcher]
-
-  /**
-   * Stops and removes all active watchers.
-   */
-  def clearWatchers(): Unit = {
-    activeWatchers foreach { _.stop() }
-    activeWatchers = Nil
-  }
 
   /**
    * Sets up a callback for node events.

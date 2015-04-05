@@ -217,44 +217,6 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "cancell all watchers" in new Env {
-    var createdA = false
-    var deletedA = false
-    var createdB = false
-    var deletedB = false
-
-    val watcherA = zk.watch("some-node") {
-      case NodeCreated("some-node", Some(node)) =>
-        node.get should be ("value")
-        createdA = true
-      case NodeDeleted("some-node") =>
-        deletedA = true
-    }
-
-    val watcherB = zk.watch("other-node") {
-      case NodeCreated("other-node", Some(node)) =>
-        node.get should be ("value")
-        createdB = true
-      case NodeDeleted("other-node") =>
-        deletedB = true
-    }
-
-    zk.create("some-node", Some("value"))
-    eventually { createdA should be (true) }
-
-    zk.create("other-node", Some("value"))
-    eventually { createdB should be (true) }
-
-    zk.clearWatchers()
-
-    zk.delete("some-node")
-    eventually { deletedA should be (false) }
-
-    zk.delete("other-node")
-    eventually { deletedB should be (false) }
-  }
-
-
   it should "fail and pass Expired event to registered callback " +
             "on session expiration" in new ZKMock
   {
