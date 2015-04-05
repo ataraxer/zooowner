@@ -409,16 +409,30 @@ class Zooowner(connection: ZKConnection) {
     (path: String, persistent: Boolean = true)
     (reaction: Reaction[ZKEvent]): EventWatcher =
   {
-    val reactOn = reaction orElse Reaction.empty[ZKEvent]
+    val callback = reaction orElse Reaction.empty[ZKEvent]
+
 
     val watcher = new EventWatcher {
-      def self: Option[EventWatcher] =
+      def self: Option[EventWatcher] = {
         if (persistent) Some(this) else None
+      }
+
+
+      def reactOn(action: => ZKEvent) = {
+        val event = try action catch {
+          case _: SessionExpiredException => Expired
+          case _: ConnectionLossException => Disconnected
+        }
+
+        if (event == Expired) stop()
+        if (event != Disconnected) callback(event)
+      }
+
 
       def reaction = {
-        case EventType.NodeCreated => {
+        case EventType.NodeCreated => reactOn {
           if (persistent) watchChildren(path, watcher = this)
-          reactOn { NodeCreated(path, getNode(path)) }
+          NodeCreated(path, getNode(path))
         }
 
         case EventType.NodeDataChanged => reactOn {
@@ -431,11 +445,11 @@ class Zooowner(connection: ZKConnection) {
           NodeChildrenChanged(path, children(path, watcher = self))
         }
 
-        case EventType.NodeDeleted => {
+        case EventType.NodeDeleted => reactOn {
           // after node deletion we still may be interested
           // in watching it, in that case -- reset watcher
           if (persistent) watch(path, watcher = this)
-          reactOn { NodeDeleted(path) }
+          NodeDeleted(path)
         }
       }
     }
