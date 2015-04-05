@@ -96,22 +96,22 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="zooowner.AsyncZooowner#children" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="children(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
-      <a id="children(String,Option[EventWatcher])(Reaction[ZKResponse]):Unit"></a>
+      <a id="children(path:String,watcher:Option[zooowner.ZKEventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
+      <a id="children(String,Option[ZKEventWatcher])(Reaction[ZKResponse]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">children</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">children</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.AsyncZooowner@children(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@children(path:String,watcher:Option[zooowner.ZKEventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#children(path:String,absolutePaths:Boolean,watcher:Option[zooowner.EventWatcher]):Seq[String]" class="extmbr" name="zooowner.Zooowner#children">Zooowner.children</a>.</p>
+      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#children(path:String,absolutePaths:Boolean,watcher:Option[zooowner.ZKEventWatcher]):Seq[String]" class="extmbr" name="zooowner.Zooowner#children">Zooowner.children</a>.</p>
     </li><li name="zooowner.AsyncZooowner#create" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit"></a>
       <a id="create[T](String,T,Boolean,Boolean)(Reaction[ZKResponse])(ZKEncoder[T]):Unit"></a>
@@ -121,7 +121,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.create.T">T</span> = <span class="symbol">Option.empty[String]</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="encoder">encoder: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.create.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.create.T">T</span> = <span class="symbol">Option.empty[String]</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span name="callback">callback: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="encoder">encoder: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.create.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#zooowner.AsyncZooowner@create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
@@ -138,7 +138,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">delete</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span name="callback">callback: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#zooowner.AsyncZooowner@delete(path:String,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
@@ -147,35 +147,35 @@
     </span>
       <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#delete(path:String,recursive:Boolean,version:Int):Unit" class="extmbr" name="zooowner.Zooowner#delete">Zooowner.delete</a>.</p>
     </li><li name="zooowner.AsyncZooowner#get" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="get(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
-      <a id="get(String,Option[EventWatcher])(Reaction[ZKResponse]):Unit"></a>
+      <a id="get(path:String,watcher:Option[zooowner.ZKEventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
+      <a id="get(String,Option[ZKEventWatcher])(Reaction[ZKResponse]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">get</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.AsyncZooowner@get(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@get(path:String,watcher:Option[zooowner.ZKEventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#get[T](path:String,watcher:Option[zooowner.EventWatcher])(implicitdecoder:zooowner.ZKDecoder[T]):Option[T]" class="extmbr" name="zooowner.Zooowner#get">Zooowner.get</a>.</p>
+      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#get[T](path:String,watcher:Option[zooowner.ZKEventWatcher])(implicitdecoder:zooowner.ZKDecoder[T]):Option[T]" class="extmbr" name="zooowner.Zooowner#get">Zooowner.get</a>.</p>
     </li><li name="zooowner.AsyncZooowner#meta" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="meta(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
-      <a id="meta(String,Option[EventWatcher])(Reaction[ZKResponse]):Unit"></a>
+      <a id="meta(path:String,watcher:Option[zooowner.ZKEventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
+      <a id="meta(String,Option[ZKEventWatcher])(Reaction[ZKResponse]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">meta</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="EventWatcher.html" class="extype" name="zooowner.EventWatcher">EventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">meta</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span name="callback">callback: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.AsyncZooowner@meta(path:String,watcher:Option[zooowner.EventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@meta(path:String,watcher:Option[zooowner.ZKEventWatcher])(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -189,7 +189,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.set.T">T</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span name="callback">callback: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="encoder">encoder: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.set.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.set.T">T</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span name="callback">callback: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="encoder">encoder: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.set.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#zooowner.AsyncZooowner@set[T](path:String,value:T,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">

@@ -90,7 +90,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="zooowner.test.ZKConnectionMock#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(client:org.apache.zookeeper.ZooKeeper,connectionWatcher:zooowner.ZKConnection.ConnectionWatcher):zooowner.test.ZKConnectionMock"></a>
+      <a id="&lt;init&gt;(client:org.apache.zookeeper.ZooKeeper,connectionWatcher:zooowner.ZKConnectionWatcher):zooowner.test.ZKConnectionMock"></a>
       <a id="&lt;init&gt;:ZKConnectionMock"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,10 +98,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ZKConnectionMock</span><span class="params">(<span name="client">client: <span class="extype" name="org.apache.zookeeper.ZooKeeper">org.apache.zookeeper.ZooKeeper</span></span>, <span name="connectionWatcher">connectionWatcher: <a href="../ZKConnection$.html#ConnectionWatcher=zooowner.Reaction[zooowner.message.ConnectionEvent]" class="extmbr" name="zooowner.ZKConnection.ConnectionWatcher">ConnectionWatcher</a></span>)</span>
+        <span class="name">ZKConnectionMock</span><span class="params">(<span name="client">client: <span class="extype" name="org.apache.zookeeper.ZooKeeper">ZooKeeper</span></span>, <span name="connectionWatcher">connectionWatcher: <a href="../package.html#ZKConnectionWatcher=zooowner.package.Reaction[zooowner.message.ZKConnectionEvent]" class="extmbr" name="zooowner.ZKConnectionWatcher">ZKConnectionWatcher</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZKConnectionMock@&lt;init&gt;(client:org.apache.zookeeper.ZooKeeper,connectionWatcher:zooowner.ZKConnection.ConnectionWatcher):zooowner.test.ZKConnectionMock" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZKConnectionMock@&lt;init&gt;(client:org.apache.zookeeper.ZooKeeper,connectionWatcher:zooowner.ZKConnectionWatcher):zooowner.test.ZKConnectionMock" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -167,18 +167,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="zooowner.impl.ZKConnectionImpl#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[T](call:zooowner.ZooKeeper=&gt;T):T"></a>
-      <a id="apply[T]((ZooKeeper)⇒T):T"></a>
+      <a id="apply[T](call:zooowner.ZKClient=&gt;T):T"></a>
+      <a id="apply[T]((ZKClient)⇒T):T"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="call">call: (<a href="../package.html#ZooKeeper=org.apache.zookeeper.ZooKeeper" class="extmbr" name="zooowner.ZooKeeper">ZooKeeper</a>) ⇒ <span class="extype" name="zooowner.impl.ZKConnectionImpl.apply.T">T</span></span>)</span><span class="result">: <span class="extype" name="zooowner.impl.ZKConnectionImpl.apply.T">T</span></span>
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="call">call: (<a href="../package.html#ZKClient=org.apache.zookeeper.ZooKeeper" class="extmbr" name="zooowner.ZKClient">ZKClient</a>) ⇒ <span class="extype" name="zooowner.impl.ZKConnectionImpl.apply.T">T</span></span>)</span><span class="result">: <span class="extype" name="zooowner.impl.ZKConnectionImpl.apply.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZKConnectionMock@apply[T](call:zooowner.ZooKeeper=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZKConnectionMock@apply[T](call:zooowner.ZKClient=&gt;T):T" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -224,14 +224,14 @@ called with active instance of ZooKeeper client.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZKConnectionImpl → <a href="../ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></dd></dl></div>
     </li><li name="zooowner.test.ZKConnectionMock#client" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="client:org.apache.zookeeper.ZooKeeper"></a>
-      <a id="client:org.apache.zookeeper.ZooKeeper"></a>
+      <a id="client:ZooKeeper"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">client</span><span class="result">: <span class="extype" name="org.apache.zookeeper.ZooKeeper">org.apache.zookeeper.ZooKeeper</span></span>
+        <span class="name">client</span><span class="result">: <span class="extype" name="org.apache.zookeeper.ZooKeeper">ZooKeeper</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.test.ZKConnectionMock@client:org.apache.zookeeper.ZooKeeper" title="Permalink" target="_top">

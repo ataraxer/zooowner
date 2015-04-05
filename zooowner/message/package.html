@@ -66,24 +66,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="zooowner.message.ConnectionEvent" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ConnectionEventextendsZKEvent"></a>
-      <a id="ConnectionEvent:ConnectionEvent"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">sealed </span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="ConnectionEvent.html"><span class="name">ConnectionEvent</span></a><span class="result"> extends <a href="ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.package@ConnectionEventextendsZKEvent" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="zooowner.message.CreateNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="zooowner.message.CreateNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="CreateNodeextendsZKMessagewithProductwithSerializable"></a>
       <a id="CreateNode:CreateNode"></a>
       <h4 class="signature">
@@ -389,6 +372,23 @@
       </a>
     </span>
       
+    </li><li name="zooowner.message.ZKConnectionEvent" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ZKConnectionEventextendsZKEvent"></a>
+      <a id="ZKConnectionEvent:ZKConnectionEvent"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ZKConnectionEvent.html"><span class="name">ZKConnectionEvent</span></a><span class="result"> extends <a href="ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.message.package@ZKConnectionEventextendsZKEvent" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="zooowner.message.ZKEvent" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ZKEventextendsZKResponse"></a>
       <a id="ZKEvent:ZKEvent"></a>
@@ -524,7 +524,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Connected$.html"><span class="name">Connected</span></a><span class="result"> extends <a href="ConnectionEvent.html" class="extype" name="zooowner.message.ConnectionEvent">ConnectionEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Connected$.html"><span class="name">Connected</span></a><span class="result"> extends <a href="ZKConnectionEvent.html" class="extype" name="zooowner.message.ZKConnectionEvent">ZKConnectionEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.package@Connected" title="Permalink" target="_top">
@@ -541,7 +541,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Disconnected$.html"><span class="name">Disconnected</span></a><span class="result"> extends <a href="ConnectionEvent.html" class="extype" name="zooowner.message.ConnectionEvent">ConnectionEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Disconnected$.html"><span class="name">Disconnected</span></a><span class="result"> extends <a href="ZKConnectionEvent.html" class="extype" name="zooowner.message.ZKConnectionEvent">ZKConnectionEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.package@Disconnected" title="Permalink" target="_top">
@@ -558,7 +558,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Expired$.html"><span class="name">Expired</span></a><span class="result"> extends <a href="ConnectionEvent.html" class="extype" name="zooowner.message.ConnectionEvent">ConnectionEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Expired$.html"><span class="name">Expired</span></a><span class="result"> extends <a href="ZKConnectionEvent.html" class="extype" name="zooowner.message.ZKConnectionEvent">ZKConnectionEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.package@Expired" title="Permalink" target="_top">

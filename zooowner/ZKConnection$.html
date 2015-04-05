@@ -91,27 +91,7 @@
         <div id="allMembers">
         
 
-        <div id="types" class="types members">
-              <h3>Type Members</h3>
-              <ol><li name="zooowner.ZKConnection.ConnectionWatcher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ConnectionWatcher=zooowner.Reaction[zooowner.message.ConnectionEvent]"></a>
-      <a id="ConnectionWatcher:ConnectionWatcher"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ConnectionWatcher</span><span class="result"> = <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<a href="message/ConnectionEvent.html" class="extype" name="zooowner.message.ConnectionEvent">ConnectionEvent</a>, <span class="extype" name="scala.Unit">Unit</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection$@ConnectionWatcher=zooowner.Reaction[zooowner.message.ConnectionEvent]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
+        
 
         
 
@@ -168,23 +148,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="zooowner.ZKConnection#NoWatcher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NoWatcher:zooowner.Reaction[zooowner.message.ConnectionEvent]"></a>
-      <a id="NoWatcher:Reaction[ConnectionEvent]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">NoWatcher</span><span class="result">: <span class="extype" name="zooowner.Reaction">Reaction</span>[<a href="message/ConnectionEvent.html" class="extype" name="zooowner.message.ConnectionEvent">ConnectionEvent</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection$@NoWatcher:zooowner.Reaction[zooowner.message.ConnectionEvent]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="zooowner.ZKConnection#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="apply(servers:String,timeout:scala.concurrent.duration.FiniteDuration):zooowner.ZKConnection"></a>
       <a id="apply(String,FiniteDuration):ZKConnection"></a>
@@ -203,18 +166,18 @@
     </span>
       
     </li><li name="zooowner.ZKConnection#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(connectionString:String,sessionTimeout:scala.concurrent.duration.FiniteDuration,connectionWatcher:zooowner.ZKConnection.ConnectionWatcher,session:Option[zooowner.ZKSession]):zooowner.ZKConnection"></a>
-      <a id="apply(String,FiniteDuration,ConnectionWatcher,Option[ZKSession]):ZKConnection"></a>
+      <a id="apply(connectionString:String,sessionTimeout:scala.concurrent.duration.FiniteDuration,connectionWatcher:zooowner.ZKConnectionWatcher,session:Option[zooowner.ZKSession]):zooowner.ZKConnection"></a>
+      <a id="apply(String,FiniteDuration,ZKConnectionWatcher,Option[ZKSession]):ZKConnection"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="connectionString">connectionString: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="sessionTimeout">sessionTimeout: <span class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</span></span>, <span name="connectionWatcher">connectionWatcher: <a href="#ConnectionWatcher=zooowner.Reaction[zooowner.message.ConnectionEvent]" class="extmbr" name="zooowner.ZKConnection.ConnectionWatcher">ConnectionWatcher</a> = <span class="symbol"><span class="name"><a href="#NoWatcher:zooowner.Reaction[zooowner.message.ConnectionEvent]">NoWatcher</a></span></span></span>, <span name="session">session: <span class="extype" name="scala.Option">Option</span>[<a href="ZKSession.html" class="extype" name="zooowner.ZKSession">ZKSession</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></span>
+        <span class="name">apply</span><span class="params">(<span name="connectionString">connectionString: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="sessionTimeout">sessionTimeout: <span class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</span></span>, <span name="connectionWatcher">connectionWatcher: <a href="package.html#ZKConnectionWatcher=zooowner.package.Reaction[zooowner.message.ZKConnectionEvent]" class="extmbr" name="zooowner.ZKConnectionWatcher">ZKConnectionWatcher</a> = <span class="symbol">NoWatcher</span></span>, <span name="session">session: <span class="extype" name="scala.Option">Option</span>[<a href="ZKSession.html" class="extype" name="zooowner.ZKSession">ZKSession</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection$@apply(connectionString:String,sessionTimeout:scala.concurrent.duration.FiniteDuration,connectionWatcher:zooowner.ZKConnection.ConnectionWatcher,session:Option[zooowner.ZKSession]):zooowner.ZKConnection" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.ZKConnection$@apply(connectionString:String,sessionTimeout:scala.concurrent.duration.FiniteDuration,connectionWatcher:zooowner.ZKConnectionWatcher,session:Option[zooowner.ZKSession]):zooowner.ZKConnection" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
