@@ -4,13 +4,6 @@ package impl
 import zooowner.message.ZKResponse
 
 
-/**
- * Plug-in trait which extends Zooowner client with asynchronous API.
- *
- * {{{
- * val zk = AsyncZooowner("localhost:2181", 5.seconds, Some("prefix"))
- * }}}
- */
 private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
   extends AsyncZooowner
 {

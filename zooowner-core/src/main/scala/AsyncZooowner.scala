@@ -54,18 +54,18 @@ trait AsyncZooowner {
 }
 
 
+trait AsyncAPI { this: Zooowner =>
+  val async: AsyncZooowner = new impl.AsyncZooownerImpl(this)
+}
+
+
 /**
- * Plug-in trait which extends Zooowner client with asynchronous API.
+ * Zooowner client extended with asynchronous API.
  *
  * {{{
  * val zk = AsyncZooowner("localhost:2181", 5.seconds, Some("prefix"))
  * }}}
  */
-trait AsyncAPI { this: Zooowner =>
-  val async = new impl.AsyncZooownerImpl(this)
-}
-
-
 object AsyncZooowner {
   type RichZooowner = Zooowner with AsyncAPI
 
