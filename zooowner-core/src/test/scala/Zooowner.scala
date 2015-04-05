@@ -122,14 +122,12 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "set one-time watches on nodes" in new Env {
-    import zooowner.Zooowner.Reaction
-
     var created = false
     var changed = false
     var deleted = false
     var childCreated = false
 
-    val reaction: Zooowner.Reaction[ZKEvent] = {
+    val reaction: Reaction[ZKEvent] = {
       case NodeCreated("some-node", Some(node)) =>
         node.get should be ("value")
         created = true

@@ -1,172 +1,94 @@
 package zooowner
 
 import zooowner.message._
-import zooowner.Zooowner.Reaction
 
-import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.Watcher.Event.KeeperState
 
-import scala.concurrent.{Promise, Await, TimeoutException}
+import scala.concurrent.Future
 import scala.concurrent.duration._
 
 import ZKConnection._
 
 
-case class ZKSession(id: ZKSessionId, password: ZKSessionPassword)
-
-
-object ZKConnection {
-  def apply(servers: String, timeout: FiniteDuration) = {
-    new ZKConnection(servers, timeout)
-  }
-
-  def apply(
-    connectionString: String,
-    sessionTimeout: FiniteDuration,
-    connectionWatcher: ConnectionWatcher = NoWatcher,
-    session: Option[ZKSession] = None) =
-  {
-    new ZKConnection(
-      connectionString,
-      sessionTimeout,
-      connectionWatcher,
-      session)
-  }
-
-  type ConnectionWatcher = Reaction[ConnectionEvent]
-  val NoWatcher = Reaction.empty[ConnectionEvent]
-}
-
-
-/**
- * `ZKConnection` encapsulates and maintaines connection to ZooKeeper.
- *
- * @param servers Connection string, consisting of comma separated host:port
- * values.
- * @param timeout Connection timeout.
- * @param connectionWatcher Hook-function, that will be called when connection
- * to ZooKeeper server is established.
- */
-class ZKConnection(
-  connectionString: String,
-  sessionTimeout: FiniteDuration,
-  connectionWatcher: ConnectionWatcher = NoWatcher,
-  session: Option[ZKSession] = None)
-{
-  import ZKConnection._
-
+trait ZKConnection {
   /**
-   * Internal promise which is resolved with active connection
-   * once it is initially established.
+   * Takes a function to be called on client taking care of ensuring that it's
+   * called with active instance of ZooKeeper client.
    */
-  private val connectionPromise = Promise[ZKConnection]()
-
-  /**
-   * Future which is resolved with active connection
-   * once is is initially established.
-   */
-  val whenConnected = connectionPromise.future
-
-  /**
-   * Safely dispatches event to a connection watcher.
-   */
-  private val dispatchEvent = {
-    connectionWatcher orElse Reaction.empty[ConnectionEvent]
-  }
-
-  /**
-   * Internal watcher, that controls ZooKeeper connection life-cycle.
-   */
-  protected val stateWatcher = {
-    ZKStateWatcher {
-      case KeeperState.SyncConnected => {
-        dispatchEvent(Connected)
-        if (connectionPromise.isCompleted) {
-          connectionPromise.success(this)
-        }
-      }
-
-      case KeeperState.Disconnected => {
-        dispatchEvent(Disconnected)
-      }
-
-      case KeeperState.Expired => {
-        dispatchEvent(Expired)
-      }
-    }
-  }
+  def apply[T](call: ZooKeeper => T): T
 
   /**
    * Active  ZooKeeper client, through which all interactions with ZK are
    * being performed.
    */
-  val client = {
-    val timeoutMillis = sessionTimeout.toMillis.toInt
-    new ZooKeeper(connectionString, timeoutMillis, stateWatcher)
-  }
+  def client: ZooKeeper
 
   /**
-   * Tests whether the connection to ZooKeeper server is established.
+   * Future which is resolved with active connection
+   * once is is initially established.
    */
-  def isConnected = client.getState == States.CONNECTED
+  def whenConnected: Future[ZKConnection]
 
   /**
    * Waits for connection to esablish within given timeout.
    *
    * @param timeout Amount of time to wait for connection
    */
-  def awaitConnection(timeout: FiniteDuration): Unit = {
-    try {
-      if (!isConnected) Await.result(whenConnected, timeout)
-    } catch {
-      case _: TimeoutException =>
-        throw new ZKConnectionTimeoutException(
-          "Can't connect to ZooKeeper within %s timeout".format(timeout))
-    }
-  }
+  def awaitConnection(timeout: FiniteDuration): Unit
 
   /**
-   * Disconnects from ZooKeeper server.
+   * Tests whether the connection to ZooKeeper server is established.
    */
-  def close(): Unit = {
-    client.close()
-    dispatchEvent(Disconnected)
-  }
+  def isConnected: Boolean
 
   /**
    * Closes current connection and returns a new connection with the same
    * arguments as this one.
    */
-  def recreate(): ZKConnection = {
-    close()
+  def recreate(): ZKConnection
 
-    new ZKConnection(
+  /**
+   * Disconnects from ZooKeeper server.
+   */
+  def close(): Unit
+}
+
+
+case class ZKSession(id: ZKSessionId, password: ZKSessionPassword)
+
+
+object ZKConnection {
+  /**
+   * `ZKConnection` encapsulates and maintaines connection to ZooKeeper.
+   *
+   * @param servers Connection string, consisting of comma separated host:port
+   * values.
+   * @param timeout Connection timeout.
+   * @param connectionWatcher Hook-function, that will be called when connection
+   * to ZooKeeper server is established.
+   */
+  def apply(
+    connectionString: String,
+    sessionTimeout: FiniteDuration,
+    connectionWatcher: ConnectionWatcher = NoWatcher,
+    session: Option[ZKSession] = None): ZKConnection =
+  {
+    new impl.ZKConnectionImpl(
       connectionString,
       sessionTimeout,
       connectionWatcher,
       session)
   }
 
-  /**
-   * Takes a function to be called on client taking care of ensuring that it's
-   * called with active instance of ZooKeeper client.
-   */
-  def apply[T](call: ZooKeeper => T): T = {
-    try call(client) catch {
-      case exception: SessionExpiredException => {
-        dispatchEvent(Expired)
-        throw exception
-      }
 
-      case exception: ConnectionLossException => {
-        dispatchEvent(Disconnected)
-        throw exception
-      }
-
-      case exception: Throwable => throw exception
-    }
+  def apply(servers: String, timeout: FiniteDuration): ZKConnection = {
+    ZKConnection(servers, timeout)
   }
+
+
+  type ConnectionWatcher = Reaction[ConnectionEvent]
+  val NoWatcher = Reaction.empty[ConnectionEvent]
 }
 
 

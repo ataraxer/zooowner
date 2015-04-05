@@ -4,8 +4,6 @@ import org.apache.zookeeper.{Watcher, WatchedEvent}
 import org.apache.zookeeper.Watcher.{Event => ZKEvent}
 import org.apache.zookeeper.Watcher.Event.{KeeperState, EventType}
 
-import zooowner.Zooowner.Reaction
-
 
 sealed trait ZKWatcher[T] extends Watcher {
   protected def reaction: Reaction[T]

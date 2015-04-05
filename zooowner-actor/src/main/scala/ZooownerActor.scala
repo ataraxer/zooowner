@@ -28,7 +28,7 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
   extends Actor with Stash
 {
   import ZooownerActor._
-  import Zooowner.SlashSeparatedPath
+  import ZKPathDSL._
   import DefaultSerializers._
 
   implicit val futureTimeout = Timeout(5.seconds)
@@ -49,7 +49,7 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
   /**
    * Generates a partial function which will pass messages to specified actor.
    */
-  def passTo(client: ActorRef): Zooowner.Reaction[ZKResponse] = {
+  def passTo(client: ActorRef): Reaction[ZKResponse] = {
     case message => client ! message
   }
 

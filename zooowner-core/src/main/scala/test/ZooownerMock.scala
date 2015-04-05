@@ -9,7 +9,7 @@ import scala.concurrent.duration._
 class ZooownerMock(
     createClient: () => ZooKeeper,
     connectionWatcher: ConnectionWatcher = NoWatcher)
-  extends Zooowner(
+  extends impl.ZooownerImpl(
     new ZKConnectionMock(createClient(), connectionWatcher))
 
 

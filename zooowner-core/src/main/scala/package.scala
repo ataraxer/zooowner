@@ -1,16 +1,15 @@
 import org.apache.zookeeper.ZooDefs.Ids
-
 import org.apache.zookeeper.{KeeperException => KE}
 
 
 package object zooowner {
+  type ZooKeeper = org.apache.zookeeper.ZooKeeper
+
   type RawZKData = Array[Byte]
   type ZKData = Option[RawZKData]
 
   type ZKSessionId = Long
   type ZKSessionPassword = Array[Byte]
-
-  type AsyncZooowner = Zooowner with AsyncAPI
 
   val AnyVersion = -1
   val AnyACL = Ids.OPEN_ACL_UNSAFE
@@ -28,6 +27,12 @@ package object zooowner {
   type NodeExistsException = KE.NodeExistsException
   type NodeNotEmptyException = KE.NotEmptyException
   type SessionExpiredException = KE.SessionExpiredException
+
+  private[zooowner] type Reaction[T] = PartialFunction[T, Unit]
+
+  private[zooowner] object Reaction {
+    def empty[T]: Reaction[T] = { case _ => }
+  }
 }
 
 

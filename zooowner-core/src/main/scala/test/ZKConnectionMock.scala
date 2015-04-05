@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 class ZKConnectionMock(
     override val client: ZooKeeper,
     connectionWatcher: ConnectionWatcher)
-  extends ZKConnection("", 1.second, connectionWatcher = connectionWatcher)
+  extends impl.ZKConnectionImpl("", 1.second, connectionWatcher, None)
 {
   stateWatcher.dispatch(KeeperState.SyncConnected)
 }
