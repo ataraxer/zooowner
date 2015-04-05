@@ -12,7 +12,7 @@ import scala.concurrent.duration._
 import ZKConnection._
 
 
-class ZKConnectionImpl(
+private[zooowner] class ZKConnectionImpl(
     connectionString: String,
     sessionTimeout: FiniteDuration,
     connectionWatcher: ConnectionWatcher,
