@@ -9,7 +9,6 @@ import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.Watcher.Event.EventType
 import org.apache.zookeeper.CreateMode
 import org.apache.zookeeper.CreateMode._
-import org.apache.zookeeper.KeeperException._
 
 import scala.concurrent.duration._
 import scala.collection.JavaConversions._

@@ -6,7 +6,6 @@ import zooowner.Zooowner.Reaction
 import org.apache.zookeeper.ZooKeeper
 import org.apache.zookeeper.ZooKeeper.States
 import org.apache.zookeeper.Watcher.Event.KeeperState
-import org.apache.zookeeper.KeeperException._
 
 import scala.concurrent.{Promise, Await, TimeoutException}
 import scala.concurrent.duration._
