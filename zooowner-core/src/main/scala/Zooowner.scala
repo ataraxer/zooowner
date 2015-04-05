@@ -13,13 +13,13 @@ trait Zooowner {
    * Takes a function to be called on client taking care of ensuring that it's
    * called with active instance of ZooKeeper client.
    */
-  def apply[T](call: ZooKeeper => T): T
+  def apply[T](call: ZKClient => T): T
 
   /*
    * Active ZooKeeper client, through which all interactions with ZK are
    * being performed.
    */
-  def client: ZooKeeper
+  def client: ZKClient
 
   /**
    * Waits for connection to esablish within given timeout.

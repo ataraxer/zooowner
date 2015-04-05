@@ -3,7 +3,7 @@ import org.apache.zookeeper.{KeeperException => KE}
 
 
 package object zooowner {
-  type ZooKeeper = org.apache.zookeeper.ZooKeeper
+  type ZKClient = org.apache.zookeeper.ZooKeeper
 
   type RawZKData = Array[Byte]
   type ZKData = Option[RawZKData]

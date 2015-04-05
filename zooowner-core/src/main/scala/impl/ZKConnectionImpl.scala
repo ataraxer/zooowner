@@ -67,11 +67,11 @@ private[zooowner] class ZKConnectionImpl(
 
   val client = {
     val timeoutMillis = sessionTimeout.toMillis.toInt
-    new ZooKeeper(connectionString, timeoutMillis, stateWatcher)
+    new ZKClient(connectionString, timeoutMillis, stateWatcher)
   }
 
 
-  def apply[T](call: ZooKeeper => T): T = {
+  def apply[T](call: ZKClient => T): T = {
     try call(client) catch {
       case exception: SessionExpiredException => {
         dispatchEvent(Expired)
