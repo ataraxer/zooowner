@@ -9,7 +9,7 @@ trait AsyncZooowner {
    * Asynchronous version of `stat`.
    */
   def meta
-    (path: String, watcher: Option[EventWatcher] = None)
+    (path: String, watcher: Option[ZKEventWatcher] = None)
     (callback: Reaction[ZKResponse]): Unit
 
   /**
@@ -42,14 +42,14 @@ trait AsyncZooowner {
    * Asynchronous version of [[Zooowner.get]].
    */
   def get
-    (path: String, watcher: Option[EventWatcher] = None)
+    (path: String, watcher: Option[ZKEventWatcher] = None)
     (callback: Reaction[ZKResponse]): Unit
 
   /**
    * Asynchronous version of [[Zooowner.children]].
    */
   def children
-    (path: String, watcher: Option[EventWatcher] = None)
+    (path: String, watcher: Option[ZKEventWatcher] = None)
     (callback: Reaction[ZKResponse]): Unit
 }
 

@@ -84,12 +84,12 @@ trait Zooowner {
   /**
    * Gets node state and optionally sets watcher.
    */
-  def meta(path: String, watcher: Option[EventWatcher] = None): Option[ZKNodeMeta]
+  def meta(path: String, watcher: Option[ZKEventWatcher] = None): Option[ZKNodeMeta]
 
   /**
    * Tests whether the node exists.
    */
-  def exists(path: String, watcher: Option[EventWatcher] = None) = {
+  def exists(path: String, watcher: Option[ZKEventWatcher] = None) = {
     meta(path, watcher).isDefined
   }
 
@@ -97,7 +97,7 @@ trait Zooowner {
    * Returns Some(value) of the node if exists, None otherwise.
    */
   def get[T]
-    (path: String, watcher: Option[EventWatcher] = None)
+    (path: String, watcher: Option[ZKEventWatcher] = None)
     (implicit decoder: ZKDecoder[T]): Option[T] =
   {
     getNode(path) flatMap { node =>
@@ -108,7 +108,7 @@ trait Zooowner {
   /**
    * Returns Some[ZKNode] if node exists, Non otherwise.
    */
-  def getNode(path: String, watcher: Option[EventWatcher] = None): Option[ZKNode]
+  def getNode(path: String, watcher: Option[ZKEventWatcher] = None): Option[ZKNode]
 
   /**
    * Sets a new value for the node.
@@ -167,7 +167,7 @@ trait Zooowner {
   def children(
     path: String,
     absolutePaths: Boolean = false,
-    watcher: Option[EventWatcher] = None): Seq[String]
+    watcher: Option[ZKEventWatcher] = None): Seq[String]
 
   /**
    * Tests whether the node is ephemeral.
@@ -184,12 +184,12 @@ trait Zooowner {
    */
   def watch
     (path: String, persistent: Boolean = true)
-    (reaction: Reaction[ZKEvent]): EventWatcher
+    (reaction: Reaction[ZKEvent]): ZKEventWatcher
 
   /**
    * Sets up a watcher on node events.
    */
-  def watch(path: String, watcher: EventWatcher): EventWatcher
+  def watch(path: String, watcher: ZKEventWatcher): ZKEventWatcher
 }
 
 

@@ -14,7 +14,7 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
 
 
   def meta
-    (path: String, watcher: Option[EventWatcher] = None)
+    (path: String, watcher: Option[ZKEventWatcher] = None)
     (callback: Reaction[ZKResponse]): Unit =
   {
     client.exists(
@@ -72,7 +72,7 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
 
 
   def get
-    (path: String, watcher: Option[EventWatcher] = None)
+    (path: String, watcher: Option[ZKEventWatcher] = None)
     (callback: Reaction[ZKResponse]): Unit =
   {
     client.getData(
@@ -84,7 +84,7 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
 
 
   def children
-    (path: String, watcher: Option[EventWatcher] = None)
+    (path: String, watcher: Option[ZKEventWatcher] = None)
     (callback: Reaction[ZKResponse]): Unit =
   {
     client.getChildren(

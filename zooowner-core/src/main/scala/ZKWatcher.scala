@@ -31,7 +31,7 @@ abstract class ZKStateWatcher extends ZKWatcher[KeeperState] {
 }
 
 
-abstract class EventWatcher extends ZKWatcher[EventType] {
+abstract class ZKEventWatcher extends ZKWatcher[EventType] {
   protected def extract(event: WatchedEvent) = event.getType
 }
 
@@ -43,9 +43,9 @@ object ZKStateWatcher {
 }
 
 
-object EventWatcher {
+object ZKEventWatcher {
   def apply(react: Reaction[EventType]) = {
-    new EventWatcher { def reaction = react }
+    new ZKEventWatcher { def reaction = react }
   }
 }
 

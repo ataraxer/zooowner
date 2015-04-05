@@ -10,9 +10,9 @@ private[zooowner] class DefaultNodeWatcher(
     path: String,
     callback: Reaction[ZKEvent],
     persistent: Boolean)
-  extends EventWatcher
+  extends ZKEventWatcher
 {
-  def self: Option[EventWatcher] = {
+  def self: Option[ZKEventWatcher] = {
     if (persistent) Some(this) else None
   }
 

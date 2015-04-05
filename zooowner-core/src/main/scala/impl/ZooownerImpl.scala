@@ -102,7 +102,7 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
   }
 
 
-  def meta(path: String, watcher: Option[EventWatcher] = None) = {
+  def meta(path: String, watcher: Option[ZKEventWatcher] = None) = {
     this { client =>
       val maybeStat = Option {
         client.exists(resolvePath(path), watcher.orNull)
@@ -112,7 +112,7 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
   }
 
 
-  def getNode(path: String, watcher: Option[EventWatcher] = None) = {
+  def getNode(path: String, watcher: Option[ZKEventWatcher] = None) = {
     val meta = new Stat
 
     val maybeData = this { client =>
@@ -159,7 +159,7 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
   def children(
     path: String,
     absolutePaths: Boolean = false,
-    watcher: Option[EventWatcher] = None) =
+    watcher: Option[ZKEventWatcher] = None) =
   {
     this { client =>
       val raw = client.getChildren(resolvePath(path), watcher.orNull).toList
@@ -175,7 +175,7 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
 
   def watch
     (path: String, persistent: Boolean = true)
-    (reaction: Reaction[ZKEvent]): EventWatcher =
+    (reaction: Reaction[ZKEvent]): ZKEventWatcher =
   {
     val callback = reaction orElse Reaction.empty[ZKEvent]
     val watcher = new DefaultNodeWatcher(this, path, callback, persistent)
@@ -185,7 +185,7 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
   /**
    * Sets up a watcher on node events.
    */
-  def watch(path: String, watcher: EventWatcher): EventWatcher = {
+  def watch(path: String, watcher: ZKEventWatcher): ZKEventWatcher = {
     val nodeExists = exists(path, Some(watcher))
     if (nodeExists) children(path, watcher = Some(watcher))
     watcher
