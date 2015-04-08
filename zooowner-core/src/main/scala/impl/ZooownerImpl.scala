@@ -55,12 +55,13 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
     path: String,
     data: ZKData,
     persistent: Boolean = false,
-    sequential: Boolean = false): Unit =
+    sequential: Boolean = false): String =
   {
     val mode = createMode(persistent, sequential)
 
     this { client =>
-      client.create(path, data.orNull, AnyACL, mode)
+      val createdPath = client.create(path, data.orNull, AnyACL, mode)
+      child(createdPath)
     }
   }
 

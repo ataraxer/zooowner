@@ -16,12 +16,15 @@ private[zooowner] object ImplUtils extends ZKPathDSL with StatConverter {
     }
   }
 
+  def cleanPath(path: String) = path.stripPrefix("/").stripSuffix("/")
+  def pathComponents(path: String) = ("/"  + cleanPath(path)).split("/")
+
+  def child(path: String) = pathComponents(path).lastOption getOrElse ""
 
   def parent(path: String) = {
-    val clean = path.stripPrefix("/").stripSuffix("/")
-    if (clean.isEmpty) "/" else "/" + clean.split("/").init.mkString("/")
+    val components = pathComponents(path)
+    if (components.isEmpty) Root else components.init.mkString("/")
   }
-
 
   def resolvePath(path: String) = {
     if (path startsWith "/") path else Root/path

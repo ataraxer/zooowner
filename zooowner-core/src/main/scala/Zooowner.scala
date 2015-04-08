@@ -44,8 +44,8 @@ trait Zooowner {
   def disconnect(): Unit
 
   /**
-   * Creates new node, ensuring that persisten path to it exists.
-   * All missing nodes on a path are filled with null's.
+   * Creates new node, ensuring that persisten path to it exists,
+   * by filling missing nodes with null's, and returns it's name.
    *
    * @param path Path of node to be created.
    * @param value Optional data that should be stored in created node.
@@ -56,10 +56,10 @@ trait Zooowner {
     path: String,
     value: T = NoData,
     persistent: Boolean = false,
-    sequential: Boolean = false): Unit
+    sequential: Boolean = false): String
 
   /**
-   * Creates a new node under existing persistent one.
+   * Creates a new node under existing persistent one and returns it's name.
    *
    * @param path Path of parent node.
    * @param child Name of a child to be created.
@@ -72,7 +72,7 @@ trait Zooowner {
     child: String,
     value: T = NoData,
     persistent: Boolean = false,
-    sequential: Boolean = false): Unit
+    sequential: Boolean = false): String
 
   /**
    * Creates persistent path, creating each missing node with null value.
