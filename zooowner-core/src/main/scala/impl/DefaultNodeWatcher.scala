@@ -34,7 +34,10 @@ private[zooowner] class DefaultNodeWatcher(
 
   def reaction = {
     case EventType.NodeCreated => reactOn {
-      if (persistent) watchChildren()
+      if (persistent) {
+        watchChildren()
+        watchData()
+      }
       NodeCreated(path, client.getNode(path))
     }
 

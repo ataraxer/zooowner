@@ -26,12 +26,12 @@ sealed trait ZKWatcher[T] extends Watcher {
 }
 
 
-abstract class ZKStateWatcher extends ZKWatcher[KeeperState] {
+trait ZKStateWatcher extends ZKWatcher[KeeperState] {
   protected def extract(event: WatchedEvent) = event.getState
 }
 
 
-abstract class ZKEventWatcher extends ZKWatcher[EventType] {
+trait ZKEventWatcher extends ZKWatcher[EventType] {
   protected def extract(event: WatchedEvent) = event.getType
 }
 

@@ -6,8 +6,9 @@ case class ZKNodeMeta(
   modificationTime: Long,
   size: Long,
   version: Int,
-  childrenVersion: Int, // children updates number
-  childrenNumber: Int,
+  // children updates number
+  childrenVersion: Int,
+  childrenCount: Int,
   ephemeral: Boolean,
   session: Long)
 

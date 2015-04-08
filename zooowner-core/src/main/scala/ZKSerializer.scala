@@ -71,12 +71,15 @@ object DefaultSerializers {
 }
 
 
-trait ZKDecoder[+T] {
+sealed trait ZKSerializer
+
+
+trait ZKDecoder[+T] extends ZKSerializer {
   def decode(data: ZKData): T
 }
 
 
-trait ZKEncoder[-T] {
+trait ZKEncoder[-T] extends ZKSerializer {
   def encode(value: T): ZKData
 }
 

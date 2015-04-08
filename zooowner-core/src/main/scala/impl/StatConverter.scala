@@ -16,7 +16,7 @@ private[zooowner] trait StatConverter {
       size = stat.getDataLength,
       version = stat.getVersion,
       childrenVersion = stat.getCversion,
-      childrenNumber = stat.getNumChildren,
+      childrenCount = stat.getNumChildren,
       ephemeral = isEphemeral,
       session = ephemeralOwner)
   }
