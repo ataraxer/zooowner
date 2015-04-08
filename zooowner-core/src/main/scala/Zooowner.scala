@@ -204,7 +204,7 @@ object Zooowner {
     servers: String,
     timeout: FiniteDuration,
     connectionWatcher: ZKConnectionWatcher = NoWatcher,
-    session: Option[ZKSession] = None)
+    session: Option[ZKSession] = None): Zooowner =
   {
     val connection = ZKConnection(
       connectionString = servers,
@@ -229,7 +229,7 @@ object Zooowner {
     servers: String,
     timeout: FiniteDuration,
     session: Option[ZKSession] = None)
-    (connectionWatcher: ZKConnectionWatcher = NoWatcher) =
+    (connectionWatcher: ZKConnectionWatcher = NoWatcher): Zooowner =
   {
     Zooowner(servers, timeout, connectionWatcher, session)
   }
