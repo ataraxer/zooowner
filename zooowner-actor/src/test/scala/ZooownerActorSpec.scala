@@ -62,28 +62,24 @@ class ZooownerActorSpec(_system: ActorSystem)
   it should "create nodes with custom serializer" in {
     case class Person(name: String, age: Int)
 
-    implicit val customEncoder = new ZKEncoder[Person] {
-      def encode(person: Person) = {
-        val size = 4 + person.name.size + 4
-        val buffer = ByteBuffer.allocate(size)
-        buffer.putInt(person.name.size)
-        buffer.put(person.name.getBytes)
-        buffer.putInt(person.age)
-        buffer.rewind()
-        Some(buffer.array())
-      }
+    implicit val customEncoder = ZKEncoder[Person] { person =>
+      val size = 4 + person.name.size + 4
+      val buffer = ByteBuffer.allocate(size)
+      buffer.putInt(person.name.size)
+      buffer.put(person.name.getBytes)
+      buffer.putInt(person.age)
+      buffer.rewind()
+      Some(buffer.array())
     }
 
-    implicit val customDecoder = new ZKDecoder[Person] {
-      def decode(data: ZKData) = {
-        val buffer = ByteBuffer.wrap(data getOrElse Array.empty[Byte])
-        val nameSize = buffer.getInt
-        val nameBytes = new Array[Byte](nameSize)
-        buffer.get(nameBytes)
-        val name = new String(nameBytes)
-        val age = buffer.getInt
-        Person(name, age)
-      }
+    implicit val customDecoder = ZKDecoder[Person] { data =>
+      val buffer = ByteBuffer.wrap(data getOrElse Array.empty[Byte])
+      val nameSize = buffer.getInt
+      val nameBytes = new Array[Byte](nameSize)
+      buffer.get(nameBytes)
+      val name = new String(nameBytes)
+      val age = buffer.getInt
+      Person(name, age)
     }
 
     val bob = Person("Bob", 42)

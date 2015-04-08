@@ -15,61 +15,45 @@ object DefaultSerializers {
 
 
   implicit val rawEncoder = {
-    new ZKEncoder[RawZKData] {
-      def encode(data: RawZKData) = Option(data)
-    }
+    ZKEncoder[RawZKData] { data => Option(data) }
   }
 
 
   implicit val rawDecoder = {
-    new ZKDecoder[RawZKData] {
-      def decode(data: ZKData) = data.orNull
-    }
+    ZKDecoder[RawZKData] { data => data.orNull }
   }
 
 
   implicit val stringEncoder = {
-    new ZKEncoder[String] {
-      def encode(string: String) = {
-        val wrappedString = Option(string)
-        wrappedString.map(_.getBytes(Encoding))
-      }
+    ZKEncoder[String] { string =>
+      val wrappedString = Option(string)
+      wrappedString.map(_.getBytes(Encoding))
     }
   }
 
 
   implicit val stringDecoder = {
-    new ZKDecoder[String] {
-      def decode(data: ZKData) = {
-        data map {
-          new String(_, Encoding)
-        } orNull
+    ZKDecoder[String] { data =>
+      data map {
+        new String(_, Encoding)
+      } orNull
+    }
+  }
+
+
+  implicit def optionEncoder[T](implicit valueEncoder: ZKEncoder[T]) = {
+    ZKEncoder[Option[T]] { data =>
+      data flatMap { value =>
+        valueEncoder.encode(value)
       }
     }
   }
 
 
-  implicit def optionEncoder[T]
-    (implicit valueEncoder: ZKEncoder[T]) =
-  {
-    new ZKEncoder[Option[T]] {
-      def encode(data: Option[T]) = {
-        data flatMap { value =>
-          valueEncoder.encode(value)
-        }
-      }
-    }
-  }
-
-
-  implicit def optionDecoder[T]
-    (implicit valueDecoder: ZKDecoder[T]) =
-  {
-    new ZKDecoder[Option[T]] {
-      def decode(data: ZKData) = {
-        data map { value =>
-          valueDecoder.decode(Some(value))
-        }
+  implicit def optionDecoder[T](implicit valueDecoder: ZKDecoder[T]) = {
+    ZKDecoder[Option[T]] { data =>
+      data map { value =>
+        valueDecoder.decode(Some(value))
       }
     }
   }
@@ -93,8 +77,22 @@ trait ZKDecoder[+T] extends ZKSerializer {
 }
 
 
+object ZKDecoder {
+  def apply[T](decoder: ZKData => T) = {
+    new ZKDecoder[T] { def decode(data: ZKData) = decoder(data) }
+  }
+}
+
+
 trait ZKEncoder[-T] extends ZKSerializer {
   def encode(value: T): ZKData
+}
+
+
+object ZKEncoder {
+  def apply[T](encoder: T => ZKData) = {
+    new ZKEncoder[T] { def encode(data: T) = encoder(data) }
+  }
 }
 
 
