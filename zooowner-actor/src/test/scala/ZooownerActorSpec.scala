@@ -12,6 +12,8 @@ import org.scalatest.concurrent.Eventually
 
 import scala.concurrent.duration._
 
+import java.nio.ByteBuffer
+
 
 class ZooownerActorSpec(_system: ActorSystem)
   extends TestKit(_system)
@@ -51,9 +53,45 @@ class ZooownerActorSpec(_system: ActorSystem)
   }
 
 
-  "ZooownerActor" should "create nodes with paths asynchronously" in {
+  "ZooownerActor" should "create nodes asynchronously" in {
     zk ! CreateNode("foo", Some("value"))
     expectMsg { NodeCreated("/foo", None) }
+  }
+
+
+  it should "create nodes with custom serializer" in {
+    case class Person(name: String, age: Int)
+
+    implicit val customEncoder = new ZKEncoder[Person] {
+      def encode(person: Person) = {
+        val size = 4 + person.name.size + 4
+        val buffer = ByteBuffer.allocate(size)
+        buffer.putInt(person.name.size)
+        buffer.put(person.name.getBytes)
+        buffer.putInt(person.age)
+        buffer.rewind()
+        Some(buffer.array())
+      }
+    }
+
+    implicit val customDecoder = new ZKDecoder[Person] {
+      def decode(data: ZKData) = {
+        val buffer = ByteBuffer.wrap(data getOrElse Array.empty[Byte])
+        val nameSize = buffer.getInt
+        val nameBytes = new Array[Byte](nameSize)
+        buffer.get(nameBytes)
+        val name = new String(nameBytes)
+        val age = buffer.getInt
+        Person(name, age)
+      }
+    }
+
+    val bob = Person("Bob", 42)
+
+    zk ! CreateNode("bob", bob)
+    expectMsgType[NodeCreated]
+
+    zk.underlyingActor.zk.get[Person]("bob") should be (Some(bob))
   }
 
 

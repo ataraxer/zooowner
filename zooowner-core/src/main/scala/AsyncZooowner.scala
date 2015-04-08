@@ -15,13 +15,12 @@ trait AsyncZooowner {
   /**
    * Asynchronous version of [[Zooowner.create]].
    */
-  def create[T](
+  def create[T: ZKEncoder](
     path: String,
-    value: T = Option.empty[String],
+    value: T = NoData,
     persistent: Boolean = false,
     sequential: Boolean = false)
-    (callback: Reaction[ZKResponse])
-    (implicit encoder: ZKEncoder[T]): Unit
+    (callback: Reaction[ZKResponse]): Unit
 
   /**
    * Asynchronous version of [[Zooowner.delete]].
@@ -33,10 +32,9 @@ trait AsyncZooowner {
   /**
    * Asynchronous version of [[Zooowner.set]].
    */
-  def set[T]
+  def set[T: ZKEncoder]
     (path: String, value: T, version: Int = AnyVersion)
-    (callback: Reaction[ZKResponse])
-    (implicit encoder: ZKEncoder[T]): Unit
+    (callback: Reaction[ZKResponse]): Unit
 
   /**
    * Asynchronous version of [[Zooowner.get]].

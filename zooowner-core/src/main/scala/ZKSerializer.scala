@@ -14,6 +14,20 @@ object DefaultSerializers {
   private val Encoding = "UTF-8"
 
 
+  implicit val rawEncoder = {
+    new ZKEncoder[RawZKData] {
+      def encode(data: RawZKData) = Option(data)
+    }
+  }
+
+
+  implicit val rawDecoder = {
+    new ZKDecoder[RawZKData] {
+      def decode(data: ZKData) = data.orNull
+    }
+  }
+
+
   implicit val stringEncoder = {
     new ZKEncoder[String] {
       def encode(string: String) = {

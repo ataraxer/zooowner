@@ -54,7 +54,7 @@ trait Zooowner {
    */
   def create[T: ZKEncoder](
     path: String,
-    value: T = None,
+    value: T = NoData,
     persistent: Boolean = false,
     sequential: Boolean = false): Unit
 
@@ -70,7 +70,7 @@ trait Zooowner {
   def createChild[T: ZKEncoder](
     path: String,
     child: String,
-    value: T = None,
+    value: T = NoData,
     persistent: Boolean = false,
     sequential: Boolean = false): Unit
 

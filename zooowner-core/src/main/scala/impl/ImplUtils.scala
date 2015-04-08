@@ -26,11 +26,6 @@ private[zooowner] object ImplUtils extends ZKPathDSL with StatConverter {
   def resolvePath(path: String) = {
     if (path startsWith "/") path else Root/path
   }
-
-
-  def encode[T](data: T)(implicit encoder: ZKEncoder[T]) = {
-    encoder.encode(data)
-  }
 }
 
 

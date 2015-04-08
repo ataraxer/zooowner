@@ -99,14 +99,12 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      * Creates new node.
      *
      * @param path Path of node to be created.
-     * @param maybeData Optional data that should be stored in created node.
+     * @param data Data that should be stored in created node.
      * @param persistent Specifies whether created node should be persistent.
      * @param sequential Specifies whether created node should be sequential.
-     * @param recursive Specifies whether path to the node should be created.
-     * @param filler Optional value with which path nodes should be created.
      */
-    case CreateNode(path, data, persistent, sequential, recursive, filler) => {
-      zk.async.create(path, data, persistent, sequential) {
+    case CreateNode(path, data, persistent, sequential) => {
+      zk.async.create[RawZKData](path, data, persistent, sequential) {
         passTo(sender)
       }
     }
@@ -115,10 +113,9 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      * Deletes node.
      *
      * @param path Path of node to be deleted.
-     * @param recursive Specifies whether to remove underlying nodes.
      * @param version Provides version to be checked against before deletion.
      */
-    case DeleteNode(path, recursive, version) => {
+    case DeleteNode(path, version) => {
       zk.async.delete(path, version = version) {
         passTo(sender)
       }

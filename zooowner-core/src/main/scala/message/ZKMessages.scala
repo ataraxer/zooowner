@@ -39,24 +39,47 @@ case class NodeExists(path: String) extends ZKFailure
 case class NodeIsEphemeral(path: String) extends ZKFailure
 case class Error(code: Code) extends ZKFailure
 
+
+object CreateNode {
+  def apply[T: ZKEncoder](
+    path: String,
+    value: T = NoData,
+    persistent: Boolean = false,
+    sequential: Boolean = false): CreateNode =
+  {
+    val data = encode(value).orNull
+    new CreateNode(path, data, persistent, sequential)
+  }
+}
+
 case class CreateNode(
     path: String,
-    maybeData: Option[String] = None,
-    persistent: Boolean = false,
-    sequential: Boolean = false,
-    recursive: Boolean = false,
-    filler: Option[String] = None)
+    data: RawZKData,
+    persistent: Boolean,
+    sequential: Boolean)
   extends ZKMessage
 
-case class DeleteNode(
+
+object SetNodeValue {
+  def apply[T: ZKEncoder](
     path: String,
-    recursive: Boolean = false,
-    version: Int = AnyVersion)
-  extends ZKRequest
+    value: T,
+    version: Int = AnyVersion): SetNodeValue =
+  {
+    val data = encode(value).orNull
+    new SetNodeValue(path, data, version)
+  }
+}
 
 case class SetNodeValue(
     path: String,
-    data: String,
+    data: RawZKData,
+    version: Int)
+  extends ZKRequest
+
+
+case class DeleteNode(
+    path: String,
     version: Int = AnyVersion)
   extends ZKRequest
 

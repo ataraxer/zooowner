@@ -25,15 +25,14 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
   }
 
 
-  def create[T](
+  def create[T: ZKEncoder](
     path: String,
-    value: T = Option.empty[String],
+    value: T = NoData,
     persistent: Boolean = false,
     sequential: Boolean = false)
-    (callback: Reaction[ZKResponse])
-    (implicit encoder: ZKEncoder[T]): Unit =
+    (callback: Reaction[ZKResponse]): Unit =
   {
-    val data = encoder.encode(value).orNull
+    val data = encode(value).orNull
 
     client.create(
       resolvePath(path),
@@ -57,12 +56,11 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
   }
 
 
-  def set[T]
+  def set[T: ZKEncoder]
     (path: String, value: T, version: Int = AnyVersion)
-    (callback: Reaction[ZKResponse])
-    (implicit encoder: ZKEncoder[T]): Unit =
+    (callback: Reaction[ZKResponse]): Unit =
   {
-    val data = encoder.encode(value).orNull
+    val data = encode(value).orNull
 
     client.setData(
       resolvePath(path), data, version,
