@@ -464,7 +464,7 @@
     </span>
       
     </li><li name="zooowner.ZKDecoder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ZKDecoder[+T]extendsAnyRef"></a>
+      <a id="ZKDecoder[+T]extendsZKSerializer"></a>
       <a id="ZKDecoder[+T]:ZKDecoder[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -472,16 +472,16 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ZKDecoder.html"><span class="name">ZKDecoder</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ZKDecoder.html"><span class="name">ZKDecoder</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <a href="ZKSerializer.html" class="extype" name="zooowner.ZKSerializer">ZKSerializer</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKDecoder[+T]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.package@ZKDecoder[+T]extendsZKSerializer" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
       
     </li><li name="zooowner.ZKEncoder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ZKEncoder[-T]extendsAnyRef"></a>
+      <a id="ZKEncoder[-T]extendsZKSerializer"></a>
       <a id="ZKEncoder[-T]:ZKEncoder[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -489,10 +489,10 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ZKEncoder.html"><span class="name">ZKEncoder</span></a><span class="tparams">[<span name="T">-T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ZKEncoder.html"><span class="name">ZKEncoder</span></a><span class="tparams">[<span name="T">-T</span>]</span><span class="result"> extends <a href="ZKSerializer.html" class="extype" name="zooowner.ZKSerializer">ZKSerializer</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.package@ZKEncoder[-T]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.package@ZKEncoder[-T]extendsZKSerializer" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -502,8 +502,8 @@
       <a id="ZKEventWatcher:ZKEventWatcher"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <a href="ZKEventWatcher.html"><span class="name">ZKEventWatcher</span></a><span class="result"> extends <a href="ZKWatcher.html" class="extype" name="zooowner.ZKWatcher">ZKWatcher</a>[<span class="extype" name="org.apache.zookeeper.Watcher.Event.EventType">EventType</span>]</span>
@@ -540,7 +540,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ZKNode.html"><span class="name">ZKNode</span></a><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="data">data: <a href="#ZKData=Option[zooowner.package.RawZKData]" class="extmbr" name="zooowner.ZKData">ZKData</a></span>, <span name="meta">meta: <a href="ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="ZKNode.html"><span class="name">ZKNode</span></a><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="data">data: <a href="#ZKData=Option[zooowner.package.RawZKData]" class="extmbr" name="zooowner.ZKData">ZKData</a></span>, <span name="meta">meta: <span class="extype" name="scala.Option">Option</span>[<a href="ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#zooowner.package@ZKNodeextendsProductwithSerializable" title="Permalink" target="_top">
@@ -557,7 +557,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ZKNodeMeta.html"><span class="name">ZKNodeMeta</span></a><span class="params">(<span name="creationTime">creationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="modificationTime">modificationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="size">size: <span class="extype" name="scala.Long">Long</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenVersion">childrenVersion: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenNumber">childrenNumber: <span class="extype" name="scala.Int">Int</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="session">session: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="ZKNodeMeta.html"><span class="name">ZKNodeMeta</span></a><span class="params">(<span name="creationTime">creationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="modificationTime">modificationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="size">size: <span class="extype" name="scala.Long">Long</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenVersion">childrenVersion: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenCount">childrenCount: <span class="extype" name="scala.Int">Int</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="session">session: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#zooowner.package@ZKNodeMetaextendsProductwithSerializable" title="Permalink" target="_top">
@@ -578,6 +578,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#zooowner.package@ZKPathDSLextendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.ZKSerializer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ZKSerializerextendsAnyRef"></a>
+      <a id="ZKSerializer:ZKSerializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ZKSerializer.html"><span class="name">ZKSerializer</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.package@ZKSerializerextendsAnyRef" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -638,8 +655,8 @@
       <a id="ZKStateWatcher:ZKStateWatcher"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <a href="ZKStateWatcher.html"><span class="name">ZKStateWatcher</span></a><span class="result"> extends <a href="ZKWatcher.html" class="extype" name="zooowner.ZKWatcher">ZKWatcher</a>[<span class="extype" name="org.apache.zookeeper.Watcher.Event.KeeperState">KeeperState</span>]</span>
@@ -772,6 +789,40 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#zooowner.package@ZKConnection" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.ZKDecoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ZKDecoder"></a>
+      <a id="ZKDecoder:ZKDecoder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ZKDecoder$.html"><span class="name">ZKDecoder</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.package@ZKDecoder" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.ZKEncoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ZKEncoder"></a>
+      <a id="ZKEncoder:ZKEncoder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ZKEncoder$.html"><span class="name">ZKEncoder</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.package@ZKEncoder" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

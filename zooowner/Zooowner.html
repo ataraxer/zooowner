@@ -167,42 +167,43 @@ called with active instance of ZooKeeper client.</p>
     </span>
       
     </li><li name="zooowner.Zooowner#create" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$1:zooowner.ZKEncoder[T]):Unit"></a>
-      <a id="create[T](String,T,Boolean,Boolean)(ZKEncoder[T]):Unit"></a>
+      <a id="create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$1:zooowner.ZKEncoder[T]):String"></a>
+      <a id="create[T](String,T,Boolean,Boolean)(ZKEncoder[T]):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.create.T">T</span> = <span class="symbol">None</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.create.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.create.T">T</span> = <span class="symbol">NoData</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.create.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner@create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$1:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.Zooowner@create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$1:zooowner.ZKEncoder[T]):String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Creates new node, ensuring that persisten path to it exists.</p><div class="fullcomment"><div class="comment cmt"><p>Creates new node, ensuring that persisten path to it exists.
-All missing nodes on a path are filled with null's.
+      <p class="shortcomment cmt">Creates new node, ensuring that persisten path to it exists,
+by filling missing nodes with null's, and returns it's name.</p><div class="fullcomment"><div class="comment cmt"><p>Creates new node, ensuring that persisten path to it exists,
+by filling missing nodes with null's, and returns it's name.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of node to be created.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Optional data that should be stored in created node.</p></dd><dt class="param">persistent</dt><dd class="cmt"><p>Specifies whether created node should be persistent.</p></dd><dt class="param">sequential</dt><dd class="cmt"><p>Specifies whether created node should be sequential.
 </p></dd></dl></div>
     </li><li name="zooowner.Zooowner#createChild" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="createChild[T](path:String,child:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$2:zooowner.ZKEncoder[T]):Unit"></a>
-      <a id="createChild[T](String,String,T,Boolean,Boolean)(ZKEncoder[T]):Unit"></a>
+      <a id="createChild[T](path:String,child:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$2:zooowner.ZKEncoder[T]):String"></a>
+      <a id="createChild[T](String,String,T,Boolean,Boolean)(ZKEncoder[T]):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createChild</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="child">child: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.createChild.T">T</span> = <span class="symbol">None</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.createChild.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">createChild</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="child">child: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.createChild.T">T</span> = <span class="symbol">NoData</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.createChild.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner@createChild[T](path:String,child:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$2:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.Zooowner@createChild[T](path:String,child:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$2:zooowner.ZKEncoder[T]):String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Creates a new node under existing persistent one.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new node under existing persistent one.
+      <p class="shortcomment cmt">Creates a new node under existing persistent one and returns it's name.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new node under existing persistent one and returns it's name.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of parent node.</p></dd><dt class="param">child</dt><dd class="cmt"><p>Name of a child to be created.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Optional data that should be stored in created node.</p></dd><dt class="param">persistent</dt><dd class="cmt"><p>Specifies whether created node should be persistent.</p></dd><dt class="param">sequential</dt><dd class="cmt"><p>Specifies whether created node should be sequential.
 </p></dd></dl></div>
     </li><li name="zooowner.Zooowner#createPath" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
@@ -568,18 +569,18 @@ All missing nodes on a path are filled with null's.
               
         </dd></dl></div>
     </li><li name="zooowner.Zooowner#forceSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="forceSet[T](path:String,value:T,persistent:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):Unit"></a>
-      <a id="forceSet[T](String,T,Boolean)(ZKEncoder[T]):Unit"></a>
+      <a id="forceSet[T](path:String,value:T,persistent:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):Any"></a>
+      <a id="forceSet[T](String,T,Boolean)(ZKEncoder[T]):Any"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">forceSet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.forceSet.T">T</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.forceSet.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">forceSet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.forceSet.T">T</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.forceSet.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Any">Any</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner@forceSet[T](path:String,value:T,persistent:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.Zooowner@forceSet[T](path:String,value:T,persistent:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):Any" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

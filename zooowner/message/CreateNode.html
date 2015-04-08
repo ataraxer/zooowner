@@ -28,10 +28,12 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../lib/class_big.png" />
+        <a href="CreateNode$.html" title="See companion object"><img src="../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../package.html" class="extype" name="zooowner">zooowner</a>.<a href="package.html" class="extype" name="zooowner.message">message</a></p>
-        <h1>CreateNode</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="zooowner.message">package message</a>
+        <h1><a href="CreateNode$.html" title="See companion object">CreateNode</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="CreateNode$.html" title="See companion object">object CreateNode</a>
+            | <a href="package.html" class="extype" name="zooowner.message">package message</a>
           </div></span></h3><span class="permalink">
       <a href="../../index.html#zooowner.message.CreateNode" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
@@ -45,7 +47,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">CreateNode</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="maybeData">maybeData: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="recursive">recursive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="filler">filler: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="ZKMessage.html" class="extype" name="zooowner.message.ZKMessage">ZKMessage</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">CreateNode</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="data">data: <a href="../package.html#RawZKData=Array[Byte]" class="extmbr" name="zooowner.RawZKData">RawZKData</a></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="ZKMessage.html" class="extype" name="zooowner.message.ZKMessage">ZKMessage</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -90,7 +92,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="zooowner.message.CreateNode#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(path:String,maybeData:Option[String],persistent:Boolean,sequential:Boolean,recursive:Boolean,filler:Option[String]):zooowner.message.CreateNode"></a>
+      <a id="&lt;init&gt;(path:String,data:zooowner.RawZKData,persistent:Boolean,sequential:Boolean):zooowner.message.CreateNode"></a>
       <a id="&lt;init&gt;:CreateNode"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,10 +100,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">CreateNode</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="maybeData">maybeData: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="recursive">recursive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="filler">filler: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span>
+        <span class="name">CreateNode</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="data">data: <a href="../package.html#RawZKData=Array[Byte]" class="extmbr" name="zooowner.RawZKData">RawZKData</a></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.CreateNode@&lt;init&gt;(path:String,maybeData:Option[String],persistent:Boolean,sequential:Boolean,recursive:Boolean,filler:Option[String]):zooowner.message.CreateNode" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.message.CreateNode@&lt;init&gt;(path:String,data:zooowner.RawZKData,persistent:Boolean,sequential:Boolean):zooowner.message.CreateNode" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -206,6 +208,23 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="zooowner.message.CreateNode#data" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="data:zooowner.RawZKData"></a>
+      <a id="data:RawZKData"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">data</span><span class="result">: <a href="../package.html#RawZKData=Array[Byte]" class="extmbr" name="zooowner.RawZKData">RawZKData</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.message.CreateNode@data:zooowner.RawZKData" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -223,23 +242,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="zooowner.message.CreateNode#filler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="filler:Option[String]"></a>
-      <a id="filler:Option[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">filler</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.CreateNode@filler:Option[String]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -297,23 +299,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="zooowner.message.CreateNode#maybeData" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="maybeData:Option[String]"></a>
-      <a id="maybeData:Option[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">maybeData</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.CreateNode@maybeData:Option[String]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -395,23 +380,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.CreateNode@persistent:Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="zooowner.message.CreateNode#recursive" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="recursive:Boolean"></a>
-      <a id="recursive:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">recursive</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.CreateNode@recursive:Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>

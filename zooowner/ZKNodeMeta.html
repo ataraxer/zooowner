@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ZKNodeMeta</span><span class="params">(<span name="creationTime">creationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="modificationTime">modificationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="size">size: <span class="extype" name="scala.Long">Long</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenVersion">childrenVersion: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenNumber">childrenNumber: <span class="extype" name="scala.Int">Int</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="session">session: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">ZKNodeMeta</span><span class="params">(<span name="creationTime">creationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="modificationTime">modificationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="size">size: <span class="extype" name="scala.Long">Long</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenVersion">childrenVersion: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenCount">childrenCount: <span class="extype" name="scala.Int">Int</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="session">session: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -90,7 +90,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="zooowner.ZKNodeMeta#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(creationTime:Long,modificationTime:Long,size:Long,version:Int,childrenVersion:Int,childrenNumber:Int,ephemeral:Boolean,session:Long):zooowner.ZKNodeMeta"></a>
+      <a id="&lt;init&gt;(creationTime:Long,modificationTime:Long,size:Long,version:Int,childrenVersion:Int,childrenCount:Int,ephemeral:Boolean,session:Long):zooowner.ZKNodeMeta"></a>
       <a id="&lt;init&gt;:ZKNodeMeta"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,10 +98,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ZKNodeMeta</span><span class="params">(<span name="creationTime">creationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="modificationTime">modificationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="size">size: <span class="extype" name="scala.Long">Long</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenVersion">childrenVersion: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenNumber">childrenNumber: <span class="extype" name="scala.Int">Int</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="session">session: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="name">ZKNodeMeta</span><span class="params">(<span name="creationTime">creationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="modificationTime">modificationTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="size">size: <span class="extype" name="scala.Long">Long</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenVersion">childrenVersion: <span class="extype" name="scala.Int">Int</span></span>, <span name="childrenCount">childrenCount: <span class="extype" name="scala.Int">Int</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="session">session: <span class="extype" name="scala.Long">Long</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKNodeMeta@&lt;init&gt;(creationTime:Long,modificationTime:Long,size:Long,version:Int,childrenVersion:Int,childrenNumber:Int,ephemeral:Boolean,session:Long):zooowner.ZKNodeMeta" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.ZKNodeMeta@&lt;init&gt;(creationTime:Long,modificationTime:Long,size:Long,version:Int,childrenVersion:Int,childrenCount:Int,ephemeral:Boolean,session:Long):zooowner.ZKNodeMeta" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
@@ -183,19 +183,19 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="zooowner.ZKNodeMeta#childrenNumber" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="childrenNumber:Int"></a>
-      <a id="childrenNumber:Int"></a>
+    </li><li name="zooowner.ZKNodeMeta#childrenCount" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="childrenCount:Int"></a>
+      <a id="childrenCount:Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">childrenNumber</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">childrenCount</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKNodeMeta@childrenNumber:Int" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.ZKNodeMeta@childrenCount:Int" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>

@@ -113,7 +113,7 @@
     </span>
       <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#children(path:String,absolutePaths:Boolean,watcher:Option[zooowner.ZKEventWatcher]):Seq[String]" class="extmbr" name="zooowner.Zooowner#children">Zooowner.children</a>.</p>
     </li><li name="zooowner.AsyncZooowner#create" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit"></a>
+      <a id="create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitevidence$1:zooowner.ZKEncoder[T]):Unit"></a>
       <a id="create[T](String,T,Boolean,Boolean)(Reaction[ZKResponse])(ZKEncoder[T]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -121,14 +121,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.create.T">T</span> = <span class="symbol">Option.empty[String]</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span name="callback">callback: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="encoder">encoder: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.create.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.create.T">T</span> = <span class="symbol">NoData</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span name="callback">callback: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.create.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.AsyncZooowner@create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitevidence$1:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$1:zooowner.ZKEncoder[T]):Unit" class="extmbr" name="zooowner.Zooowner#create">Zooowner.create</a>.</p>
+      <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#create[T](path:String,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$1:zooowner.ZKEncoder[T]):String" class="extmbr" name="zooowner.Zooowner#create">Zooowner.create</a>.</p>
     </li><li name="zooowner.AsyncZooowner#delete" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="delete(path:String,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse]):Unit"></a>
       <a id="delete(String,Int)(Reaction[ZKResponse]):Unit"></a>
@@ -181,7 +181,7 @@
     </span>
       <p class="shortcomment cmt">Asynchronous version of <code>stat</code>.</p>
     </li><li name="zooowner.AsyncZooowner#set" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="set[T](path:String,value:T,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit"></a>
+      <a id="set[T](path:String,value:T,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitevidence$2:zooowner.ZKEncoder[T]):Unit"></a>
       <a id="set[T](String,T,Int)(Reaction[ZKResponse])(ZKEncoder[T]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -189,10 +189,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.set.T">T</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span name="callback">callback: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="encoder">encoder: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.set.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.set.T">T</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span name="callback">callback: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.set.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.AsyncZooowner@set[T](path:String,value:T,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitencoder:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@set[T](path:String,value:T,version:Int)(callback:zooowner.Reaction[zooowner.message.ZKResponse])(implicitevidence$2:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
