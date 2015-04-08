@@ -46,7 +46,7 @@ private[zooowner] class ZKConnectionImpl(
     ZKStateWatcher {
       case KeeperState.SyncConnected => {
         dispatchEvent(Connected)
-        if (connectionPromise.isCompleted) {
+        if (!connectionPromise.isCompleted) {
           connectionPromise.success(this)
         }
       }
