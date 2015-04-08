@@ -44,6 +44,23 @@ class ZKMockSpec extends UnitSpec {
   }
 
 
+  it should "simulate sequntial node creation" in new Env {
+    val data = "some-data".getBytes
+
+    val pathA = zk.create("/queue", data, AnyACL, PERSISTENT_SEQUENTIAL)
+    pathA should be ("queue0000000000")
+
+    zk.exists("/queue0000000000", null) should not be (null)
+    zk.getData("/queue0000000000", null, null) should be (data)
+
+    val pathB = zk.create("/queue", data, AnyACL, PERSISTENT_SEQUENTIAL)
+    pathB should be ("queue0000000001")
+
+    zk.exists("/queue0000000001", null) should not be (null)
+    zk.getData("/queue0000000001", null, null) should be (data)
+  }
+
+
   it should "simulate node existance check" in new Env {
     zk.exists("/non-existing-node", null) should be (null)
     zk.exists("/non-existing-node/non-existing-child", null) should be (null)

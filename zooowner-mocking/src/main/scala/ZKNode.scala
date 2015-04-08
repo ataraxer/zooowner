@@ -10,23 +10,27 @@ import ZKNode._
 
 
 object ZKNode {
-  def apply(data: ZKData, persistent: Boolean = false): ZKNode = {
+  def apply(name: String, data: ZKData, persistent: Boolean = false): ZKNode = {
     if (persistent) {
-      new PersistentNode(data)
+      new PersistentNode(name, data)
     } else {
-      new EphemeralNode(data)
+      new EphemeralNode(name, data)
     }
   }
 
 
-  def apply(data: String, persistent: Boolean): ZKNode = {
-    apply(Some(data.getBytes), persistent)
+  def apply(name: String, data: String, persistent: Boolean): ZKNode = {
+    apply(name, Some(data.getBytes), persistent)
   }
 
 
-  def apply(data: String): ZKNode = apply(data, false)
-  def apply(persistent: Boolean): ZKNode = apply(None, persistent)
-  def apply(): ZKNode = apply(None, false)
+  def apply(name: String, data: String): ZKNode = apply(name, data, false)
+
+  def apply(name: String, persistent: Boolean): ZKNode = {
+    apply(name, None, persistent)
+  }
+
+  def apply(name: String): ZKNode = apply(name, None, false)
 
   type ZKData = Option[Array[Byte]]
   val AnyVersion = -1
@@ -34,6 +38,8 @@ object ZKNode {
 
 
 abstract class ZKNode(initialData: ZKData) {
+  val name: String
+
   protected object State {
     var data = initialData
     var version = 0
@@ -103,29 +109,54 @@ abstract class ZKNode(initialData: ZKData) {
   }
 
   val persistent: Boolean
-  val sequential: Boolean = true
+
+  private var sequentialNodesCounter = 0
 
   // operations with children
   def create(
-    child: String, data: ZKData,
-    persistent: Boolean = true): ZKNode =
+    child: String,
+    data: ZKData,
+    persistent: Boolean = true,
+    sequential: Boolean = false): ZKNode =
   {
-    if (exists(child)) throw new NodeExistsException
-    val newNode = ZKNode(data, persistent)
-    State.children(child) = newNode
+    val childName = if (!sequential) {
+      if (exists(child)) throw new NodeExistsException
+      child
+    } else {
+      val name = child + "%010d".format(sequentialNodesCounter)
+      sequentialNodesCounter += 1
+      name
+    }
+
+    val newNode = ZKNode(childName, data, persistent)
+    State.children(childName) = newNode
     newNode
   }
 
-  def create(child: String, data: String, persistent: Boolean): ZKNode = {
-    create(child, Some(data.getBytes), persistent)
+  def create(
+    child: String,
+    data: String,
+    persistent: Boolean,
+    sequential: Boolean): ZKNode =
+  {
+    create(child, Some(data.getBytes), persistent, sequential)
   }
 
-  def create(child: String, persistent: Boolean): ZKNode = {
-    create(child, None, persistent)
+  def create(
+    child: String,
+    persistent: Boolean,
+    sequential: Boolean): ZKNode =
+  {
+    create(child, None, persistent, sequential)
   }
 
-  def create(child: String, data: String): ZKNode = create(child, data, false)
-  def create(child: String): ZKNode = create(child, None, false)
+  def create(child: String, data: String): ZKNode = {
+    create(child, data, false, false)
+  }
+
+  def create(child: String): ZKNode = {
+    create(child, None, false, false)
+  }
 
 
   def delete(child: String, version: Int = AnyVersion): Unit = {
@@ -139,18 +170,28 @@ abstract class ZKNode(initialData: ZKData) {
 }
 
 
-case class EphemeralNode(value: ZKData = None) extends ZKNode(value) {
+case class EphemeralNode(
+    name: String,
+    value: ZKData = None)
+  extends ZKNode(value)
+{
   val persistent = false
 
-  override def create(child: String, data: ZKData, persistent: Boolean) = {
+  override def create(
+    child: String,
+    data: ZKData,
+    persistent: Boolean,
+    sequential: Boolean) = {
     throw new NoChildrenForEphemeralsException
   }
 }
 
 
-case class PersistentNode(value: ZKData = None) extends ZKNode(value) {
-  val persistent = true
-}
+case class PersistentNode(
+    name: String,
+    value: ZKData = None)
+  extends ZKNode(value)
+{ val persistent = true }
 
 
 // vim: set ts=2 sw=2 et:

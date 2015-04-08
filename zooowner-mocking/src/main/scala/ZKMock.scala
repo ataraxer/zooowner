@@ -41,6 +41,7 @@ object ZKMock {
 
 
   val persistentModes = List(PERSISTENT_SEQUENTIAL, PERSISTENT)
+  val sequentialModes = List(PERSISTENT_SEQUENTIAL, EPHEMERAL_SEQUENTIAL)
 
 
   def anyStatCallback = any(classOf[StatCallback])
@@ -113,7 +114,7 @@ trait ZKMock {
       val (result, code) = catchExceptionCode {
         nodeTree.create(path, data, createMode)
       }
-      callback.processResult(code, path, context, result.orNull)
+      callback.processResult(code, path, context, result.map( "/" + _ ).orNull)
     }
 
     /** Generate `setData(String, Int)` stub answer.  */

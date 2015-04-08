@@ -129,17 +129,24 @@ class ZKNodeTree {
     PathUtils.validatePath(path)
 
     val persistent = persistentModes contains createMode
+    val sequential = sequentialModes contains createMode
+
     val parent = nodeParent(path)
     val name = nodeName(path)
 
-    fetchNode(parent).create(name, Option(data), persistent)
-    fireEvent(path, NodeCreated)
+    val node = fetchNode(parent).create(
+      name,
+      Option(data),
+      persistent,
+      sequential)
+
+    fireEvent(parent + node.name, NodeCreated)
 
     if (childrenWatchers contains parent) {
       fireEvent(parent, NodeChildrenChanged)
     }
 
-    path
+    node.name
   }
 
 

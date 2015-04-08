@@ -13,15 +13,15 @@ class NodeTreeSpec extends UnitSpec {
   }
 
 
-  "ZKNode" should "consist be either persistent or epehemeral" in {
-    EphemeralNode(None) shouldBe a [ZKNode]
-    PersistentNode(None) shouldBe a [ZKNode]
+  "ZKNode" should "be either persistent or epehemeral" in {
+    EphemeralNode("name", None) shouldBe a [ZKNode]
+    PersistentNode("name", None) shouldBe a [ZKNode]
   }
 
 
   it should "have data assigned to it" in {
-    ZKNode(None).data should be (None)
-    ZKNode("string").dataString should be (Some("string"))
+    ZKNode("node", None).data should be (None)
+    ZKNode("node", "string").dataString should be (Some("string"))
   }
 
 
@@ -114,8 +114,8 @@ class NodeTreeSpec extends UnitSpec {
 
 
   it should "throw exception if node to be deleted has children" in new {
-    val root = ZKNode(persistent = true)
-    val parent = root.create("parent", persistent = true)
+    val root = ZKNode("node", persistent = true)
+    val parent = root.create("parent", persistent = true, sequential = false)
     parent.create("child")
 
     intercept[NotEmptyException] {
