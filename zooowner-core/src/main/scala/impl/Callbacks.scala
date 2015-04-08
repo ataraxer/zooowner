@@ -54,7 +54,9 @@ private[zooowner] object Callbacks {
   /**
    * Fires up on node creation.
    */
-  private[zooowner] case class OnCreated(reaction: Reaction[ZKResponse])
+  private[zooowner] case class OnCreated(
+      reaction: Reaction[ZKResponse],
+      data: RawZKData)
     extends ZKCallback with StringCallback
   {
     def processResult(
@@ -64,7 +66,9 @@ private[zooowner] object Callbacks {
       name: String) =
     {
       processCode(code = returnCode, path = path) {
-        NodeCreated(name, None)
+        val wrappedData = Option(data)
+        val node = ZKNode(path, wrappedData, None)
+        NodeCreated(name, Some(node))
       }
     }
   }
@@ -119,7 +123,8 @@ private[zooowner] object Callbacks {
       processCode(code = returnCode, path = path) {
         // wrap in option to guard from null
         val wrappedData = Option(data)
-        val node = ZKNode(path, wrappedData, stat.toMeta)
+        val meta = Some(stat.toMeta)
+        val node = ZKNode(path, wrappedData, meta)
         Node(node)
       }
     }

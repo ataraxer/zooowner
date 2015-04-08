@@ -1,6 +1,7 @@
 package zooowner
 package impl
 
+import org.apache.zookeeper.data.Stat
 import zooowner.message.ZKResponse
 
 
@@ -39,7 +40,7 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
       data,
       AnyACL,
       createMode(persistent, sequential),
-      OnCreated(callback),
+      OnCreated(callback, data),
       null)
   }
 

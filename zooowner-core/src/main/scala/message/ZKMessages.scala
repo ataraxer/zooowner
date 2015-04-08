@@ -28,7 +28,7 @@ case class NodeMeta(path: String, meta: ZKNodeMeta) extends ZKSuccess
 case class Node(node: ZKNode) extends ZKSuccess
 case class NodeChildren(path: String, children: List[String]) extends ZKSuccess
 
-case class NodeCreated(path: String, data: Option[ZKNode]) extends ZKEvent
+case class NodeCreated(path: String, node: Option[ZKNode]) extends ZKEvent
 case class NodeChanged(path: String, data: Option[ZKNode]) extends ZKEvent
 case class NodeChildrenChanged(path: String, children: Seq[String]) extends ZKEvent
 case class NodeDeleted(path: String) extends ZKEvent

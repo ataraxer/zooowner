@@ -113,16 +113,16 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
 
 
   def getNode(path: String, watcher: Option[ZKEventWatcher] = None) = {
-    val meta = new Stat
+    val stat = new Stat
 
     val maybeData = this { client =>
       catching(classOf[NoNodeException]) opt {
-        client.getData(resolvePath(path), watcher.orNull, meta)
+        client.getData(resolvePath(path), watcher.orNull, stat)
       }
     }
 
     maybeData map { data =>
-      ZKNode(path, Option(data), meta)
+      ZKNode(path, Option(data), Some(stat.toMeta))
     }
   }
 

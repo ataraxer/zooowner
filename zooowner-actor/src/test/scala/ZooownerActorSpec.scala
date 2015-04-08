@@ -15,12 +15,38 @@ import scala.concurrent.duration._
 import java.nio.ByteBuffer
 
 
+object ZooownerActorSpec {
+  case class Person(name: String, age: Int)
+
+  implicit val customEncoder = ZKEncoder[Person] { person =>
+    val size = 4 + person.name.size + 4
+    val buffer = ByteBuffer.allocate(size)
+    buffer.putInt(person.name.size)
+    buffer.put(person.name.getBytes)
+    buffer.putInt(person.age)
+    buffer.rewind()
+    Some(buffer.array())
+  }
+
+  implicit val customDecoder = ZKDecoder[Person] { data =>
+    val buffer = ByteBuffer.wrap(data getOrElse Array.empty[Byte])
+    val nameSize = buffer.getInt
+    val nameBytes = new Array[Byte](nameSize)
+    buffer.get(nameBytes)
+    val name = new String(nameBytes)
+    val age = buffer.getInt
+    Person(name, age)
+  }
+}
+
+
 class ZooownerActorSpec(_system: ActorSystem)
   extends TestKit(_system)
   with ImplicitSender
   with Eventually
   with UnitSpec
 {
+  import ZooownerActorSpec._
   import DefaultSerializers._
 
   def this() = this { ActorSystem("zooowner-actor-spec") }
@@ -55,39 +81,8 @@ class ZooownerActorSpec(_system: ActorSystem)
 
   "ZooownerActor" should "create nodes asynchronously" in {
     zk ! CreateNode("foo", Some("value"))
-    expectMsg { NodeCreated("/foo", None) }
-  }
-
-
-  it should "create nodes with custom serializer" in {
-    case class Person(name: String, age: Int)
-
-    implicit val customEncoder = ZKEncoder[Person] { person =>
-      val size = 4 + person.name.size + 4
-      val buffer = ByteBuffer.allocate(size)
-      buffer.putInt(person.name.size)
-      buffer.put(person.name.getBytes)
-      buffer.putInt(person.age)
-      buffer.rewind()
-      Some(buffer.array())
-    }
-
-    implicit val customDecoder = ZKDecoder[Person] { data =>
-      val buffer = ByteBuffer.wrap(data getOrElse Array.empty[Byte])
-      val nameSize = buffer.getInt
-      val nameBytes = new Array[Byte](nameSize)
-      buffer.get(nameBytes)
-      val name = new String(nameBytes)
-      val age = buffer.getInt
-      Person(name, age)
-    }
-
-    val bob = Person("Bob", 42)
-
-    zk ! CreateNode("bob", bob)
-    expectMsgType[NodeCreated]
-
-    zk.underlyingActor.zk.get[Person]("bob") should be (Some(bob))
+    val response = expectMsgType[NodeCreated]
+    response.path should be ("/foo")
   }
 
 
@@ -151,6 +146,23 @@ class ZooownerActorSpec(_system: ActorSystem)
     }
   }
 
+
+  it should "support custom serializer" in {
+    val alice = Person("Alice", 21)
+    val bob = Person("Bob", 42)
+
+    zk ! CreateNode("bob", bob)
+    val NodeCreated("/bob", Some(node)) = expectMsgType[NodeCreated]
+    node.extract[Person] should be (bob)
+
+    zk ! SetNodeValue("bob", alice)
+    expectMsgType[NodeMeta]
+
+    zk ! GetNodeValue("bob")
+    val Node(newNode) = expectMsgType[Node]
+    newNode.path should be ("/bob")
+    newNode.extract[Person] should be (alice)
+  }
 }
 
 
