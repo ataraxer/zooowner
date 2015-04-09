@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Node</span><span class="params">(<span name="node">node: <a href="../ZKNode.html" class="extype" name="zooowner.ZKNode">ZKNode</a></span>)</span><span class="result"> extends <a href="ZKSuccess.html" class="extype" name="zooowner.message.ZKSuccess">ZKSuccess</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Node</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="node">node: <a href="../ZKNode.html" class="extype" name="zooowner.ZKNode">ZKNode</a></span>)</span><span class="result"> extends <a href="ZKSuccess.html" class="extype" name="zooowner.message.ZKSuccess">ZKSuccess</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -90,7 +90,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="zooowner.message.Node#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(node:zooowner.ZKNode):zooowner.message.Node"></a>
+      <a id="&lt;init&gt;(path:String,node:zooowner.ZKNode):zooowner.message.Node"></a>
       <a id="&lt;init&gt;:Node"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,10 +98,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Node</span><span class="params">(<span name="node">node: <a href="../ZKNode.html" class="extype" name="zooowner.ZKNode">ZKNode</a></span>)</span>
+        <span class="name">Node</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="node">node: <a href="../ZKNode.html" class="extype" name="zooowner.ZKNode">ZKNode</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.Node@&lt;init&gt;(node:zooowner.ZKNode):zooowner.message.Node" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.message.Node@&lt;init&gt;(path:String,node:zooowner.ZKNode):zooowner.message.Node" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -348,6 +348,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="zooowner.message.Node#path" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="path:String"></a>
+      <a id="path:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">path</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.message.Node@path:String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
