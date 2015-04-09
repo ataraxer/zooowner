@@ -25,8 +25,8 @@ case object ReadOnly extends ZKFailure
 case object BadVersion extends ZKFailure
 
 case class NodeMeta(path: String, meta: ZKNodeMeta) extends ZKSuccess
-case class Node(node: ZKNode) extends ZKSuccess
-case class NodeChildren(path: String, children: List[String]) extends ZKSuccess
+case class Node(path: String, node: ZKNode) extends ZKSuccess
+case class NodeChildren(path: String, children: Seq[String]) extends ZKSuccess
 
 case class NodeCreated(path: String, node: Option[ZKNode]) extends ZKEvent
 case class NodeChanged(path: String, data: Option[ZKNode]) extends ZKEvent

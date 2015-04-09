@@ -1,6 +1,7 @@
 package zooowner
 
 import zooowner.message._
+import scala.concurrent.Future
 import scala.concurrent.duration._
 
 
@@ -8,9 +9,9 @@ trait AsyncZooowner {
   /**
    * Asynchronous version of `stat`.
    */
-  def meta
-    (path: String, watcher: Option[ZKEventWatcher] = None)
-    (callback: Reaction[ZKResponse]): Unit
+  def meta(
+    path: String,
+    watcher: Option[ZKEventWatcher] = None): Future[ZKNodeMeta]
 
   /**
    * Asynchronous version of [[Zooowner.create]].
@@ -19,36 +20,35 @@ trait AsyncZooowner {
     path: String,
     value: T = NoData,
     persistent: Boolean = false,
-    sequential: Boolean = false)
-    (callback: Reaction[ZKResponse]): Unit
+    sequential: Boolean = false): Future[String]
 
   /**
    * Asynchronous version of [[Zooowner.delete]].
    */
-  def delete
-    (path: String, version: Int = AnyVersion)
-    (callback: Reaction[ZKResponse]): Unit
+  def delete(
+    path: String,
+    version: Int = AnyVersion): Future[Unit]
 
   /**
    * Asynchronous version of [[Zooowner.set]].
    */
-  def set[T: ZKEncoder]
-    (path: String, value: T, version: Int = AnyVersion)
-    (callback: Reaction[ZKResponse]): Unit
+  def set[T: ZKEncoder](
+    path: String,
+    value: T, version: Int = AnyVersion): Future[ZKNodeMeta]
 
   /**
    * Asynchronous version of [[Zooowner.get]].
    */
-  def get
-    (path: String, watcher: Option[ZKEventWatcher] = None)
-    (callback: Reaction[ZKResponse]): Unit
+  def get(
+    path: String,
+    watcher: Option[ZKEventWatcher] = None): Future[ZKNode]
 
   /**
    * Asynchronous version of [[Zooowner.children]].
    */
-  def children
-    (path: String, watcher: Option[ZKEventWatcher] = None)
-    (callback: Reaction[ZKResponse]): Unit
+  def children(
+    path: String,
+    watcher: Option[ZKEventWatcher] = None): Future[Seq[String]]
 }
 
 

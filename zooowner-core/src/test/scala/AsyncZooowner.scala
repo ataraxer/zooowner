@@ -7,8 +7,10 @@ import zooowner.message._
 import org.apache.zookeeper.data.Stat
 
 import org.scalatest.concurrent.Eventually
+import org.scalatest.concurrent.ScalaFutures._
 
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 
 class AsyncZooownerSpec extends UnitSpec with Eventually {
@@ -24,14 +26,9 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
 
 
   "Async Zooowner" should "create nodes asynchronously" in new Env {
-    var done = false
+    val result = zk.async.create("node", Some("value"))
 
-    zk.async.create("node", Some("value")) {
-      case NodeCreated(_, _) => done = true
-    }
-
-    eventually { done should be (true) }
-
+    result.futureValue should be ("node")
     zk.get[String]("node") should be (Some("value"))
   }
 
@@ -39,51 +36,35 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   it should "return node meta of the node asynchronously" in new Env {
     zk.create("node", Some("value"))
 
-    var result = Option.empty[ZKNodeMeta]
-
-    zk.async.meta("node") {
-      case NodeMeta(_, meta) => result = Some(meta)
-    }
-
-    eventually { result should not be (None) }
+    val result = zk.async.meta("node")
+    result.futureValue should not be (None)
   }
 
 
-  it should "return Some(value) if node exists asynchronously" in new Env {
+  it should "return Some(value) if node exists" in new Env {
     zk.create("node", Some("value"))
 
-    var result = Option.empty[String]
-
-    zk.async.get("node") {
-      case Node(node) => result = Some(node.extract[String])
-    }
-
-    eventually { result should be (Some("value")) }
+    val result = zk.async.get("node")
+    result.futureValue.extract[String] should be ("value")
   }
 
 
-  it should "return None if node doesn't exist asynchronously" in new Env {
-    var result = Option.empty[Any]
-
-    zk.async.get("non-existant-node") {
-      case Node(node) => result = node.data
+  it should "return Failure[NoNode] if node doesn't exist" in new Env {
+    val result = zk.async.get("non-existant-node") recover {
+      case _: NoNodeException => true
     }
 
-    eventually { result should be (None) }
+    result.mapTo[Boolean].futureValue should be (true)
   }
 
 
   it should "get node's children asynchronously" in new Env {
-    var result = List.empty[String]
     zk.create("parent", persistent = true)
     zk.create("parent/child-a")
     zk.create("parent/child-b")
 
-    zk.async.children("parent") {
-      case NodeChildren(_, children) => result = children
-    }
-
-    eventually { result should contain only ("child-a", "child-b") }
+    val result = zk.async.children("parent")
+    result.futureValue should contain only ("child-a", "child-b")
   }
 
 
@@ -92,14 +73,8 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
 
     zk.get[String]("node") should be (Some("first value"))
 
-    var done = false
-
-    zk.async.set("node", "second value") {
-      case _: NodeMeta=> done = true
-    }
-
-    eventually { done should be (true) }
-
+    val result = zk.async.set("node", "second value")
+    result.futureValue should not be (None)
     zk.get[String]("node") should be (Some("second value"))
   }
 
@@ -107,14 +82,8 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
   it should "delete nodes asynchronously" in new Env {
     zk.create("node", Some("first value"))
 
-    var done = false
-
-    zk.async.delete("node") {
-      case _: NodeDeleted => done = true
-    }
-
-    eventually { done should be (true) }
-
+    val result = zk.async.delete("node")
+    result.isReadyWithin(3.seconds)
     zk.exists("node") should be (false)
   }
 

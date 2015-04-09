@@ -4,12 +4,15 @@ package impl
 import zooowner.message._
 
 import org.apache.zookeeper.data.Stat
+import org.apache.zookeeper.KeeperException
 import org.apache.zookeeper.KeeperException.Code
 import org.apache.zookeeper.AsyncCallback
 import org.apache.zookeeper.AsyncCallback._
 
 import java.util.{List => JavaList}
 
+import scala.util.{Try, Success, Failure}
+import scala.concurrent.Promise
 import scala.collection.JavaConversions._
 
 
@@ -17,46 +20,26 @@ import scala.collection.JavaConversions._
  * Callback class represents abstract callback for asynchronous ZooKeeper
  * operation.
  */
-private[zooowner] sealed trait ZKCallback extends AsyncCallback {
+private[zooowner] sealed trait ZKCallback extends AsyncCallback
+
+
+private[zooowner] object ZKCallback {
+  import ImplUtils._
   import Code._
 
-  def reaction: Reaction[ZKResponse]
 
-  protected val reactOn = reaction orElse Reaction.empty[ZKResponse]
-
-
-  protected def processCode(code: Int, path: String)(response: => ZKResponse) = {
-    reactOn {
-      Code.get(code) match {
-        case OK => response
-
-        case NONODE => NoNode(path)
-        case NODEEXISTS => NodeExists(path)
-        case NOTEMPTY => NotEmpty(path)
-        case NOCHILDRENFOREPHEMERALS => NodeIsEphemeral(path)
-
-        // default context-free reactions
-        case NOTREADONLY => ReadOnly
-        case BADVERSION => BadVersion
-        case CONNECTIONLOSS => Disconnected
-        case SESSIONEXPIRED => Expired
-
-        case unexpectedCode => Error(unexpectedCode)
-      }
+  def processCode[T](code: Int, path: String)(result: => T): Try[T] = {
+    Code.get(code) match {
+      case OK => Success(result)
+      case other => Failure(KeeperException.create(other, path))
     }
   }
-}
 
-
-private[zooowner] object Callbacks {
-  import ImplUtils._
 
   /**
    * Fires up on node creation.
    */
-  private[zooowner] case class OnCreated(
-      reaction: Reaction[ZKResponse],
-      data: RawZKData)
+  case class OnCreated(resultPromise: Promise[String])
     extends ZKCallback with StringCallback
   {
     def processResult(
@@ -65,11 +48,11 @@ private[zooowner] object Callbacks {
       context: Any,
       name: String) =
     {
-      processCode(code = returnCode, path = path) {
-        val wrappedData = Option(data)
-        val node = ZKNode(path, wrappedData, None)
-        NodeCreated(name, Some(node))
+      val result = processCode(code = returnCode, path = path) {
+        child(name)
       }
+
+      resultPromise.complete(result)
     }
   }
 
@@ -77,13 +60,12 @@ private[zooowner] object Callbacks {
   /**
    * Fires up on node deletion.
    */
-  private[zooowner] case class OnDeleted(reaction: Reaction[ZKResponse])
+  case class OnDeleted(resultPromise: Promise[Unit])
     extends ZKCallback with VoidCallback
   {
     def processResult(returnCode: Int, path: String, context: Any) = {
-      processCode(code = returnCode, path = path) {
-        new NodeDeleted(path)
-      }
+      val result = processCode(code = returnCode, path = path)({})
+      resultPromise.complete(result)
     }
   }
 
@@ -91,18 +73,17 @@ private[zooowner] object Callbacks {
   /**
    * Fires up on node stat retreival.
    */
-  private[zooowner] case class OnStat(reaction: Reaction[ZKResponse])
+  case class OnStat(resultPromise: Promise[ZKNodeMeta])
     extends ZKCallback with StatCallback
   {
     def processResult(
       returnCode: Int,
       path: String,
       context: Any,
-      stat: Stat) =
+      stat: Stat): Unit =
     {
-      processCode(code = returnCode, path = path) {
-        NodeMeta(path, stat.toMeta)
-      }
+      val result = processCode(code = returnCode, path = path)(stat.toMeta)
+      resultPromise.complete(result)
     }
   }
 
@@ -110,7 +91,7 @@ private[zooowner] object Callbacks {
   /**
    * Fires up on node value retrieval.
    */
-  private[zooowner] case class OnData(reaction: Reaction[ZKResponse])
+  case class OnData(resultPromise: Promise[ZKNode])
     extends ZKCallback with DataCallback
   {
     def processResult(
@@ -120,13 +101,14 @@ private[zooowner] object Callbacks {
       data: RawZKData,
       stat: Stat): Unit =
     {
-      processCode(code = returnCode, path = path) {
+      val result = processCode(code = returnCode, path = path) {
         // wrap in option to guard from null
         val wrappedData = Option(data)
         val meta = Some(stat.toMeta)
-        val node = ZKNode(path, wrappedData, meta)
-        Node(node)
+        ZKNode(path, wrappedData, meta)
       }
+
+      resultPromise.complete(result)
     }
   }
 
@@ -134,7 +116,7 @@ private[zooowner] object Callbacks {
   /**
    * Fire up on node's children retreival.
    */
-  private[zooowner] case class OnChildren(reaction: Reaction[ZKResponse])
+  case class OnChildren(resultPromise: Promise[Seq[String]])
     extends ZKCallback with Children2Callback
   {
     def processResult(
@@ -144,9 +126,11 @@ private[zooowner] object Callbacks {
       children: JavaList[String],
       stat: Stat) =
     {
-      processCode(code = returnCode, path = path) {
-        NodeChildren(path, children.toList)
+      val result = processCode(code = returnCode, path = path) {
+        children.toSeq
       }
+
+      resultPromise.complete(result)
     }
   }
 }

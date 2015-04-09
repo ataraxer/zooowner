@@ -104,9 +104,8 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      * @param sequential Specifies whether created node should be sequential.
      */
     case CreateNode(path, data, persistent, sequential) => {
-      zk.async.create[RawZKData](path, data, persistent, sequential) {
-        passTo(sender)
-      }
+      val result = zk.async.create[RawZKData](path, data, persistent, sequential)
+      result.map( name => NodeCreated(name, None) ) pipeTo sender
     }
 
     /*
@@ -116,9 +115,8 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      * @param version Provides version to be checked against before deletion.
      */
     case DeleteNode(path, version) => {
-      zk.async.delete(path, version = version) {
-        passTo(sender)
-      }
+      val result = zk.async.delete(path, version = version)
+      result.map( _ => NodeDeleted(path) ) pipeTo sender
     }
 
     /*
@@ -128,7 +126,8 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      * @param data New value of the node.
      */
     case SetNodeValue(path, data, version) => {
-      zk.async.set(path, data, version) { passTo(sender) }
+      val result = zk.async.set(path, data, version)
+      result.map( meta => NodeMeta(path, meta) ) pipeTo sender
     }
 
     /*
@@ -137,7 +136,8 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      * @param path Path of the node which value is requested.
      */
     case GetNodeValue(path) => {
-      zk.async.get(path) { passTo(sender) }
+      val result = zk.async.get(path)
+      result.map( node => Node(path, node) ) pipeTo sender
     }
 
     /*
@@ -146,7 +146,8 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      * @param path Path of the node which children are requested.
      */
     case GetNodeChildren(path) => {
-      zk.async.children(path) { passTo(sender) }
+      val result = zk.async.children(path)
+      result.map( children => NodeChildren(path, children) ) pipeTo sender
     }
 
     /*
