@@ -19,7 +19,8 @@ val commonSettings = Seq(
 
 val dependencies = Seq(
   libraryDependencies ++= Seq(
-    "org.scalatest" %% "scalatest" % "2.2.0" % "test",
+    "org.parboiled" %% "parboiled" % "2.1.0",
+    "org.scalatest" %% "scalatest" % "2.2.1" % "test",
     "org.apache.zookeeper" % "zookeeper" % "3.4.6" excludeAll (
       ExclusionRule(organization = "com.sun.jdmk"),
       ExclusionRule(organization = "com.sun.jmx"),
