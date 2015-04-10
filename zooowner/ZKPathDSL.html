@@ -51,18 +51,19 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides utilities for constructing and pattern matching [ZKPath]s.</p><p>You can either extend class where you intend to use path DSL to
-make it available only inside that class or use global import
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides utilities for constructing and pattern matching <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a>s.</p><p>You can either extend class where you intend to use path DSL to
+make it available only inside that class or use global import:
 <code>import zooowner.ZKPathDSL._</code></p><p>After enabling path DSL you can:</p><p>Construct paths:</p><pre><span class="cmt">// $ is an alias for path root.</span>
 <span class="kw">val</span> path = $ / <span class="lit">"foo"</span> / <span class="lit">"bar"</span></pre><p>Deconstruct paths:</p><pre>ZKPath(<span class="lit">"/foo/bar"</span>) <span class="kw">match</span> {
- <span class="cmt">// parent = ZKPath("/foo"), child = "bar"</span>
- <span class="kw">case</span> parent/child <span class="kw">=&gt;</span>
- <span class="cmt">// foo = "foo", bar = "bar"</span>
- <span class="kw">case</span> $ /foo/bar <span class="kw">=&gt;</span>
- <span class="cmt">// foo = "foo", rest = ZKPath("/bar")</span>
- <span class="kw">case</span> foo/:rest <span class="kw">=&gt;</span>
- <span class="cmt">// foo = "foo", bar = "bar"</span>
- <span class="kw">case</span> foo/:bar/: $ <span class="kw">=&gt;</span></pre><p>You can also match strings:</p><pre><span class="kw">val</span> $ /foo/bar = <span class="lit">"/foo/bar"</span></pre></div><div class="toggleContainer block">
+  <span class="cmt">// parent = ZKPath("/foo"), child = "bar"</span>
+  <span class="kw">case</span> parent/child <span class="kw">=&gt;</span>
+  <span class="cmt">// foo = "foo", bar = "bar"</span>
+  <span class="kw">case</span> $ /foo/bar <span class="kw">=&gt;</span>
+  <span class="cmt">// foo = "foo", rest = ZKPath("/bar")</span>
+  <span class="kw">case</span> foo/:rest <span class="kw">=&gt;</span>
+  <span class="cmt">// foo = "foo", bar = "bar"</span>
+  <span class="kw">case</span> foo/:bar/: $ <span class="kw">=&gt;</span>
+}</pre><p>You can also match strings:</p><pre><span class="kw">val</span> $ /foo/bar = <span class="lit">"/foo/bar"</span></pre></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
