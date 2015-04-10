@@ -51,7 +51,18 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides utilities for constructing and pattern matching [ZKPath]s.</p><p>You can either extend class where you intend to use path DSL to
+make it available only inside that class or use global import
+<code>import zooowner.ZKPathDSL._</code></p><p>After enabling path DSL you can:</p><p>Construct paths:</p><pre><span class="cmt">// $ is an alias for path root.</span>
+<span class="kw">val</span> path = $ / <span class="lit">"foo"</span> / <span class="lit">"bar"</span></pre><p>Deconstruct paths:</p><pre>ZKPath(<span class="lit">"/foo/bar"</span>) <span class="kw">match</span> {
+ <span class="cmt">// parent = ZKPath("/foo"), child = "bar"</span>
+ <span class="kw">case</span> parent/child <span class="kw">=&gt;</span>
+ <span class="cmt">// foo = "foo", bar = "bar"</span>
+ <span class="kw">case</span> $ /foo/bar <span class="kw">=&gt;</span>
+ <span class="cmt">// foo = "foo", rest = ZKPath("/bar")</span>
+ <span class="kw">case</span> foo/:rest <span class="kw">=&gt;</span>
+ <span class="cmt">// foo = "foo", bar = "bar"</span>
+ <span class="kw">case</span> foo/:bar/: $ <span class="kw">=&gt;</span></pre><p>You can also match strings:</p><pre><span class="kw">val</span> $ /foo/bar = <span class="lit">"/foo/bar"</span></pre></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -96,7 +107,24 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="zooowner.ZKPathDSL.SlashSeparatedPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="zooowner.ZKPathDSL.InvalidPathException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InvalidPathException=zooowner.ZKPath.InvalidPathException"></a>
+      <a id="InvalidPathException:InvalidPathException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">InvalidPathException</span><span class="result"> = <a href="ZKPath$$InvalidPathException.html" class="extype" name="zooowner.ZKPath.InvalidPathException">ZKPath.InvalidPathException</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.ZKPathDSL@InvalidPathException=zooowner.ZKPath.InvalidPathException" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.ZKPathDSL.SlashSeparatedPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SlashSeparatedPathextendsAnyRef"></a>
       <a id="SlashSeparatedPath:SlashSeparatedPath"></a>
       <h4 class="signature">
@@ -154,6 +182,57 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="zooowner.ZKPathDSL#$" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="$:zooowner.ZKPath"></a>
+      <a id="$:ZKPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">$</span><span class="result">: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.ZKPathDSL@$:zooowner.ZKPath" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.ZKPathDSL./" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="/"></a>
+      <a id="/:/"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ZKPathDSL$$div$.html"><span title="gt4s: $div" class="name">/</span></a><span class="result"> extends <span class="extype" name="zooowner.impl.PathSuffixMatcher">PathSuffixMatcher</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.ZKPathDSL@/" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.ZKPathDSL./:" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="/:"></a>
+      <a id="/::/:"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ZKPathDSL$$div$colon$.html"><span title="gt4s: $div$colon" class="name">/:</span></a><span class="result"> extends <span class="extype" name="zooowner.impl.PathPrefixMatcher">PathPrefixMatcher</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.ZKPathDSL@/:" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>

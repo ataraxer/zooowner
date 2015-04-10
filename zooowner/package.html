@@ -565,7 +565,26 @@
       </a>
     </span>
       
-    </li><li name="zooowner.ZKPathDSL" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="zooowner.ZKPath" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ZKPathextendsAnyRef"></a>
+      <a id="ZKPath:ZKPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ZKPath.html"><span class="name">ZKPath</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.package@ZKPathextendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents ZooKeeper path.</p><div class="fullcomment"><div class="comment cmt"><p>Represents ZooKeeper path.</p><pre><span class="kw">val</span> path = ZKPath(<span class="lit">"/foo/bar"</span>)
+<span class="kw">val</span> subpath = path / <span class="lit">"baz"</span>
+subpath.asString == <span class="lit">"/foo/bar/baz"</span></pre></div></div>
+    </li><li name="zooowner.ZKPathDSL" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ZKPathDSLextendsAnyRef"></a>
       <a id="ZKPathDSL:ZKPathDSL"></a>
       <h4 class="signature">
@@ -581,7 +600,18 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Provides utilities for constructing and pattern matching [ZKPath]s.</p><div class="fullcomment"><div class="comment cmt"><p>Provides utilities for constructing and pattern matching [ZKPath]s.</p><p>You can either extend class where you intend to use path DSL to
+make it available only inside that class or use global import
+<code>import zooowner.ZKPathDSL._</code></p><p>After enabling path DSL you can:</p><p>Construct paths:</p><pre><span class="cmt">// $ is an alias for path root.</span>
+<span class="kw">val</span> path = $ / <span class="lit">"foo"</span> / <span class="lit">"bar"</span></pre><p>Deconstruct paths:</p><pre>ZKPath(<span class="lit">"/foo/bar"</span>) <span class="kw">match</span> {
+ <span class="cmt">// parent = ZKPath("/foo"), child = "bar"</span>
+ <span class="kw">case</span> parent/child <span class="kw">=&gt;</span>
+ <span class="cmt">// foo = "foo", bar = "bar"</span>
+ <span class="kw">case</span> $ /foo/bar <span class="kw">=&gt;</span>
+ <span class="cmt">// foo = "foo", rest = ZKPath("/bar")</span>
+ <span class="kw">case</span> foo/:rest <span class="kw">=&gt;</span>
+ <span class="cmt">// foo = "foo", bar = "bar"</span>
+ <span class="kw">case</span> foo/:bar/: $ <span class="kw">=&gt;</span></pre><p>You can also match strings:</p><pre><span class="kw">val</span> $ /foo/bar = <span class="lit">"/foo/bar"</span></pre></div></div>
     </li><li name="zooowner.ZKSerializer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ZKSerializerextendsAnyRef"></a>
       <a id="ZKSerializer:ZKSerializer"></a>
@@ -844,7 +874,24 @@
       </a>
     </span>
       
-    </li><li name="zooowner.ZKPathDSL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="zooowner.ZKPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ZKPath"></a>
+      <a id="ZKPath:ZKPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ZKPath$.html"><span class="name">ZKPath</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.package@ZKPath" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.ZKPathDSL" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ZKPathDSL"></a>
       <a id="ZKPathDSL:ZKPathDSL"></a>
       <h4 class="signature">
@@ -860,7 +907,8 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Used to enable path DSL:</p><div class="fullcomment"><div class="comment cmt"><p>Used to enable path DSL:</p><pre><span class="kw">import</span> zooowner.ZKPathDSL._</pre><p>Refer to <code>ZKPathDSL</code> trait for DSL description.
+</p></div></div>
     </li><li name="zooowner.ZKStateWatcher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ZKStateWatcher"></a>
       <a id="ZKStateWatcher:ZKStateWatcher"></a>
