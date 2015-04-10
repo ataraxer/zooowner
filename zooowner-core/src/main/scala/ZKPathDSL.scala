@@ -70,7 +70,7 @@ object ZKPath {
   }
 
   /**
-   * Creates new [ZKPath] from string.
+   * Creates new [[ZKPath]] from string.
    * @throws InvalidPathException
    */
   def apply(input: String): ZKPath = parse(input)
@@ -86,7 +86,7 @@ object ZKPath {
   def unapply(input: String): Option[Components] = unapply(ZKPath(input))
 
   /**
-   * Creates new [ZKPath] from string.
+   * Creates new [[ZKPath]] from string.
    * @throws InvalidPathException
    */
   def parse(input: String) = impl.ZKPath.parse(input)
@@ -121,10 +121,10 @@ object ZKPathDSL extends ZKPathDSL
 
 
 /**
- * Provides utilities for constructing and pattern matching [ZKPath]s.
+ * Provides utilities for constructing and pattern matching [[ZKPath]]s.
  *
  * You can either extend class where you intend to use path DSL to
- * make it available only inside that class or use global import
+ * make it available only inside that class or use global import:
  * `import zooowner.ZKPathDSL._`
  *
  * After enabling path DSL you can:
@@ -138,14 +138,15 @@ object ZKPathDSL extends ZKPathDSL
  * Deconstruct paths:
  * {{{
  * ZKPath("/foo/bar") match {
- *  // parent = ZKPath("/foo"), child = "bar"
- *  case parent/child =>
- *  // foo = "foo", bar = "bar"
- *  case $ /foo/bar =>
- *  // foo = "foo", rest = ZKPath("/bar")
- *  case foo/:rest =>
- *  // foo = "foo", bar = "bar"
- *  case foo/:bar/: $ =>
+ *   // parent = ZKPath("/foo"), child = "bar"
+ *   case parent/child =>
+ *   // foo = "foo", bar = "bar"
+ *   case $ /foo/bar =>
+ *   // foo = "foo", rest = ZKPath("/bar")
+ *   case foo/:rest =>
+ *   // foo = "foo", bar = "bar"
+ *   case foo/:bar/: $ =>
+ * }
  * }}}
  *
  * You can also match strings:
