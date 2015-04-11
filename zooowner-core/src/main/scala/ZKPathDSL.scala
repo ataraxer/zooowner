@@ -160,7 +160,7 @@ object ZKPathDSL extends ZKPathDSL
  *   // true
  *   case zk"/foo/bar" =>
  *   // foo = "foo", bar = "bar"
- *   case zk"/$foo/$bar" =>
+ *   case zk"/\$foo/\$bar" =>
  * }
  * }}}
  *
