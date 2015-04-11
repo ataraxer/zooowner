@@ -11,6 +11,9 @@ import scala.util.Try
  * val subpath = path / "baz"
  * subpath.asString == "/foo/bar/baz"
  * }}}
+ *
+ * It is guaranteed, that ZooKeeper path generated via [ZKPath]
+ * is going to be valid.
  */
 trait ZKPath {
   /**
@@ -141,17 +144,17 @@ object ZKPathDSL extends ZKPathDSL
  *   // parent = ZKPath("/foo"), child = "bar"
  *   case parent/child =>
  *   // foo = "foo", bar = "bar"
- *   case $ /foo/bar =>
+ *   case $/foo/bar =>
  *   // foo = "foo", rest = ZKPath("/bar")
  *   case foo/:rest =>
  *   // foo = "foo", bar = "bar"
- *   case foo/:bar/: $ =>
+ *   case foo/:bar/:$ =>
  * }
  * }}}
  *
  * You can also match strings:
  * {{{
- * val $ /foo/bar = "/foo/bar"
+ * val $/foo/bar = "/foo/bar"
  * }}}
  */
 trait ZKPathDSL {

@@ -40,9 +40,6 @@ private[zooowner] trait PathPrefixMatcher {
 
 
 private[zooowner] object ZKPath {
-  val readComponents = ZKPathImpl.apply _
-
-
   def isComponentValid(component: String) = {
     val noSlash = !(component contains '/')
 
@@ -60,7 +57,7 @@ private[zooowner] object ZKPath {
   }
 
 
-  def parse(input: String) = {
+  def parse(input: String): ZKPath = {
     val parser = new ZKPathParser(input)
     val result = parser.Path.run()
 
@@ -101,13 +98,20 @@ private[zooowner] case class ZKPathImpl(components: Seq[String])
 private[zooowner] class ZKPathParser(val input: ParserInput) extends Parser {
   import CharPredicate._
 
-  def Path = rule { (ComponentList | Root) ~ EOI ~> ZKPath.readComponents }
+  val ForbiddenToken = Set("zookeeper", ".", "..")
+
+  def Check(token: String) = rule {
+    test(!ForbiddenToken.contains(token)) ~ push(token)
+  }
+
+  def Path = rule { (ComponentList | Root) ~ EOI ~> ZKPathImpl }
+
   def ComponentList = rule { Component + }
   def Component = rule { Slash ~ Token }
 
-  def Token = rule { !ForbiddenToken ~ capture(TokenValue) ~> ( _.toString ) }
-  def TokenValue = rule { !Slash ~ Printable + }
-  def ForbiddenToken = rule { "zookeeper" | "." | ".." }
+  def Token = rule { capture(TokenValue) ~> Check _ }
+  def TokenValue = rule { TokenChar + }
+  def TokenChar = rule { !Slash ~ Printable }
 
   def Slash = rule { '/' }
   def Root = rule { capture(Slash) ~> ( _ => Nil ) }

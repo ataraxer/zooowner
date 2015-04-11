@@ -63,23 +63,48 @@ class ZKPathDSLSpec extends UnitSpec {
       "/foo/.",
       "/foo/..")
 
-    invalidPaths.foreach(isInvalid)
+    invalidPaths foreach isInvalid
+
+    val validPaths = List(
+      "/.test",
+      "/..test",
+      "/...",
+      "/._.",
+      "/foo.bar.",
+      "/-zookeeper-")
+
+    validPaths foreach ZKPath.apply
   }
 
 
   it should "vaildate components on creation" in {
-    def isInvalid(code: => Unit) = {
-      intercept[IllegalArgumentException] { code }
+    def isInvalid(components: Seq[String]) = {
+      intercept[IllegalArgumentException] { ZKPath(components: _*) }
     }
 
-    isInvalid { ZKPath("foo", "zookeeper") }
-    isInvalid { ZKPath("foo", ".") }
-    isInvalid { ZKPath("foo", "..") }
-    isInvalid { ZKPath("foo", "/") }
-    isInvalid { ZKPath("foo", "//") }
-    isInvalid { ZKPath("foo", "/foo") }
-    isInvalid { ZKPath("foo", "foo/") }
-    isInvalid { ZKPath("foo", "foo/bar") }
+    val invalidComponents = List(
+      Seq("foo", "zookeeper"),
+      Seq("foo", "."),
+      Seq("foo", ".."),
+      Seq("foo", "/"),
+      Seq("foo", "//"),
+      Seq("foo", "/foo"),
+      Seq("foo", "foo/"),
+      Seq("foo", "foo/bar"))
+
+    invalidComponents foreach isInvalid
+
+    val validComponents = List(
+      Seq("foo", ".test"),
+      Seq("foo", "..test"),
+      Seq("foo", "..."),
+      Seq("foo", "._."),
+      Seq("foo", "foo.bar."),
+      Seq("foo", "-zookeeper-"))
+
+    validComponents foreach { components =>
+      ZKPath(components: _*)
+    }
   }
 
 
@@ -121,7 +146,7 @@ class ZKPathDSLSpec extends UnitSpec {
 
   "ZKPathDSL" should "be pretty damn awesome" in {
     val path = $ / "foo" / "bar"
-    val $ /foo/bar = path
+    val $/foo/bar = path
     foo should be ("foo")
     bar should be ("bar")
   }
@@ -144,7 +169,7 @@ class ZKPathDSLSpec extends UnitSpec {
 
   it should "match complete path via suffixes" in {
     val path = $ / "foo" / "bar" / "baz"
-    val $ /"foo"/bar/baz = path
+    val $/"foo"/bar/baz = path
 
     bar should be ("bar")
     baz should be ("baz")
@@ -161,8 +186,8 @@ class ZKPathDSLSpec extends UnitSpec {
 
 
   it should "match complete path via prefixes" in {
-    val path = $ / "foo" / "bar" / "baz"
-    val foo/:bar/:"baz"/: $ = path
+    val path = $/ "foo" / "bar" / "baz"
+    val foo/:bar/:"baz"/:$ = path
 
     foo should be ("foo")
     bar should be ("bar")
@@ -170,7 +195,7 @@ class ZKPathDSLSpec extends UnitSpec {
 
 
   it should "match valid path strings" in {
-    val $ /foo/bar = "/foo/bar"
+    val $/foo/bar = "/foo/bar"
 
     foo should be ("foo")
     bar should be ("bar")
