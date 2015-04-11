@@ -3,6 +3,8 @@ import org.apache.zookeeper.{KeeperException => KE}
 
 import zooowner.message.ZKConnectionEvent
 
+import scala.language.implicitConversions
+
 
 package object zooowner {
   type ZKClient = org.apache.zookeeper.ZooKeeper
@@ -18,6 +20,8 @@ package object zooowner {
 
   val AnyVersion = -1
   val AnyACL = Ids.OPEN_ACL_UNSAFE
+
+  implicit def stringToPath(path: String): ZKPath = ZKPath(path)
 
   /* === Exceptions === */
   type APIErrorException = KE.APIErrorException

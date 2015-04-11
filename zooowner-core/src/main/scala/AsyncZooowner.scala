@@ -10,45 +10,45 @@ trait AsyncZooowner {
    * Asynchronous version of `stat`.
    */
   def meta(
-    path: String,
+    path: ZKPath,
     watcher: Option[ZKEventWatcher] = None): Future[ZKNodeMeta]
 
   /**
    * Asynchronous version of [[Zooowner.create]].
    */
   def create[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,
-    sequential: Boolean = false): Future[String]
+    sequential: Boolean = false): Future[ZKPath]
 
   /**
    * Asynchronous version of [[Zooowner.delete]].
    */
   def delete(
-    path: String,
+    path: ZKPath,
     version: Int = AnyVersion): Future[Unit]
 
   /**
    * Asynchronous version of [[Zooowner.set]].
    */
   def set[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T, version: Int = AnyVersion): Future[ZKNodeMeta]
 
   /**
    * Asynchronous version of [[Zooowner.get]].
    */
   def get(
-    path: String,
+    path: ZKPath,
     watcher: Option[ZKEventWatcher] = None): Future[ZKNode]
 
   /**
    * Asynchronous version of [[Zooowner.children]].
    */
   def children(
-    path: String,
-    watcher: Option[ZKEventWatcher] = None): Future[Seq[String]]
+    path: ZKPath,
+    watcher: Option[ZKEventWatcher] = None): Future[Seq[ZKPath]]
 }
 
 

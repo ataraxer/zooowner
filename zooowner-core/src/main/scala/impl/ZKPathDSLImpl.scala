@@ -8,6 +8,8 @@ import org.parboiled2._
 import scala.util.{Failure, Success}
 import scala.language.postfixOps
 
+import java.util.regex.Pattern
+
 
 private[zooowner] trait PathSuffixMatcher {
   private type Match = Option[(ZKPath, String)]
@@ -39,7 +41,24 @@ private[zooowner] trait PathPrefixMatcher {
 }
 
 
-private[zooowner] object ZKPath {
+private[zooowner] abstract class ZKStringInterpolator(context: StringContext) {
+  // `s` stands for default Scala string interpolation
+  def apply(args: Any*) = ZKPath(context.s(args: _*))
+
+
+  def unapplySeq(path: ZKPath) = {
+    val pseudoPath = ZKPath(context.parts.mkString("match"))
+
+    if (pseudoPath.depth != path.depth) None else {
+      val quotedParts = context.parts map Pattern.quote
+      val regex = quotedParts.mkString("(.+)").r
+      regex.unapplySeq(path.asString)
+    }
+  }
+}
+
+
+private[zooowner] object ZKPathUtils {
   def isComponentValid(component: String) = {
     val noSlash = !(component contains '/')
 
@@ -76,7 +95,7 @@ private[zooowner] case class ZKPathImpl(components: Seq[String])
   extends ZKPath
 {
   def / (child: String) = {
-    ZKPath.validateComponent(child)
+    ZKPathUtils.validateComponent(child)
     this.copy(components :+ child)
   }
 

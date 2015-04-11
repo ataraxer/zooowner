@@ -1,6 +1,8 @@
 package zooowner
 
+import java.util.regex.Pattern
 import scala.util.Try
+import scala.language.implicitConversions
 
 
 /**
@@ -53,6 +55,12 @@ trait ZKPath {
    */
   def components: Seq[String]
 
+  /**
+   * Amount of components in a path.
+   * Root depth is zero.
+   */
+  def depth = components.size
+
   // Used internally for prefix pattern matching
   private[zooowner] def tail: ZKPath
   private[zooowner] def head: String
@@ -67,8 +75,7 @@ object ZKPath {
    * @throws InvalidPathException
    */
   def apply(components: String*): ZKPath = {
-    components.foreach(impl.ZKPath.validateComponent)
-    val path = components.mkString("/", "/", "")
+    components.foreach(impl.ZKPathUtils.validateComponent)
     new impl.ZKPathImpl(components)
   }
 
@@ -92,7 +99,7 @@ object ZKPath {
    * Creates new [[ZKPath]] from string.
    * @throws InvalidPathException
    */
-  def parse(input: String) = impl.ZKPath.parse(input)
+  def parse(input: String) = impl.ZKPathUtils.parse(input)
 
   /**
    * Thrown on any error during path parsing.
@@ -132,10 +139,11 @@ object ZKPathDSL extends ZKPathDSL
  *
  * After enabling path DSL you can:
  *
- * Construct paths:
+ * Construct and parse paths:
  * {{{
- * // $ is an alias for path root.
+ * // $ is an alias for root path:
  * val path = $ / "foo" / "bar"
+ * val path = zk"/foo/bar"
  * }}}
  *
  * Deconstruct paths:
@@ -149,25 +157,34 @@ object ZKPathDSL extends ZKPathDSL
  *   case foo/:rest =>
  *   // foo = "foo", bar = "bar"
  *   case foo/:bar/:$ =>
+ *   // true
+ *   case zk"/foo/bar" =>
+ *   // foo = "foo", bar = "bar"
+ *   case zk"/$foo/$bar" =>
  * }
  * }}}
  *
- * You can also match strings:
+ * You can also match strings, if they contain valid ZooKeeper paths:
  * {{{
  * val $/foo/bar = "/foo/bar"
  * }}}
  */
 trait ZKPathDSL {
-  implicit class SlashSeparatedPath(path: String) {
-    def / (subpath: String) = path + "/" + subpath
-  }
-
   object / extends impl.PathSuffixMatcher
   object /: extends impl.PathPrefixMatcher
 
+  /**
+   * An alias for [[ZKPath.Root]] for convinience in pattern matching.
+   */
   val $ = ZKPath.Root
 
   type InvalidPathException = ZKPath.InvalidPathException
+
+  implicit def pathToString(path: ZKPath): String = path.asString
+
+  implicit class ZKStringContext(context: StringContext) {
+    object zk extends impl.ZKStringInterpolator(context)
+  }
 }
 
 

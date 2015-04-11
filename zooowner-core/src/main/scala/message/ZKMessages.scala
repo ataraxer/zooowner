@@ -24,25 +24,25 @@ case object Expired extends ZKConnectionEvent with ZKFailure
 case object ReadOnly extends ZKFailure
 case object BadVersion extends ZKFailure
 
-case class NodeMeta(path: String, meta: ZKNodeMeta) extends ZKSuccess
-case class Node(path: String, node: ZKNode) extends ZKSuccess
-case class NodeChildren(path: String, children: Seq[String]) extends ZKSuccess
+case class NodeMeta(path: ZKPath, meta: ZKNodeMeta) extends ZKSuccess
+case class Node(path: ZKPath, node: ZKNode) extends ZKSuccess
+case class NodeChildren(path: ZKPath, children: Seq[ZKPath]) extends ZKSuccess
 
-case class NodeCreated(path: String, node: Option[ZKNode]) extends ZKEvent
-case class NodeChanged(path: String, data: Option[ZKNode]) extends ZKEvent
-case class NodeChildrenChanged(path: String, children: Seq[String]) extends ZKEvent
-case class NodeDeleted(path: String) extends ZKEvent
+case class NodeCreated(path: ZKPath, node: Option[ZKNode]) extends ZKEvent
+case class NodeChanged(path: ZKPath, data: Option[ZKNode]) extends ZKEvent
+case class NodeChildrenChanged(path: ZKPath, children: Seq[ZKPath]) extends ZKEvent
+case class NodeDeleted(path: ZKPath) extends ZKEvent
 
-case class NoNode(path: String) extends ZKFailure
-case class NotEmpty(path: String) extends ZKFailure
-case class NodeExists(path: String) extends ZKFailure
-case class NodeIsEphemeral(path: String) extends ZKFailure
+case class NoNode(path: ZKPath) extends ZKFailure
+case class NotEmpty(path: ZKPath) extends ZKFailure
+case class NodeExists(path: ZKPath) extends ZKFailure
+case class NodeIsEphemeral(path: ZKPath) extends ZKFailure
 case class Error(code: Code) extends ZKFailure
 
 
 object CreateNode {
   def apply[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,
     sequential: Boolean = false): CreateNode =
@@ -53,7 +53,7 @@ object CreateNode {
 }
 
 case class CreateNode(
-    path: String,
+    path: ZKPath,
     data: RawZKData,
     persistent: Boolean,
     sequential: Boolean)
@@ -62,7 +62,7 @@ case class CreateNode(
 
 object SetNodeValue {
   def apply[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T,
     version: Int = AnyVersion): SetNodeValue =
   {
@@ -72,20 +72,20 @@ object SetNodeValue {
 }
 
 case class SetNodeValue(
-    path: String,
+    path: ZKPath,
     data: RawZKData,
     version: Int)
   extends ZKRequest
 
 
 case class DeleteNode(
-    path: String,
+    path: ZKPath,
     version: Int = AnyVersion)
   extends ZKRequest
 
-case class GetNodeValue(path: String) extends ZKRequest
-case class GetNodeChildren(path: String) extends ZKRequest
-case class WatchNode(path: String, persistent: Boolean = true) extends ZKRequest
+case class GetNodeValue(path: ZKPath) extends ZKRequest
+case class GetNodeChildren(path: ZKPath) extends ZKRequest
+case class WatchNode(path: ZKPath, persistent: Boolean = true) extends ZKRequest
 
 
 // vim: set ts=2 sw=2 et:

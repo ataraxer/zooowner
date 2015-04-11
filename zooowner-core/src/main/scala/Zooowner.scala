@@ -53,10 +53,10 @@ trait Zooowner {
    * @param sequential Specifies whether created node should be sequential.
    */
   def create[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,
-    sequential: Boolean = false): String
+    sequential: Boolean = false): ZKPath
 
   /**
    * Creates a new node under existing persistent one and returns it's name.
@@ -68,26 +68,25 @@ trait Zooowner {
    * @param sequential Specifies whether created node should be sequential.
    */
   def createChild[T: ZKEncoder](
-    path: String,
-    child: String,
+    path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,
-    sequential: Boolean = false): String
+    sequential: Boolean = false): ZKPath
 
   /**
    * Creates persistent path, creating each missing node with null value.
    */
-  def createPath(path: String): Unit
+  def createPath(path: ZKPath): Unit
 
   /**
    * Gets node state and optionally sets watcher.
    */
-  def meta(path: String, watcher: Option[ZKEventWatcher] = None): Option[ZKNodeMeta]
+  def meta(path: ZKPath, watcher: Option[ZKEventWatcher] = None): Option[ZKNodeMeta]
 
   /**
    * Tests whether the node exists.
    */
-  def exists(path: String, watcher: Option[ZKEventWatcher] = None) = {
+  def exists(path: ZKPath, watcher: Option[ZKEventWatcher] = None) = {
     meta(path, watcher).isDefined
   }
 
@@ -95,7 +94,7 @@ trait Zooowner {
    * Returns Some(value) of the node if exists, None otherwise.
    */
   def get[T]
-    (path: String, watcher: Option[ZKEventWatcher] = None)
+    (path: ZKPath, watcher: Option[ZKEventWatcher] = None)
     (implicit decoder: ZKDecoder[T]): Option[T] =
   {
     getNode(path) flatMap { node =>
@@ -106,7 +105,9 @@ trait Zooowner {
   /**
    * Returns Some[ZKNode] if node exists, Non otherwise.
    */
-  def getNode(path: String, watcher: Option[ZKEventWatcher] = None): Option[ZKNode]
+  def getNode(
+    path: ZKPath,
+    watcher: Option[ZKEventWatcher] = None): Option[ZKNode]
 
   /**
    * Sets a new value for the node.
@@ -117,7 +118,7 @@ trait Zooowner {
    * @param force Create node if it does not exist.
    */
   def set[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T,
     version: Int = AnyVersion): Unit
 
@@ -129,7 +130,7 @@ trait Zooowner {
    * @param persistent Specifies whether created node should be persistent.
    */
   def forceSet[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T,
     persistent: Boolean = true) =
   {
@@ -155,7 +156,7 @@ trait Zooowner {
    * @param version Version of a node to be deleted.
    */
   def delete(
-    path: String,
+    path: ZKPath,
     recursive: Boolean = false,
     version: Int = AnyVersion): Unit
 
@@ -163,31 +164,30 @@ trait Zooowner {
    * Returns list of children of the node.
    */
   def children(
-    path: String,
-    absolutePaths: Boolean = false,
-    watcher: Option[ZKEventWatcher] = None): Seq[String]
+    path: ZKPath,
+    watcher: Option[ZKEventWatcher] = None): Seq[ZKPath]
 
   /**
    * Tests whether the node is ephemeral.
    */
-  def isEphemeral(path: String): Boolean
+  def isEphemeral(path: ZKPath): Boolean
 
   /**
    * Tests whether the node is persistent.
    */
-  def isPersistent(path: String) = !isEphemeral(path)
+  def isPersistent(path: ZKPath) = !isEphemeral(path)
 
   /**
    * Sets up a callback for node events.
    */
   def watch
-    (path: String, persistent: Boolean = true)
+    (path: ZKPath, persistent: Boolean = true)
     (reaction: Reaction[ZKEvent]): ZKEventWatcher
 
   /**
    * Sets up a watcher on node events.
    */
-  def watch(path: String, watcher: ZKEventWatcher): ZKEventWatcher
+  def watch(path: ZKPath, watcher: ZKEventWatcher): ZKEventWatcher
 }
 
 

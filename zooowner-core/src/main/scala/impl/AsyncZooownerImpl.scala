@@ -16,102 +16,64 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
 
 
   def meta(
-    path: String,
+    path: ZKPath,
     watcher: Option[ZKEventWatcher] = None): Future[ZKNodeMeta] =
   {
     val result = Promise[ZKNodeMeta]()
-
-    client.exists(
-      resolvePath(path),
-      watcher.orNull,
-      OnStat(result),
-      null)
-
+    client.exists(path, watcher.orNull, OnStat(result), null)
     result.future
   }
 
 
   def create[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,
-    sequential: Boolean = false): Future[String] =
+    sequential: Boolean = false): Future[ZKPath] =
   {
-    val result = Promise[String]()
+    val result = Promise[ZKPath]()
     val data = encode(value).orNull
-
-    client.create(
-      resolvePath(path),
-      data,
-      AnyACL,
-      createMode(persistent, sequential),
-      OnCreated(result),
-      null)
-
+    val mode = createMode(persistent, sequential)
+    client.create(path, data, AnyACL, mode, OnCreated(result), null)
     result.future
   }
 
 
-  def delete(path: String, version: Int = AnyVersion): Future[Unit] = {
+  def delete(path: ZKPath, version: Int = AnyVersion): Future[Unit] = {
     val result = Promise[Unit]()
-
-    client.delete(
-      resolvePath(path),
-      version,
-      OnDeleted(result),
-      null)
-
+    client.delete(path, version, OnDeleted(result), null)
     result.future
   }
 
 
   def set[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T,
     version: Int = AnyVersion): Future[ZKNodeMeta] =
   {
     val result = Promise[ZKNodeMeta]()
     val data = encode(value).orNull
-
-    client.setData(
-      resolvePath(path),
-      data,
-      version,
-      OnStat(result),
-      null)
-
+    client.setData(path, data, version, OnStat(result), null)
     result.future
   }
 
 
   def get(
-    path: String,
+    path: ZKPath,
     watcher: Option[ZKEventWatcher] = None): Future[ZKNode] =
   {
     val result = Promise[ZKNode]()
-
-    client.getData(
-      resolvePath(path),
-      watcher.orNull,
-      OnData(result),
-      null)
-
+    client.getData(path, watcher.orNull, OnData(result), null)
     result.future
   }
 
 
   def children(
-    path: String,
-    watcher: Option[ZKEventWatcher] = None): Future[Seq[String]] =
+    path: ZKPath,
+    watcher: Option[ZKEventWatcher] = None): Future[Seq[ZKPath]] =
   {
-    val result = Promise[Seq[String]]()
-
-    client.getChildren(
-      resolvePath(path),
-      watcher.orNull,
-      OnChildren(result),
-      null)
-
+    val result = Promise[Seq[ZKPath]]()
+    client.getChildren(path, watcher.orNull, OnChildren(result), null)
     result.future
   }
 }

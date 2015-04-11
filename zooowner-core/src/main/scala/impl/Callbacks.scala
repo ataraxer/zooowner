@@ -39,7 +39,7 @@ private[zooowner] object ZKCallback {
   /**
    * Fires up on node creation.
    */
-  case class OnCreated(resultPromise: Promise[String])
+  case class OnCreated(resultPromise: Promise[ZKPath])
     extends ZKCallback with StringCallback
   {
     def processResult(
@@ -48,10 +48,7 @@ private[zooowner] object ZKCallback {
       context: Any,
       name: String) =
     {
-      val result = processCode(code = returnCode, path = path) {
-        child(name)
-      }
-
+      val result = processCode(code = returnCode, path = path)(ZKPath(name))
       resultPromise.complete(result)
     }
   }
@@ -116,7 +113,7 @@ private[zooowner] object ZKCallback {
   /**
    * Fire up on node's children retreival.
    */
-  case class OnChildren(resultPromise: Promise[Seq[String]])
+  case class OnChildren(resultPromise: Promise[Seq[ZKPath]])
     extends ZKCallback with Children2Callback
   {
     def processResult(
@@ -127,7 +124,7 @@ private[zooowner] object ZKCallback {
       stat: Stat) =
     {
       val result = processCode(code = returnCode, path = path) {
-        children.toSeq
+        children.toSeq map { child => ZKPath(path) / child }
       }
 
       resultPromise.complete(result)

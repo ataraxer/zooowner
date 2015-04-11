@@ -7,6 +7,7 @@ import akka.testkit._
 import zooowner.test.ZooownerMock
 import zooowner.mocking.ZKMock
 import zooowner.message._
+import zooowner.ZKPathDSL._
 
 import org.scalatest.concurrent.Eventually
 
@@ -80,67 +81,69 @@ class ZooownerActorSpec(_system: ActorSystem)
 
 
   "ZooownerActor" should "create nodes asynchronously" in {
-    zk ! CreateNode("foo", Some("value"))
+    zk ! CreateNode("/foo", Some("value"))
     val response = expectMsgType[NodeCreated]
-    response.path should be ("foo")
+    response.path should be (zk"/foo")
   }
 
 
   it should "delete nodes asynchronously" in {
-    zk.underlyingActor.zk.create("foo", Some("value"))
-    zk.underlyingActor.zk.exists("foo") should be (true)
+    zk.underlyingActor.zk.create("/foo", Some("value"))
+    zk.underlyingActor.zk.exists("/foo") should be (true)
 
-    zk ! DeleteNode("foo")
-    expectMsg { NodeDeleted("foo") }
+    zk ! DeleteNode("/foo")
+    expectMsg { NodeDeleted(zk"/foo") }
 
-    zk.underlyingActor.zk.exists("foo") should be (false)
+    zk.underlyingActor.zk.exists("/foo") should be (false)
   }
 
 
   it should "change values of created nodes asynchronously" in {
-    zk.underlyingActor.zk.create("foo", Some("value"))
+    zk.underlyingActor.zk.create("/foo", Some("value"))
 
     zk ! SetNodeValue("/foo", "new-value")
 
     val result = expectMsgType[NodeMeta]
-    result.path should be ("/foo")
-    zk.underlyingActor.zk.get[String]("foo") should be (Some("new-value"))
+    result.path should be (zk"/foo")
+    zk.underlyingActor.zk.get[String]("/foo") should be (Some("new-value"))
   }
 
 
   it should "get values of existing nodes asynchronously" in {
-    zk.underlyingActor.zk.create("foo", Some("value"))
+    zk.underlyingActor.zk.create("/foo", Some("value"))
 
     zk ! GetNodeValue("/foo")
 
-    val Node("/foo", node) = expectMsgType[Node]
-    node.path should be ("/foo")
+    val Node(zk"/foo", node) = expectMsgType[Node]
+    node.path should be (zk"/foo")
     node.extract[String] should be ("value")
   }
 
 
   it should "get node's children asynchronously" in {
-    zk.underlyingActor.zk.create("foo", Some("value"), persistent = true)
-    zk.underlyingActor.zk.create("foo/a", Some("value"))
-    zk.underlyingActor.zk.create("foo/b", Some("value"))
+    zk.underlyingActor.zk.create("/foo", "value", persistent = true)
+    zk.underlyingActor.zk.create("/foo/a", "value")
+    zk.underlyingActor.zk.create("/foo/b", "value")
 
     zk ! GetNodeChildren("/foo")
 
     val result = expectMsgType[NodeChildren]
-    result.path should be ("/foo")
-    result.children should contain only ("a", "b")
+    result.path should be (zk"/foo")
+    result.children should contain theSameElementsAs Seq(
+      zk"/foo/a",
+      zk"/foo/b")
   }
 
 
   it should "watch node events and report them back to watcher" in {
-    zk.underlyingActor.zk.create("foo", Some("value"), persistent = true)
+    zk.underlyingActor.zk.create("/foo", Some("value"), persistent = true)
 
-    zk ! WatchNode("foo")
+    zk ! WatchNode("/foo")
 
-    zk.underlyingActor.zk.set("foo", "new-value")
+    zk.underlyingActor.zk.set("/foo", "new-value")
 
     expectMsgPF(5.seconds) {
-      case NodeChanged("foo", Some(node)) =>
+      case NodeChanged(zk"/foo", Some(node)) =>
         node.get should be ("new-value")
     }
   }
@@ -151,15 +154,15 @@ class ZooownerActorSpec(_system: ActorSystem)
     val bob = Person("Bob", 42)
 
     zk ! CreateNode("/bob", bob)
-    val NodeCreated("bob", None) = expectMsgType[NodeCreated]
+    val NodeCreated(zk"/bob", None) = expectMsgType[NodeCreated]
     //node.extract[Person] should be (bob)
 
-    zk ! SetNodeValue("bob", alice)
+    zk ! SetNodeValue("/bob", alice)
     expectMsgType[NodeMeta]
 
-    zk ! GetNodeValue("bob")
-    val Node("bob", newNode) = expectMsgType[Node]
-    newNode.path should be ("/bob")
+    zk ! GetNodeValue("/bob")
+    val Node(zk"/bob", newNode) = expectMsgType[Node]
+    newNode.path should be (zk"/bob")
     newNode.extract[Person] should be (alice)
   }
 }

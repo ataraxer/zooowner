@@ -52,73 +52,67 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
 
 
   private def _create(
-    path: String,
+    path: ZKPath,
     data: ZKData,
     persistent: Boolean = false,
-    sequential: Boolean = false): String =
+    sequential: Boolean = false): ZKPath =
   {
     val mode = createMode(persistent, sequential)
 
     this { client =>
-      val createdPath = client.create(path, data.orNull, AnyACL, mode)
-      child(createdPath)
+      path / client.create(path, data.orNull, AnyACL, mode)
     }
   }
 
 
   def create[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,
     sequential: Boolean = false) =
   {
-    val realPath = resolvePath(path)
-    createPathTo(realPath)
-    _create(realPath, encode(value), persistent, sequential)
+    if (!path.isRoot) createPathTo(path)
+    _create(path, encode(value), persistent, sequential)
   }
 
 
   def createChild[T: ZKEncoder](
-    path: String,
-    child: String,
+    path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,
     sequential: Boolean = false) =
   {
-    val realPath = resolvePath(path / child)
-    _create(realPath, encode(value), persistent, sequential)
+    require(!path.isRoot, "Path should not be root")
+    _create(path, encode(value), persistent, sequential)
   }
 
 
-  def createPath(path: String) = createPathTo(path / "fake")
+  def createPath(path: ZKPath) = createPathTo(path / "fake")
 
 
-  private def createPathTo(node: String): Unit = {
-    val realPath = parent(resolvePath(node))
+  private def createPathTo(node: ZKPath): Unit = {
+    val parent = node.parent
 
-    if (!exists(realPath)) {
-      createPathTo(realPath)
-      _create(realPath, None, persistent = true)
+    if (!exists(parent)) {
+      createPathTo(parent)
+      _create(parent, None, persistent = true)
     }
   }
 
 
-  def meta(path: String, watcher: Option[ZKEventWatcher] = None) = {
+  def meta(path: ZKPath, watcher: Option[ZKEventWatcher] = None) = {
     this { client =>
-      val maybeStat = Option {
-        client.exists(resolvePath(path), watcher.orNull)
-      }
-      maybeStat.map(_.toMeta)
-    }
+      Option { client.exists(path, watcher.orNull) }
+    } map ( _.toMeta )
   }
 
 
-  def getNode(path: String, watcher: Option[ZKEventWatcher] = None) = {
+  def getNode(path: ZKPath, watcher: Option[ZKEventWatcher] = None) = {
     val stat = new Stat
 
     val maybeData = this { client =>
       catching(classOf[NoNodeException]) opt {
-        client.getData(resolvePath(path), watcher.orNull, stat)
+        client.getData(path, watcher.orNull, stat)
       }
     }
 
@@ -129,53 +123,49 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
 
 
   def set[T: ZKEncoder](
-    path: String,
+    path: ZKPath,
     value: T,
     version: Int = AnyVersion) =
   {
-    val realPath = resolvePath(path)
     val data = encode(value)
-    this { _.setData(realPath, data.orNull, version) }
+    this { _.setData(path, data.orNull, version) }
   }
 
 
   def delete(
-    path: String,
+    path: ZKPath,
     recursive: Boolean = false,
     version: Int = AnyVersion): Unit =
   {
     if (recursive) {
-      for (child <- children(path)) {
-        val childPath = path/child
-        delete(childPath, recursive = true)
+      children(path) foreach { child =>
+        delete(child, recursive = true)
       }
     }
 
     this { client =>
-      client.delete(resolvePath(path), version)
+      client.delete(path, version)
     }
   }
 
 
   def children(
-    path: String,
-    absolutePaths: Boolean = false,
+    path: ZKPath,
     watcher: Option[ZKEventWatcher] = None) =
   {
     this { client =>
-      val raw = client.getChildren(resolvePath(path), watcher.orNull).toList
-      if (absolutePaths) raw map { path/_ } else raw
-    }
+      client.getChildren(path, watcher.orNull).toList
+    } map { child => ZKPath(path) / child }
   }
 
 
-  def isEphemeral(path: String) = {
+  def isEphemeral(path: ZKPath) = {
     meta(path).map(_.ephemeral).getOrElse(false)
   }
 
 
   def watch
-    (path: String, persistent: Boolean = true)
+    (path: ZKPath, persistent: Boolean = true)
     (reaction: Reaction[ZKEvent]): ZKEventWatcher =
   {
     val callback = reaction orElse Reaction.empty[ZKEvent]
@@ -186,7 +176,7 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
   /**
    * Sets up a watcher on node events.
    */
-  def watch(path: String, watcher: ZKEventWatcher): ZKEventWatcher = {
+  def watch(path: ZKPath, watcher: ZKEventWatcher): ZKEventWatcher = {
     val nodeExists = exists(path, Some(watcher))
     if (nodeExists) children(path, watcher = Some(watcher))
     watcher

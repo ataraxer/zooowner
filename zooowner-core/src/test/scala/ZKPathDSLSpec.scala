@@ -18,6 +18,17 @@ class ZKPathDSLSpec extends UnitSpec {
   }
 
 
+  it should "construct path via string interpolation" in {
+    zk"/foo/bar" should be (ZKPath("/foo/bar"))
+
+    val foo = "foo"
+    zk"/$foo/bar" should be (ZKPath(s"/$foo/bar"))
+
+    val subpath = "foo/wat"
+    zk"/$subpath/bar" should be (ZKPath(s"/$subpath/bar"))
+  }
+
+
   it should "deconstruct valid paths into components" in {
     val ZKPath(components) = ZKPath("foo", "bar")
     components should be (Seq("foo", "bar"))
@@ -27,6 +38,16 @@ class ZKPathDSLSpec extends UnitSpec {
   it should "deconstruct valid path strings into components" in {
     val ZKPath(components) = "/foo/bar"
     components should be (Seq("foo", "bar"))
+  }
+
+
+  it should "deconstruct valid paths via string interpolation" in {
+    val zk"/$foo/$bar" = ZKPath("/foo/bar")
+    foo should be ("foo")
+    bar should be ("bar")
+
+    val zk"/wat/$wat" = ZKPath("/wat/nan")
+    wat should be ("nan")
   }
 
 
@@ -199,6 +220,25 @@ class ZKPathDSLSpec extends UnitSpec {
 
     foo should be ("foo")
     bar should be ("bar")
+  }
+
+
+  it should "match paths via interpolation" in {
+    val zk"/wat" = ZKPath("/wat")
+  }
+
+
+  it should "match only paths with same amount of components" in {
+    intercept[MatchError] {
+      val zk"/--$one--/$two" = ZKPath("/--foo--/bar/baz")
+    }
+  }
+
+
+  it should "validate interpolated matcher" in {
+    intercept[InvalidPathException] {
+      val zk"/wat/" = ZKPath("/wat")
+    }
   }
 }
 

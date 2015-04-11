@@ -3,6 +3,7 @@ package zooowner
 import zooowner.test.ZooownerMock
 import zooowner.mocking.ZKMock
 import zooowner.message._
+import zooowner.ZKPathDSL._
 
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.Watcher.Event.KeeperState
@@ -44,86 +45,88 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "create nodes with paths" in new Env {
-    zk.create("node/with/long/path", "value")
+    zk.create("/node/with/long/path", "value")
 
-    zk.get[String]("node/with/long") should be (None)
-    zk.get[String]("node/with/long/path") should be (Some("value"))
+    zk.get[String]("/node/with/long") should be (None)
+    zk.get[String]("/node/with/long/path") should be (Some("value"))
   }
 
 
   it should "create nodes with paths filled with nulls" in new Env {
-    zk.create("node/with/long/path", "value") should be ("path")
+    zk.create("/node/with/long/path", "value").child should be ("path")
 
     zkMock.check.created("/node", None)
     zkMock.check.created("/node/with", None)
     zkMock.check.created("/node/with/long", None)
 
-    zk.get[String]("node/with/long/path") should be (Some("value"))
+    zk.get[String]("/node/with/long/path") should be (Some("value"))
   }
 
 
   it should "create sequential node and return it's name" in new Env {
-    zk.create("/queue/node", sequential = true) should be ("node0000000000")
-    zk.create("/queue/node", sequential = true) should be ("node0000000001")
+    zk.create("/queue/node", sequential = true).child should be ("node0000000000")
+    zk.create("/queue/node", sequential = true).child should be ("node0000000001")
   }
 
 
   it should "return Some(value) if node exists" in new Env {
-    zk.create("node", Some("value"))
+    zk.create("/node", Some("value"))
 
-    zk.get[String]("node") should be (Some("value"))
+    zk.get[String]("/node") should be (Some("value"))
   }
 
 
   it should "return None if node doesn't exist" in new Env {
-    zk.get[String]("non-existant-node") should be (None)
+    zk.get[String]("/non-existant-node") should be (None)
   }
 
 
   it should "change values of created nodes" in new Env {
-    zk.create("node", Some("first value"))
+    zk.create("/node", Some("first value"))
 
-    zk.get[String]("node") should be (Some("first value"))
+    zk.get[String]("/node") should be (Some("first value"))
 
-    zk.set("node", "second value")
+    zk.set("/node", "second value")
 
-    zk.get[String]("node") should be (Some("second value"))
+    zk.get[String]("/node") should be (Some("second value"))
   }
 
 
   it should "return a list of nodes children" in new Env {
-    zk.create("node", Some("value"), persistent = true)
-    zk.create("node/foo", Some("foo-value"))
-    zk.create("node/bar", Some("bar-value"))
+    zk.create("/node", Some("value"), persistent = true)
+    zk.create("/node/foo", Some("foo-value"))
+    zk.create("/node/bar", Some("bar-value"))
 
-    zk.children("node") should contain only ("foo", "bar")
+    zk.children("/node") should contain theSameElementsAs Seq(
+      zk"/node/foo",
+      zk"/node/bar")
   }
 
 
   it should "delete nodes" in new Env {
-    zk.create("node", Some("first value"))
-    zk.delete("node")
+    zk.create("/node", Some("first value"))
+    zk.delete("/node")
 
-    zk.exists("node") should be (false)
+    zk.exists("/node") should be (false)
   }
 
 
   it should "delete nodes recursively" in new Env {
-    zk.create("node", Some("first value"), persistent = true)
-    zk.create("node/child", Some("child value"), persistent = true)
-    zk.delete("node", recursive = true)
+    zk.create("/node", "first value", persistent = true)
+    zk.create("/node/child", "child value", persistent = true)
+    zk.delete("/node", recursive = true)
 
-    zk.exists("node") should be (false)
-    zk.exists("node/child") should be (false)
+    zk.exists("/node") should be (false)
+    zk.exists("/node/child") should be (false)
   }
 
 
   it should "test if node is ephemeral" in new Env {
-    zk.create("persistent-node", persistent = true)
-    zk.create("ephemeral-node", persistent = false)
+    zk.create("/persistent-node", persistent = true)
+    zk.create("/ephemeral-node", persistent = false)
 
-    zk.isEphemeral("persistent-node") should be (false)
-    zk.isEphemeral("ephemeral-node") should be (true)
+    zk.isEphemeral("/persistent-node") should be (false)
+    zk.isEphemeral("/ephemeral-node") should be (true)
   }
 
 
@@ -134,34 +137,34 @@ class ZooownerSpec extends UnitSpec with Eventually {
     var childCreated = false
 
     val reaction: Reaction[ZKEvent] = {
-      case NodeCreated("some-node", Some(node)) =>
+      case NodeCreated(zk"/some-node", Some(node)) =>
         node.get should be ("value")
         created = true
-      case NodeChanged("some-node", Some(node)) =>
+      case NodeChanged(zk"/some-node", Some(node)) =>
         node.get should be ("new-value")
         changed = true
-      case NodeDeleted("some-node") =>
+      case NodeDeleted(zk"/some-node") =>
         deleted = true
-      case NodeChildrenChanged("some-node", Seq("child")) =>
+      case NodeChildrenChanged(zk"/some-node", Seq(zk"/some-node/child")) =>
         childCreated = true
     }
 
-    zk.watch("some-node", persistent = false)(reaction)
-    zk.create("some-node", Some("value"), persistent = true)
+    zk.watch("/some-node", persistent = false)(reaction)
+    zk.create("/some-node", Some("value"), persistent = true)
     eventually { created should be (true) }
 
-    zk.watch("some-node", persistent = false)(reaction)
-    zk.create("some-node/child", Some("value"))
+    zk.watch("/some-node", persistent = false)(reaction)
+    zk.create("/some-node/child", Some("value"))
     eventually { childCreated should be (true) }
     // cleanup
-    zk.delete("some-node/child")
+    zk.delete("/some-node/child")
 
-    zk.watch("some-node", persistent = false)(reaction)
-    zk.set("some-node", "new-value")
+    zk.watch("/some-node", persistent = false)(reaction)
+    zk.set("/some-node", "new-value")
     eventually { changed should be (true) }
 
-    zk.watch("some-node", persistent = false)(reaction)
-    zk.delete("some-node", recursive = true)
+    zk.watch("/some-node", persistent = false)(reaction)
+    zk.delete("/some-node", recursive = true)
     eventually { deleted should be (true) }
   }
 
@@ -172,29 +175,29 @@ class ZooownerSpec extends UnitSpec with Eventually {
     var deleted = false
     var childCreated = false
 
-    zk.watch("some-node") {
-      case NodeCreated("some-node", Some(node)) =>
+    zk.watch("/some-node") {
+      case NodeCreated(zk"/some-node", Some(node)) =>
         node.get should be ("value")
         created = true
-      case NodeChanged("some-node", Some(node)) =>
+      case NodeChanged(zk"/some-node", Some(node)) =>
         node.get should be ("new-value")
         changed = true
-      case NodeDeleted("some-node") =>
+      case NodeDeleted(zk"/some-node") =>
         deleted = true
-      case NodeChildrenChanged("some-node", Seq("child")) =>
+      case NodeChildrenChanged(zk"/some-node", Seq(zk"/some-node/child")) =>
         childCreated = true
     }
 
-    zk.create("some-node", Some("value"), persistent = true)
+    zk.create("/some-node", Some("value"), persistent = true)
     eventually { created should be (true) }
 
-    zk.create("some-node/child", Some("value"))
+    zk.create("/some-node/child", Some("value"))
     eventually { childCreated should be (true) }
 
-    zk.set("some-node", "new-value")
+    zk.set("/some-node", "new-value")
     eventually { changed should be (true) }
 
-    zk.delete("some-node", recursive = true)
+    zk.delete("/some-node", recursive = true)
     eventually { deleted should be (true) }
   }
 
@@ -203,20 +206,20 @@ class ZooownerSpec extends UnitSpec with Eventually {
     var created = false
     var deleted = false
 
-    val watcher = zk.watch("some-node") {
-      case NodeCreated("some-node", Some(node)) =>
+    val watcher = zk.watch("/some-node") {
+      case NodeCreated(zk"/some-node", Some(node)) =>
         node.get should be ("value")
         created = true
-      case NodeDeleted("some-node") =>
+      case NodeDeleted(zk"/some-node") =>
         deleted = true
     }
 
-    zk.create("some-node", Some("value"))
+    zk.create("/some-node", Some("value"))
     eventually { created should be (true) }
 
     watcher.stop()
 
-    zk.delete("some-node")
+    zk.delete("/some-node")
     eventually { deleted should be (false) }
   }
 
@@ -233,12 +236,11 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zkMock.expireSession()
 
     intercept[SessionExpiredException] {
-      zk.create("foo", Some("value"))
+      zk.create("/foo", Some("value"))
     }
 
     hookRan should be (true)
   }
-
 }
 
 
