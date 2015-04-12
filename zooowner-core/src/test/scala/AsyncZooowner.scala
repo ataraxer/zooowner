@@ -7,15 +7,11 @@ import zooowner.ZKPathDSL._
 
 import org.apache.zookeeper.data.Stat
 
-import org.scalatest.concurrent.Eventually
-
 import scala.concurrent.duration._
 
 
-class AsyncZooownerSpec extends UnitSpec with Eventually {
+class AsyncZooownerSpec extends UnitSpec {
   import DefaultSerializers._
-
-  implicit val eventuallyConfig = PatienceConfig(timeout = 3.seconds)
 
 
   trait Env extends ZKMock {

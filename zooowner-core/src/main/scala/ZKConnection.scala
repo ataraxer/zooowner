@@ -111,4 +111,9 @@ object ZKConnection {
 }
 
 
+object ZKConnectionWatcher {
+  def apply(reaction: ZKConnectionWatcher) = reaction
+}
+
+
 // vim: set ts=2 sw=2 et:

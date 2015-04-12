@@ -8,16 +8,13 @@ import zooowner.ZKPathDSL._
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.Watcher.Event.KeeperState
 
-import org.scalatest.concurrent.Eventually
-
+import scala.util.Try
+import scala.concurrent.{Promise, Await, TimeoutException}
 import scala.concurrent.duration._
 
 
-class ZooownerSpec extends UnitSpec with Eventually {
+class ZooownerSpec extends UnitSpec {
   import DefaultSerializers._
-
-  implicit val eventuallyConfig =
-    PatienceConfig(timeout = 3.seconds)
 
 
   trait Env extends ZKMock {
@@ -34,21 +31,29 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "run provided hook on connection" in new ZKMock {
-    var hookRan = false
+    val connectionPromise = Promise[Unit]()
+    val disconnectionPromise = Promise[Unit]()
+    val expirationPromise = Promise[Unit]()
+
+    val connectionWatcher = ZKConnectionWatcher {
+      case Connected => connectionPromise.success({})
+      case Disconnected => disconnectionPromise.success({})
+      case Expired => expirationPromise.success({})
+    }
 
     val zk = new ZooownerMock(
       zkMock.createMock _,
-      connectionWatcher = { case Connected => hookRan = true })
+      connectionWatcher = connectionWatcher)
 
-    eventually { hookRan should be (true) }
-  }
+    connectionPromise.future.futureValue
 
+    zk.disconnect()
+    disconnectionPromise.future.futureValue
 
-  it should "create nodes with paths" in new Env {
-    zk.create("/node/with/long/path", "value")
-
-    zk.get[String]("/node/with/long") should be (None)
-    zk.get[String]("/node/with/long/path") should be (Some("value"))
+    zkMock.expireSession()
+    // cause session expired exception
+    intercept[SessionExpiredException] { zk.exists("/foo") }
+    expirationPromise.future.futureValue
   }
 
 
@@ -64,8 +69,11 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "create sequential node and return it's name" in new Env {
-    zk.create("/queue/node", sequential = true).child should be ("node0000000000")
-    zk.create("/queue/node", sequential = true).child should be ("node0000000001")
+    val one = zk.create("/queue/node", sequential = true)
+    one.child should be ("node0000000000")
+
+    val two = zk.create("/queue/node", sequential = true)
+    two.child should be ("node0000000001")
   }
 
 
@@ -130,75 +138,36 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "set one-time watches on nodes" in new Env {
-    var created = false
-    var changed = false
-    var deleted = false
-    var childCreated = false
-
-    val reaction: Reaction[ZKEvent] = {
-      case NodeCreated(zk"/some-node", Some(node)) =>
-        node.get should be ("value")
-        created = true
-      case NodeChanged(zk"/some-node", Some(node)) =>
-        node.get should be ("new-value")
-        changed = true
-      case NodeDeleted(zk"/some-node") =>
-        deleted = true
-      case NodeChildrenChanged(zk"/some-node", Seq(zk"/some-node/child")) =>
-        childCreated = true
-    }
-
-    zk.watch("/some-node", persistent = false)(reaction)
-    zk.create("/some-node", Some("value"), persistent = true)
-    eventually { created should be (true) }
-
-    zk.watch("/some-node", persistent = false)(reaction)
-    zk.create("/some-node/child", Some("value"))
-    eventually { childCreated should be (true) }
-    // cleanup
-    zk.delete("/some-node/child")
-
-    zk.watch("/some-node", persistent = false)(reaction)
-    zk.set("/some-node", "new-value")
-    eventually { changed should be (true) }
-
-    zk.watch("/some-node", persistent = false)(reaction)
-    zk.delete("/some-node", recursive = true)
-    eventually { deleted should be (true) }
-  }
-
-
   it should "set persistent watches on nodes" in new Env {
-    var created = false
-    var changed = false
-    var deleted = false
-    var childCreated = false
+    val created = Promise[Unit]()
+    val changed = Promise[Unit]()
+    val deleted = Promise[Unit]()
+    val childCreated = Promise[Unit]()
 
     zk.watch("/some-node") {
       case NodeCreated(zk"/some-node", Some(node)) =>
-        node.get should be ("value")
-        created = true
+        node.extract[String] should be ("value")
+        created.success({})
       case NodeChanged(zk"/some-node", Some(node)) =>
-        node.get should be ("new-value")
-        changed = true
+        node.extract[String] should be ("new-value")
+        changed.success({})
       case NodeDeleted(zk"/some-node") =>
-        deleted = true
+        deleted.success({})
       case NodeChildrenChanged(zk"/some-node", Seq(zk"/some-node/child")) =>
-        childCreated = true
+        childCreated.success({})
     }
 
     zk.create("/some-node", Some("value"), persistent = true)
-    eventually { created should be (true) }
+    created.future.futureValue
 
     zk.create("/some-node/child", Some("value"))
-    eventually { childCreated should be (true) }
+    childCreated.future.futureValue
 
     zk.set("/some-node", "new-value")
-    eventually { changed should be (true) }
+    changed.future.futureValue
 
     zk.delete("/some-node", recursive = true)
-    eventually { deleted should be (true) }
+    deleted.future.futureValue
   }
 
 
@@ -234,43 +203,24 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "return cancellable watcher" in new Env {
-    var created = false
-    var deleted = false
+    val created = Promise[Unit]()
+    val deleted = Promise[Unit]()
 
     val watcher = zk.watch("/some-node") {
       case NodeCreated(zk"/some-node", Some(node)) =>
-        node.get should be ("value")
-        created = true
+        node.extract[String] should be ("value")
+        created.success({})
       case NodeDeleted(zk"/some-node") =>
-        deleted = true
+        deleted.success({})
     }
 
-    zk.create("/some-node", Some("value"))
-    eventually { created should be (true) }
+    zk.create("/some-node", "value")
+    created.future.futureValue
 
     watcher.stop()
 
     zk.delete("/some-node")
-    eventually { deleted should be (false) }
-  }
-
-
-  it should "fail and pass Expired event to registered callback " +
-            "on session expiration" in new ZKMock
-  {
-    var hookRan = false
-
-    val zk = new ZooownerMock(
-      zkMock.createMock _,
-      connectionWatcher = { case Expired => hookRan = true })
-
-    zkMock.expireSession()
-
-    intercept[SessionExpiredException] {
-      zk.create("/foo", Some("value"))
-    }
-
-    hookRan should be (true)
+    intercept[TimeoutException] { Await.ready(deleted.future, 1.second) }
   }
 }
 
