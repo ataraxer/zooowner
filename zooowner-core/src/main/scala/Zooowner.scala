@@ -208,7 +208,14 @@ trait Zooowner {
 
 object Zooowner {
   /**
-   * Creates new instance of `Zooowner`.
+   * Creates new instance of [[Zooowner]] from [[ZKConnection]].
+   */
+  def apply(connection: ZKConnection): Zooowner = {
+    new impl.ZooownerImpl(connection)
+  }
+
+  /**
+   * Creates new instance of [[Zooowner]].
    *
    * @param servers ZooKeeper connection string
    * @param timeout ZooKeeper session timeout
@@ -227,11 +234,11 @@ object Zooowner {
       connectionWatcher = connectionWatcher,
       session = session)
 
-    new impl.ZooownerImpl(connection)
+    Zooowner(connection)
   }
 
   /**
-   * Creates new instance of Zooowner.
+   * Creates new instance of [[Zooowner]].
    *
    * {{{
    * Zooowner.withWatcher("localhost:2181", 5.seconds) {

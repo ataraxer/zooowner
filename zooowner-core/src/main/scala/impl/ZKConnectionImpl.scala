@@ -16,14 +16,15 @@ private[zooowner] class ZKConnectionImpl(
     connectionString: String,
     sessionTimeout: FiniteDuration,
     connectionWatcher: ZKConnectionWatcher,
-    session: Option[ZKSession])
+    sessionCredentials: Option[ZKSession])
   extends ZKConnection
 {
   import ZKConnection._
 
   private val connectionPromise = Promise[ZKConnection]()
-
+  private val expirationPromise = Promise[ZKSession]()
   val whenConnected = connectionPromise.future
+  val whenExpired = expirationPromise.future
 
 
   def awaitConnection(timeout: FiniteDuration): Unit = {
@@ -37,46 +38,63 @@ private[zooowner] class ZKConnectionImpl(
   }
 
 
-  def isConnected = client.getState == States.CONNECTED
+  def awaitExpiration(timeout: FiniteDuration): Unit = {
+    if (!isConnected) Await.result(whenExpired, timeout)
+  }
 
-  private val dispatchEvent = connectionWatcher orElse NoWatcher
+
+  def isConnected = client.getState.isConnected
+  def isExpired = expirationPromise.isCompleted
+
+  private val watcherCallback = connectionWatcher orElse NoWatcher
 
 
   protected val stateWatcher = {
     ZKStateWatcher {
       case KeeperState.SyncConnected => {
-        dispatchEvent(Connected)
+        watcherCallback(Connected)
         if (!connectionPromise.isCompleted) {
           connectionPromise.success(this)
         }
       }
 
       case KeeperState.Disconnected => {
-        dispatchEvent(Disconnected)
+        watcherCallback(Disconnected)
       }
 
       case KeeperState.Expired => {
-        dispatchEvent(Expired)
+        watcherCallback(Expired)
+        if (!expirationPromise.isCompleted) {
+          expirationPromise.success(session)
+        }
       }
     }
   }
 
 
-  val client = {
+  val client: ZKClient = {
     val timeoutMillis = sessionTimeout.toMillis.toInt
-    new ZKClient(connectionString, timeoutMillis, stateWatcher)
+
+    sessionCredentials map { case ZKSession(id, pass) =>
+      new ZKClient(connectionString, timeoutMillis, stateWatcher, id, pass)
+    } getOrElse {
+      new ZKClient(connectionString, timeoutMillis, stateWatcher)
+    }
   }
+
+
+  val session = ZKSession(client.getSessionId, client.getSessionPasswd)
 
 
   def apply[T](call: ZKClient => T): T = {
     try call(client) catch {
       case exception: SessionExpiredException => {
-        dispatchEvent(Expired)
+        stateWatcher.dispatch(KeeperState.Expired)
         throw exception
       }
 
       case exception: ConnectionLossException => {
-        dispatchEvent(Disconnected)
+        stateWatcher.dispatch(KeeperState.Disconnected)
         throw exception
       }
 
@@ -92,13 +110,13 @@ private[zooowner] class ZKConnectionImpl(
       connectionString,
       sessionTimeout,
       connectionWatcher,
-      session)
+      Some(session))
   }
 
 
   def close(): Unit = {
     client.close()
-    dispatchEvent(Disconnected)
+    stateWatcher.dispatch(KeeperState.Disconnected)
   }
 }
 

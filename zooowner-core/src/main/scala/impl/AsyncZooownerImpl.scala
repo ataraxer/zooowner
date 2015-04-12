@@ -83,9 +83,9 @@ private[zooowner] class AsyncZooownerImpl(zooowner: ZooownerImpl)
     (path: ZKPath)
     (implicit executor: ExecutionContext): Future[ZKDataEvent] =
   {
-    val (eventWatcher, futureEvent) = zooowner._watch(path)
+    val eventWatcher = new OneTimeWatcher(zooowner.connection)
     meta(path, watcher = Some(eventWatcher))
-    _processEvent(path, futureEvent).mapTo[ZKDataEvent]
+    _processEvent(path, eventWatcher.futureEvent).mapTo[ZKDataEvent]
   }
 
 
@@ -93,9 +93,9 @@ private[zooowner] class AsyncZooownerImpl(zooowner: ZooownerImpl)
     (path: ZKPath)
     (implicit executor: ExecutionContext): Future[ZKChildrenEvent] =
   {
-    val (eventWatcher, futureEvent) = zooowner._watch(path)
+    val eventWatcher = new OneTimeWatcher(zooowner.connection)
     children(path, watcher = Some(eventWatcher))
-    _processEvent(path, futureEvent).mapTo[ZKChildrenEvent]
+    _processEvent(path, eventWatcher.futureEvent).mapTo[ZKChildrenEvent]
   }
 
 

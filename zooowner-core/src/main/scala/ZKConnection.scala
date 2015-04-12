@@ -25,6 +25,11 @@ trait ZKConnection {
   def client: ZKClient
 
   /**
+   * Session credentials of connection.
+   */
+  def session: ZKSession
+
+  /**
    * Future which is resolved with active connection
    * once is is initially established.
    */
@@ -38,9 +43,27 @@ trait ZKConnection {
   def awaitConnection(timeout: FiniteDuration): Unit
 
   /**
+   * Future which is resolved with Session credentials of current connection
+   * when it becomes expires.
+   */
+  def whenExpired: Future[ZKSession]
+
+  /**
+   * Waits for connection to expire.
+   *
+   * @param timeout Amount of time to wait for session expiration.
+   */
+  def awaitExpiration(timeout: FiniteDuration): Unit
+
+  /**
    * Tests whether the connection to ZooKeeper server is established.
    */
   def isConnected: Boolean
+
+  /**
+   * Tests whether connection's session has expired.
+   */
+  def isExpired: Boolean
 
   /**
    * Closes current connection and returns a new connection with the same
@@ -55,7 +78,12 @@ trait ZKConnection {
 }
 
 
-case class ZKSession(id: ZKSessionId, password: ZKSessionPassword)
+/**
+ * Connection session credentials, used to reestablish the session.
+ */
+case class ZKSession(
+  id: ZKSessionId,
+  password: ZKSessionPassword)
 
 
 object ZKConnection {
@@ -79,11 +107,6 @@ object ZKConnection {
       sessionTimeout,
       connectionWatcher,
       session)
-  }
-
-
-  def apply(servers: String, timeout: FiniteDuration): ZKConnection = {
-    ZKConnection(servers, timeout)
   }
 }
 

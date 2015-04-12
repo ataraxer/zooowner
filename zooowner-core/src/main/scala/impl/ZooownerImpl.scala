@@ -18,7 +18,7 @@ import scala.util.control.Exception.catching
  *
  * @param connection Connection to ZooKeeper
  */
-private[zooowner] class ZooownerImpl(connection: ZKConnection)
+private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   extends Zooowner
 {
   import Zooowner._
@@ -27,9 +27,9 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
   /**
    * Internal active connection to ZooKeeper.
    */
-  private var activeConnection = connection
+  private[zooowner] var connection = initialConnection
 
-  def client = activeConnection.client
+  def client = connection.client
 
   def disconnect(): Unit = connection.close()
 
@@ -43,7 +43,7 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
 
   def reconnect(force: Boolean = false): Unit = {
     if (!isConnected || force) {
-      activeConnection = activeConnection.recreate()
+      connection = connection.recreate()
     }
   }
 
@@ -188,9 +188,9 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
     (path: ZKPath)
     (implicit executor: ExecutionContext): Future[ZKDataEvent] =
   {
-    val (eventWatcher, futureEvent) = _watch(path)
+    val eventWatcher = new OneTimeWatcher(connection)
     exists(path, watcher = Some(eventWatcher))
-    _processEvent(path, futureEvent).mapTo[ZKDataEvent]
+    _processEvent(path, eventWatcher.futureEvent).mapTo[ZKDataEvent]
   }
 
 
@@ -198,9 +198,9 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
     (path: ZKPath)
     (implicit executor: ExecutionContext): Future[ZKChildrenEvent] =
   {
-    val (eventWatcher, futureEvent) = _watch(path)
+    val eventWatcher = new OneTimeWatcher(connection)
     children(path, watcher = Some(eventWatcher))
-    _processEvent(path, futureEvent).mapTo[ZKChildrenEvent]
+    _processEvent(path, eventWatcher.futureEvent).mapTo[ZKChildrenEvent]
   }
 
 
@@ -224,16 +224,6 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
       case event =>
         throw new Exception("Unexpected event encountered: " + event)
     }
-  }
-
-
-  private[zooowner] def _watch
-    (path: ZKPath)
-    (implicit executor: ExecutionContext): (ZKEventWatcher, Future[EventType]) =
-  {
-    val eventPromise = Promise[EventType]()
-    val eventWatcher = ZKEventWatcher { case event => eventPromise.success(event) }
-    (eventWatcher, eventPromise.future)
   }
 }
 
