@@ -95,7 +95,7 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="zooowner.Zooowner#apply" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="zooowner.Zooowner#apply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="apply(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):zooowner.ZKNode"></a>
       <a id="apply(ZKPath,Option[ZKEventWatcher]):ZKNode"></a>
       <h4 class="signature">
@@ -111,8 +111,9 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Takes a function to be called on client taking care of ensuring that it's
-called with active instance of ZooKeeper client.</p>
+      <p class="shortcomment cmt">Returns a node associated with given path.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a node associated with given path.
+</p></div><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"><p><a href="package.html#NoNodeException=org.apache.zookeeper.KeeperException.NoNodeException" class="extmbr" name="zooowner.NoNodeException"><code>NoNodeException</code></a> if node doesn't exist
+</p></span></dd></dl></div>
     </li><li name="zooowner.Zooowner#awaitConnection" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="awaitConnection(timeout:scala.concurrent.duration.FiniteDuration):Unit"></a>
       <a id="awaitConnection(FiniteDuration):Unit"></a>
