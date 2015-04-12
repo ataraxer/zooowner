@@ -18,9 +18,9 @@ private[zooowner] class AsyncZooownerImpl(zooowner: ZooownerImpl)
 
   def meta(
     path: ZKPath,
-    watcher: Option[ZKEventWatcher] = None): Future[Option[ZKNodeMeta]] =
+    watcher: Option[ZKEventWatcher] = None): Future[Option[ZKMeta]] =
   {
-    val result = Promise[Option[ZKNodeMeta]]()
+    val result = Promise[Option[ZKMeta]]()
     client.exists(path, watcher.orNull, OnStat(result), null)
     result.future
   }
@@ -50,9 +50,9 @@ private[zooowner] class AsyncZooownerImpl(zooowner: ZooownerImpl)
   def set[T: ZKEncoder](
     path: ZKPath,
     value: T,
-    version: Int = AnyVersion): Future[Option[ZKNodeMeta]] =
+    version: Int = AnyVersion): Future[Option[ZKMeta]] =
   {
-    val result = Promise[Option[ZKNodeMeta]]()
+    val result = Promise[Option[ZKMeta]]()
     val data = encode(value).orNull
     client.setData(path, data, version, OnStat(result), null)
     result.future

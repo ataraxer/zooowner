@@ -11,7 +11,7 @@ trait AsyncZooowner {
    */
   def meta(
     path: ZKPath,
-    watcher: Option[ZKEventWatcher] = None): Future[Option[ZKNodeMeta]]
+    watcher: Option[ZKEventWatcher] = None): Future[Option[ZKMeta]]
 
   /**
    * Asynchronous version of [[Zooowner.create]].
@@ -34,7 +34,7 @@ trait AsyncZooowner {
    */
   def set[T: ZKEncoder](
     path: ZKPath,
-    value: T, version: Int = AnyVersion): Future[Option[ZKNodeMeta]]
+    value: T, version: Int = AnyVersion): Future[Option[ZKMeta]]
 
   /**
    * Asynchronous version of [[Zooowner.get]].

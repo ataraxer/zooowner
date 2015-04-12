@@ -27,7 +27,7 @@ case object Expired extends ZKConnectionEvent with ZKFailure
 case object ReadOnly extends ZKFailure
 case object BadVersion extends ZKFailure
 
-case class NodeMeta(path: ZKPath, meta: Option[ZKNodeMeta]) extends ZKSuccess
+case class NodeMeta(path: ZKPath, meta: Option[ZKMeta]) extends ZKSuccess
 case class Node(path: ZKPath, node: ZKNode) extends ZKSuccess
 case class NodeChildren(path: ZKPath, children: Seq[ZKPath]) extends ZKSuccess
 

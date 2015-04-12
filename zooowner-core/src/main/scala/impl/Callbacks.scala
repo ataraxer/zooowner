@@ -70,7 +70,7 @@ private[zooowner] object ZKCallback {
   /**
    * Fires up on node stat retreival.
    */
-  case class OnStat(resultPromise: Promise[Option[ZKNodeMeta]])
+  case class OnStat(resultPromise: Promise[Option[ZKMeta]])
     extends ZKCallback with StatCallback
   {
     def processResult(

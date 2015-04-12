@@ -6,11 +6,11 @@ import scala.language.implicitConversions
 
 
 private[zooowner] trait StatConverter {
-  implicit def statToMeta(stat: Stat): ZKNodeMeta = {
+  implicit def statToMeta(stat: Stat): ZKMeta = {
     val ephemeralOwner = stat.getEphemeralOwner
     val isEphemeral = (ephemeralOwner != 0)
 
-    ZKNodeMeta(
+    ZKMeta(
       creationTime = stat.getCtime,
       modificationTime = stat.getMtime,
       size = stat.getDataLength,

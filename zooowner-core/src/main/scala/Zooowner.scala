@@ -89,7 +89,7 @@ trait Zooowner {
    */
   def meta(
     path: ZKPath,
-    watcher: Option[ZKEventWatcher] = None): Option[ZKNodeMeta]
+    watcher: Option[ZKEventWatcher] = None): Option[ZKMeta]
 
   /**
    * Tests whether the node exists.

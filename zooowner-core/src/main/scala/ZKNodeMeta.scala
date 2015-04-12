@@ -1,7 +1,7 @@
 package zooowner
 
 
-case class ZKNodeMeta(
+case class ZKMeta(
   creationTime: Long,
   modificationTime: Long,
   size: Long,
