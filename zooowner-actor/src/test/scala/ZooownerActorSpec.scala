@@ -105,7 +105,7 @@ class ZooownerActorSpec(_system: ActorSystem)
 
     val result = expectMsgType[NodeMeta]
     result.path should be (zk"/foo")
-    zk.underlyingActor.zk.get[String]("/foo") should be (Some("new-value"))
+    zk.underlyingActor.zk("/foo")[String] should be ("new-value")
   }
 
 

@@ -48,18 +48,13 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   }
 
 
-  def apply[T](call: ZooKeeper => T): T = {
-    connection.apply(call)
-  }
-
-
   private def _create(
     path: ZKPath,
     data: ZKData,
     persistent: Boolean = false,
     sequential: Boolean = false): ZKPath =
   {
-    this { client =>
+    connection { client =>
       val mode = createMode(persistent, sequential)
       client.create(path, data.orNull, AnyACL, mode)
     }
@@ -102,24 +97,24 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
 
 
   def meta(path: ZKPath, watcher: Option[ZKEventWatcher] = None) = {
-    this { client =>
+    connection { client =>
       Option { client.exists(path, watcher.orNull) }
     } map ( _.toMeta )
   }
 
 
-  def getNode(path: ZKPath, watcher: Option[ZKEventWatcher] = None) = {
+  def apply(path: ZKPath, watcher: Option[ZKEventWatcher] = None) = {
     val stat = new Stat
 
-    val maybeData = this { client =>
-      catching(classOf[NoNodeException]) opt {
-        client.getData(path, watcher.orNull, stat)
-      }
-    }
-
-    maybeData map { data =>
+    connection { client =>
+      val data = client.getData(path, watcher.orNull, stat)
       ZKNode(path, Option(data), Some(stat.toMeta))
     }
+  }
+
+
+  def get(path: ZKPath, watcher: Option[ZKEventWatcher] = None) = {
+    catching(classOf[NoNodeException]) opt { apply(path, watcher) }
   }
 
 
@@ -129,7 +124,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
     version: Int = AnyVersion) =
   {
     val data = encode(value)
-    this { _.setData(path, data.orNull, version) }
+    connection { _.setData(path, data.orNull, version) }
   }
 
 
@@ -144,7 +139,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
       }
     }
 
-    this { client =>
+    connection { client =>
       client.delete(path, version)
     }
   }
@@ -154,7 +149,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
     path: ZKPath,
     watcher: Option[ZKEventWatcher] = None) =
   {
-    this { client =>
+    connection { client =>
       client.getChildren(path, watcher.orNull).toList
     } map { child => ZKPath(path) / child }
   }
@@ -210,10 +205,10 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   {
     futureEvent map {
       case EventType.NodeCreated =>
-        NodeCreated(path, getNode(path))
+        NodeCreated(path, get(path))
 
       case EventType.NodeDataChanged =>
-        NodeChanged(path, getNode(path))
+        NodeChanged(path, get(path))
 
       case EventType.NodeDeleted =>
         NodeDeleted(path)

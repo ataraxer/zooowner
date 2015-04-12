@@ -38,12 +38,12 @@ private[zooowner] class DefaultNodeWatcher(
         watchChildren()
         watchData()
       }
-      NodeCreated(path, client.getNode(path))
+      NodeCreated(path, client.get(path))
     }
 
     case EventType.NodeDataChanged => reactOn {
       if (persistent) watchChildren()
-      NodeChanged(path, client.getNode(path, watcher = self))
+      NodeChanged(path, client.get(path, watcher = self))
     }
 
     case EventType.NodeChildrenChanged => reactOn {

@@ -25,15 +25,15 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
 
 
   "Async Zooowner" should "create nodes asynchronously" in new Env {
-    val result = zk.async.create("/node", Some("value"))
+    val result = zk.async.create("/node", "value")
 
     result.futureValue should be (zk"/node")
-    zk.get[String]("/node") should be (Some("value"))
+    zk("/node")[String] should be ("value")
   }
 
 
   it should "return node meta of the node asynchronously" in new Env {
-    zk.create("/node", Some("value"))
+    zk.create("/node", "value")
 
     val result = zk.async.meta("/node")
     result.futureValue should not be (None)
@@ -41,7 +41,7 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "return Some(value) if node exists" in new Env {
-    zk.create("/node", Some("value"))
+    zk.create("/node", "value")
 
     val result = zk.async.get("/node")
     result.futureValue.extract[String] should be ("value")
@@ -70,18 +70,18 @@ class AsyncZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "change values of created nodes asynchronously" in new Env {
-    zk.create("/node", Some("first value"))
+    zk.create("/node", "first value")
 
-    zk.get[String]("/node") should be (Some("first value"))
+    zk("/node")[String] should be ("first value")
 
     val result = zk.async.set("/node", "second value")
     result.futureValue should not be (None)
-    zk.get[String]("/node") should be (Some("second value"))
+    zk("/node")[String] should be ("second value")
   }
 
 
   it should "delete nodes asynchronously" in new Env {
-    zk.create("/node", Some("first value"))
+    zk.create("/node", "first value")
 
     val result = zk.async.delete("/node")
     result.isReadyWithin(3.seconds)

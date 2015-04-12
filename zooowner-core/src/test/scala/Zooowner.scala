@@ -59,7 +59,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
     zkMock.check.created("/node/with", None)
     zkMock.check.created("/node/with/long", None)
 
-    zk.get[String]("/node/with/long/path") should be (Some("value"))
+    zk("/node/with/long/path")[String] should be ("value")
   }
 
 
@@ -69,33 +69,33 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
-  it should "return Some(value) if node exists" in new Env {
-    zk.create("/node", Some("value"))
+  it should "return Some(node) if it exists" in new Env {
+    zk.create("/node", "value")
 
-    zk.get[String]("/node") should be (Some("value"))
+    val maybeNode = zk.get("/node")
+    maybeNode should be ('defined)
+    maybeNode.get.extract[String] should be ("value")
   }
 
 
   it should "return None if node doesn't exist" in new Env {
-    zk.get[String]("/non-existant-node") should be (None)
+    zk.get("/non-existant-node") should be (None)
   }
 
 
   it should "change values of created nodes" in new Env {
-    zk.create("/node", Some("first value"))
-
-    zk.get[String]("/node") should be (Some("first value"))
+    zk.create("/node", "first value")
+    zk("/node")[String] should be ("first value")
 
     zk.set("/node", "second value")
-
-    zk.get[String]("/node") should be (Some("second value"))
+    zk("/node")[String] should be ("second value")
   }
 
 
   it should "return a list of nodes children" in new Env {
-    zk.create("/node", Some("value"), persistent = true)
-    zk.create("/node/foo", Some("foo-value"))
-    zk.create("/node/bar", Some("bar-value"))
+    zk.create("/node", "value", persistent = true)
+    zk.create("/node/foo", "foo-value")
+    zk.create("/node/bar", "bar-value")
 
     zk.children("/node") should contain theSameElementsAs Seq(
       zk"/node/foo",
@@ -104,7 +104,7 @@ class ZooownerSpec extends UnitSpec with Eventually {
 
 
   it should "delete nodes" in new Env {
-    zk.create("/node", Some("first value"))
+    zk.create("/node", "first value")
     zk.delete("/node")
 
     zk.exists("/node") should be (false)

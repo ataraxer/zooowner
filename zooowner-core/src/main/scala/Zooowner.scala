@@ -12,7 +12,12 @@ trait Zooowner {
    * Takes a function to be called on client taking care of ensuring that it's
    * called with active instance of ZooKeeper client.
    */
-  def apply[T](call: ZKClient => T): T
+  def apply(path: ZKPath, watcher: Option[ZKEventWatcher] = None): ZKNode
+
+  /**
+   * Sets a new value for the node.
+   */
+  def update[T: ZKEncoder](path: ZKPath, value: T) = set(path, value)
 
   /*
    * Active ZooKeeper client, through which all interactions with ZK are
@@ -92,21 +97,9 @@ trait Zooowner {
   }
 
   /**
-   * Returns Some(value) of the node if exists, None otherwise.
+   * Optionally returns a node.
    */
-  def get[T]
-    (path: ZKPath, watcher: Option[ZKEventWatcher] = None)
-    (implicit decoder: ZKDecoder[T]): Option[T] =
-  {
-    getNode(path) flatMap { node =>
-      Option(decoder.decode(node.data))
-    }
-  }
-
-  /**
-   * Returns Some[ZKNode] if node exists, Non otherwise.
-   */
-  def getNode(
+  def get(
     path: ZKPath,
     watcher: Option[ZKEventWatcher] = None): Option[ZKNode]
 
