@@ -1,22 +1,22 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ZKConnection - zooowner.ZKConnection</title>
-          <meta name="description" content="ZKConnection - zooowner.ZKConnection" />
-          <meta name="keywords" content="ZKConnection zooowner.ZKConnection" />
+          <title>ZKDataEvent - zooowner.message.ZKDataEvent</title>
+          <meta name="description" content="ZKDataEvent - zooowner.message.ZKDataEvent" />
+          <meta name="keywords" content="ZKDataEvent zooowner.message.ZKDataEvent" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
-      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../lib/template.js"></script>
-      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
       
       <script type="text/javascript">
          if(top === self) {
-            var url = '../index.html';
-            var hash = 'zooowner.ZKConnection';
+            var url = '../../index.html';
+            var hash = 'zooowner.message.ZKDataEvent';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -28,33 +28,34 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="ZKConnection$.html" title="See companion object"><img src="../lib/trait_to_object_big.png" /></a>
-        <p id="owner"><a href="package.html" class="extype" name="zooowner">zooowner</a></p>
-        <h1><a href="ZKConnection$.html" title="See companion object">ZKConnection</a></h1><h3><span class="morelinks"><div>
-            Related Docs:
-            <a href="ZKConnection$.html" title="See companion object">object ZKConnection</a>
-            | <a href="package.html" class="extype" name="zooowner">package zooowner</a>
+        <img src="../../lib/trait_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="zooowner">zooowner</a>.<a href="package.html" class="extype" name="zooowner.message">message</a></p>
+        <h1>ZKDataEvent</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="zooowner.message">package message</a>
           </div></span></h3><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">sealed </span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ZKConnection</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">ZKDataEvent</span><span class="result"> extends <a href="ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div></div>
+          <div class="superTypes hiddenContent"><a href="ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a>, <a href="ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a>, <a href="ZKMessage.html" class="extype" name="zooowner.message.ZKMessage">ZKMessage</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="NodeChanged.html" class="extype" name="zooowner.message.NodeChanged">NodeChanged</a>, <a href="NodeCreated.html" class="extype" name="zooowner.message.NodeCreated">NodeCreated</a>, <a href="NodeDeleted.html" class="extype" name="zooowner.message.NodeDeleted">NodeDeleted</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -71,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="zooowner.ZKConnection"><span>ZKConnection</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="zooowner.message.ZKDataEvent"><span>ZKDataEvent</span></li><li class="in" name="zooowner.message.ZKEvent"><span>ZKEvent</span></li><li class="in" name="zooowner.message.ZKResponse"><span>ZKResponse</span></li><li class="in" name="zooowner.message.ZKMessage"><span>ZKMessage</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -93,209 +94,10 @@
 
         
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="zooowner.ZKConnection#apply" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="apply[T](call:zooowner.ZKClient=&gt;T):T"></a>
-      <a id="apply[T]((ZKClient)⇒T):T"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="call">call: (<a href="package.html#ZKClient=org.apache.zookeeper.ZooKeeper" class="extmbr" name="zooowner.ZKClient">ZKClient</a>) ⇒ <span class="extype" name="zooowner.ZKConnection.apply.T">T</span></span>)</span><span class="result">: <span class="extype" name="zooowner.ZKConnection.apply.T">T</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@apply[T](call:zooowner.ZKClient=&gt;T):T" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Takes a function to be called on client taking care of ensuring that it's
-called with active instance of ZooKeeper client.</p>
-    </li><li name="zooowner.ZKConnection#awaitConnection" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="awaitConnection(timeout:scala.concurrent.duration.FiniteDuration):Unit"></a>
-      <a id="awaitConnection(FiniteDuration):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">awaitConnection</span><span class="params">(<span name="timeout">timeout: <span class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@awaitConnection(timeout:scala.concurrent.duration.FiniteDuration):Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Waits for connection to esablish within given timeout.</p><div class="fullcomment"><div class="comment cmt"><p>Waits for connection to esablish within given timeout.
-</p></div><dl class="paramcmts block"><dt class="param">timeout</dt><dd class="cmt"><p>Amount of time to wait for connection
-</p></dd></dl></div>
-    </li><li name="zooowner.ZKConnection#awaitExpiration" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="awaitExpiration(timeout:scala.concurrent.duration.FiniteDuration):Unit"></a>
-      <a id="awaitExpiration(FiniteDuration):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">awaitExpiration</span><span class="params">(<span name="timeout">timeout: <span class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@awaitExpiration(timeout:scala.concurrent.duration.FiniteDuration):Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Waits for connection to expire.</p><div class="fullcomment"><div class="comment cmt"><p>Waits for connection to expire.
-</p></div><dl class="paramcmts block"><dt class="param">timeout</dt><dd class="cmt"><p>Amount of time to wait for session expiration.
-</p></dd></dl></div>
-    </li><li name="zooowner.ZKConnection#client" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="client:zooowner.ZKClient"></a>
-      <a id="client:ZKClient"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">client</span><span class="result">: <a href="package.html#ZKClient=org.apache.zookeeper.ZooKeeper" class="extmbr" name="zooowner.ZKClient">ZKClient</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@client:zooowner.ZKClient" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Active  ZooKeeper client, through which all interactions with ZK are
-being performed.</p>
-    </li><li name="zooowner.ZKConnection#close" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="close():Unit"></a>
-      <a id="close():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">close</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@close():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Disconnects from ZooKeeper server.</p>
-    </li><li name="zooowner.ZKConnection#isConnected" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="isConnected:Boolean"></a>
-      <a id="isConnected:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isConnected</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@isConnected:Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Tests whether the connection to ZooKeeper server is established.</p>
-    </li><li name="zooowner.ZKConnection#isExpired" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="isExpired:Boolean"></a>
-      <a id="isExpired:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isExpired</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@isExpired:Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Tests whether connection's session has expired.</p>
-    </li><li name="zooowner.ZKConnection#recreate" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="recreate():zooowner.ZKConnection"></a>
-      <a id="recreate():ZKConnection"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">recreate</span><span class="params">()</span><span class="result">: <a href="" class="extype" name="zooowner.ZKConnection">ZKConnection</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@recreate():zooowner.ZKConnection" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Closes current connection and returns a new connection with the same
-arguments as this one.</p>
-    </li><li name="zooowner.ZKConnection#session" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="session:zooowner.ZKSession"></a>
-      <a id="session:ZKSession"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">session</span><span class="result">: <a href="ZKSession.html" class="extype" name="zooowner.ZKSession">ZKSession</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@session:zooowner.ZKSession" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Session credentials of connection.</p>
-    </li><li name="zooowner.ZKConnection#whenConnected" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="whenConnected:scala.concurrent.Future[zooowner.ZKConnection]"></a>
-      <a id="whenConnected:Future[ZKConnection]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">whenConnected</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<a href="" class="extype" name="zooowner.ZKConnection">ZKConnection</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@whenConnected:scala.concurrent.Future[zooowner.ZKConnection]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Future which is resolved with active connection
-once is is initially established.</p>
-    </li><li name="zooowner.ZKConnection#whenExpired" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="whenExpired:scala.concurrent.Future[zooowner.ZKSession]"></a>
-      <a id="whenExpired:Future[ZKSession]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">whenExpired</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<a href="ZKSession.html" class="extype" name="zooowner.ZKSession">ZKSession</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@whenExpired:scala.concurrent.Future[zooowner.ZKSession]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Future which is resolved with Session credentials of current connection
-when it becomes expires.</p>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -308,8 +110,8 @@ when it becomes expires.</p>
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -325,8 +127,8 @@ when it becomes expires.</p>
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@##():Int" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -342,8 +144,8 @@ when it becomes expires.</p>
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -359,8 +161,8 @@ when it becomes expires.</p>
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -376,11 +178,11 @@ when it becomes expires.</p>
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@clone():Object" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
@@ -399,8 +201,8 @@ when it becomes expires.</p>
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -416,8 +218,8 @@ when it becomes expires.</p>
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -433,11 +235,11 @@ when it becomes expires.</p>
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@finalize():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
@@ -456,8 +258,8 @@ when it becomes expires.</p>
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -473,8 +275,8 @@ when it becomes expires.</p>
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@hashCode():Int" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -490,8 +292,8 @@ when it becomes expires.</p>
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -507,8 +309,8 @@ when it becomes expires.</p>
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -524,8 +326,8 @@ when it becomes expires.</p>
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@notify():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -541,8 +343,8 @@ when it becomes expires.</p>
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -558,8 +360,8 @@ when it becomes expires.</p>
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -575,8 +377,8 @@ when it becomes expires.</p>
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@toString():String" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -592,8 +394,8 @@ when it becomes expires.</p>
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@wait():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -615,8 +417,8 @@ when it becomes expires.</p>
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -638,8 +440,8 @@ when it becomes expires.</p>
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.ZKConnection@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
+      <a href="../../index.html#zooowner.message.ZKDataEvent@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -658,7 +460,13 @@ when it becomes expires.</p>
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="zooowner.message.ZKEvent">
+              <h3>Inherited from <a href="ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a></h3>
+            </div><div class="parent" name="zooowner.message.ZKResponse">
+              <h3>Inherited from <a href="ZKResponse.html" class="extype" name="zooowner.message.ZKResponse">ZKResponse</a></h3>
+            </div><div class="parent" name="zooowner.message.ZKMessage">
+              <h3>Inherited from <a href="ZKMessage.html" class="extype" name="zooowner.message.ZKMessage">ZKMessage</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

@@ -167,18 +167,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="zooowner.impl.ZooownerImpl#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[T](call:org.apache.zookeeper.ZooKeeper=&gt;T):T"></a>
-      <a id="apply[T]((ZooKeeper)⇒T):T"></a>
+      <a id="apply(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):zooowner.ZKNode"></a>
+      <a id="apply(ZKPath,Option[ZKEventWatcher]):ZKNode"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="call">call: (<span class="extype" name="org.apache.zookeeper.ZooKeeper">ZooKeeper</span>) ⇒ <span class="extype" name="zooowner.impl.ZooownerImpl.apply.T">T</span></span>)</span><span class="result">: <span class="extype" name="zooowner.impl.ZooownerImpl.apply.T">T</span></span>
+        <span class="name">apply</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="../ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="../ZKNode.html" class="extype" name="zooowner.ZKNode">ZKNode</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@apply[T](call:org.apache.zookeeper.ZooKeeper=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@apply(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):zooowner.ZKNode" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -451,7 +451,7 @@ by filling missing nodes with null's, and returns it's name.
               
         </dd></dl></div>
     </li><li name="zooowner.Zooowner#forceSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="forceSet[T](path:zooowner.ZKPath,value:T,persistent:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):Any"></a>
+      <a id="forceSet[T](path:zooowner.ZKPath,value:T,persistent:Boolean)(implicitevidence$5:zooowner.ZKEncoder[T]):Any"></a>
       <a id="forceSet[T](ZKPath,T,Boolean)(ZKEncoder[T]):Any"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -462,31 +462,31 @@ by filling missing nodes with null's, and returns it's name.
         <span class="name">forceSet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.forceSet.T">T</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.forceSet.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Any">Any</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@forceSet[T](path:zooowner.ZKPath,value:T,persistent:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):Any" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@forceSet[T](path:zooowner.ZKPath,value:T,persistent:Boolean)(implicitevidence$5:zooowner.ZKEncoder[T]):Any" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Sets a new value if node exists, creates it otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Sets a new value if node exists, creates it otherwise.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of a node to be updated.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Value to be saved into node.</p></dd><dt class="param">persistent</dt><dd class="cmt"><p>Specifies whether created node should be persistent.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#get" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="get[T](path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher])(implicitdecoder:zooowner.ZKDecoder[T]):Option[T]"></a>
-      <a id="get[T](ZKPath,Option[ZKEventWatcher])(ZKDecoder[T]):Option[T]"></a>
+    </li><li name="zooowner.impl.ZooownerImpl#get" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="get(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Option[zooowner.ZKNode]"></a>
+      <a id="get(ZKPath,Option[ZKEventWatcher]):Option[ZKNode]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="../ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="decoder">decoder: <a href="../ZKDecoder.html" class="extype" name="zooowner.ZKDecoder">ZKDecoder</a>[<span class="extype" name="zooowner.Zooowner.get.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="zooowner.Zooowner.get.T">T</span>]</span>
+        <span class="name">get</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="../ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="../ZKNode.html" class="extype" name="zooowner.ZKNode">ZKNode</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@get[T](path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher])(implicitdecoder:zooowner.ZKDecoder[T]):Option[T]" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@get(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Option[zooowner.ZKNode]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Returns Some(value) of the node if exists, None otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Returns Some(value) of the node if exists, None otherwise.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+      <p class="shortcomment cmt">Optionally returns a node.</p><div class="fullcomment"><div class="comment cmt"><p>Optionally returns a node.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -504,24 +504,6 @@ by filling missing nodes with null's, and returns it's name.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="zooowner.impl.ZooownerImpl#getNode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getNode(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Option[zooowner.ZKNode]"></a>
-      <a id="getNode(ZKPath,Option[ZKEventWatcher]):Option[ZKNode]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getNode</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="../ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="../ZKNode.html" class="extype" name="zooowner.ZKNode">ZKNode</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@getNode(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Option[zooowner.ZKNode]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Returns Some[ZKNode] if node exists, Non otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Returns Some[ZKNode] if node exists, Non otherwise.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -750,6 +732,24 @@ by filling missing nodes with null's, and returns it's name.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="zooowner.Zooowner#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="update[T](path:zooowner.ZKPath,value:T)(implicitevidence$1:zooowner.ZKEncoder[T]):Unit"></a>
+      <a id="update[T](ZKPath,T)(ZKEncoder[T]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">update</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.update.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.update.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.test.ZooownerMock@update[T](path:zooowner.ZKPath,value:T)(implicitevidence$1:zooowner.ZKEncoder[T]):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets a new value for the node.</p><div class="fullcomment"><div class="comment cmt"><p>Sets a new value for the node.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -838,22 +838,58 @@ by filling missing nodes with null's, and returns it's name.
       <p class="shortcomment cmt">Sets up a watcher on node events.</p><div class="fullcomment"><div class="comment cmt"><p>Sets up a watcher on node events.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="zooowner.impl.ZooownerImpl#watch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="watch(path:zooowner.ZKPath,persistent:Boolean)(reaction:zooowner.Reaction[zooowner.message.ZKEvent]):zooowner.ZKEventWatcher"></a>
-      <a id="watch(ZKPath,Boolean)(Reaction[ZKEvent]):ZKEventWatcher"></a>
+      <a id="watch(path:zooowner.ZKPath)(reaction:zooowner.Reaction[zooowner.message.ZKEvent]):zooowner.ZKEventWatcher"></a>
+      <a id="watch(ZKPath)(Reaction[ZKEvent]):ZKEventWatcher"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">watch</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span name="reaction">reaction: <a href="../package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="../message/ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a>]</span>)</span><span class="result">: <a href="../ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a></span>
+        <span class="name">watch</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="params">(<span name="reaction">reaction: <a href="../package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="../message/ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a>]</span>)</span><span class="result">: <a href="../ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@watch(path:zooowner.ZKPath,persistent:Boolean)(reaction:zooowner.Reaction[zooowner.message.ZKEvent]):zooowner.ZKEventWatcher" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@watch(path:zooowner.ZKPath)(reaction:zooowner.Reaction[zooowner.message.ZKEvent]):zooowner.ZKEventWatcher" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Sets up a callback for node events.</p><div class="fullcomment"><div class="comment cmt"><p>Sets up a callback for node events.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#watchChildren" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="watchChildren(path:zooowner.ZKPath)(implicitexecutor:scala.concurrent.ExecutionContext):scala.concurrent.Future[zooowner.message.ZKChildrenEvent]"></a>
+      <a id="watchChildren(ZKPath)(ExecutionContext):Future[ZKChildrenEvent]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">watchChildren</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="executor">executor: <span class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<a href="../message/ZKChildrenEvent.html" class="extype" name="zooowner.message.ZKChildrenEvent">ZKChildrenEvent</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.test.ZooownerMock@watchChildren(path:zooowner.ZKPath)(implicitexecutor:scala.concurrent.ExecutionContext):scala.concurrent.Future[zooowner.message.ZKChildrenEvent]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets up a one-time watcher on a node children, and returns a future change.</p><div class="fullcomment"><div class="comment cmt"><p>Sets up a one-time watcher on a node children, and returns a future change.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+    </li><li name="zooowner.impl.ZooownerImpl#watchData" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="watchData(path:zooowner.ZKPath)(implicitexecutor:scala.concurrent.ExecutionContext):scala.concurrent.Future[zooowner.message.ZKDataEvent]"></a>
+      <a id="watchData(ZKPath)(ExecutionContext):Future[ZKDataEvent]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">watchData</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="executor">executor: <span class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<a href="../message/ZKDataEvent.html" class="extype" name="zooowner.message.ZKDataEvent">ZKDataEvent</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.test.ZooownerMock@watchData(path:zooowner.ZKPath)(implicitexecutor:scala.concurrent.ExecutionContext):scala.concurrent.Future[zooowner.message.ZKDataEvent]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets up a one-time watcher on a node, and returns a future change.</p><div class="fullcomment"><div class="comment cmt"><p>Sets up a one-time watcher on a node, and returns a future change.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li></ol>
             </div>

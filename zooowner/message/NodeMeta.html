@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">NodeMeta</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="meta">meta: <a href="../ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a></span>)</span><span class="result"> extends <a href="ZKSuccess.html" class="extype" name="zooowner.message.ZKSuccess">ZKSuccess</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">NodeMeta</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="meta">meta: <span class="extype" name="scala.Option">Option</span>[<a href="../ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a>]</span>)</span><span class="result"> extends <a href="ZKSuccess.html" class="extype" name="zooowner.message.ZKSuccess">ZKSuccess</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -90,7 +90,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="zooowner.message.NodeMeta#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(path:zooowner.ZKPath,meta:zooowner.ZKNodeMeta):zooowner.message.NodeMeta"></a>
+      <a id="&lt;init&gt;(path:zooowner.ZKPath,meta:Option[zooowner.ZKNodeMeta]):zooowner.message.NodeMeta"></a>
       <a id="&lt;init&gt;:NodeMeta"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,10 +98,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">NodeMeta</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="meta">meta: <a href="../ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a></span>)</span>
+        <span class="name">NodeMeta</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="meta">meta: <span class="extype" name="scala.Option">Option</span>[<a href="../ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.NodeMeta@&lt;init&gt;(path:zooowner.ZKPath,meta:zooowner.ZKNodeMeta):zooowner.message.NodeMeta" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.message.NodeMeta@&lt;init&gt;(path:zooowner.ZKPath,meta:Option[zooowner.ZKNodeMeta]):zooowner.message.NodeMeta" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -281,18 +281,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="zooowner.message.NodeMeta#meta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="meta:zooowner.ZKNodeMeta"></a>
-      <a id="meta:ZKNodeMeta"></a>
+      <a id="meta:Option[zooowner.ZKNodeMeta]"></a>
+      <a id="meta:Option[ZKNodeMeta]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">meta</span><span class="result">: <a href="../ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a></span>
+        <span class="name">meta</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="../ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.NodeMeta@meta:zooowner.ZKNodeMeta" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.message.NodeMeta@meta:Option[zooowner.ZKNodeMeta]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>

@@ -164,9 +164,26 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Creates new instance of <code>Zooowner</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates new instance of <code>Zooowner</code>.
+      <p class="shortcomment cmt">Creates new instance of <a href="Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates new instance of <a href="Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a>.
 </p></div><dl class="paramcmts block"><dt class="param">servers</dt><dd class="cmt"><p>ZooKeeper connection string</p></dd><dt class="param">timeout</dt><dd class="cmt"><p>ZooKeeper session timeout</p></dd><dt class="param">connectionWatcher</dt><dd class="cmt"><p>Connection events callback</p></dd><dt class="param">session</dt><dd class="cmt"><p>Session credentials -- id and password
 </p></dd></dl></div>
+    </li><li name="zooowner.Zooowner#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply(connection:zooowner.ZKConnection):zooowner.Zooowner"></a>
+      <a id="apply(ZKConnection):Zooowner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="connection">connection: <a href="ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></span>)</span><span class="result">: <a href="Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.Zooowner$@apply(connection:zooowner.ZKConnection):zooowner.Zooowner" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Creates new instance of <a href="Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a> from <a href="ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a>.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -485,7 +502,7 @@
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Creates new instance of Zooowner.</p><div class="fullcomment"><div class="comment cmt"><p>Creates new instance of Zooowner.</p><pre>Zooowner.withWatcher(<span class="lit">"localhost:2181"</span>, <span class="num">5.</span>seconds) {
+      <p class="shortcomment cmt">Creates new instance of <a href="Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Creates new instance of <a href="Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a>.</p><pre>Zooowner.withWatcher(<span class="lit">"localhost:2181"</span>, <span class="num">5.</span>seconds) {
   <span class="kw">case</span> Connected <span class="kw">=&gt;</span> println(<span class="lit">"Connection established"</span>)
   <span class="kw">case</span> Disconnected <span class="kw">=&gt;</span> println(<span class="lit">"Connection lost"</span>)
 }</pre></div></div>
