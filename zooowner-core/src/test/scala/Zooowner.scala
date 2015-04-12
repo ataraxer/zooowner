@@ -57,8 +57,17 @@ class ZooownerSpec extends UnitSpec {
   }
 
 
+  it should "create nodes" in new Env {
+    zk.create("/node", persistent = true).child should be ("node")
+    zk.exists("/node") should be (true)
+
+    zk.create("/node/child").child should be ("child")
+    zk.exists("/node/child") should be (true)
+  }
+
+
   it should "create nodes with paths filled with nulls" in new Env {
-    zk.create("/node/with/long/path", "value").child should be ("path")
+    zk.forceCreate("/node/with/long/path", "value").child should be ("path")
 
     zkMock.check.created("/node", None)
     zkMock.check.created("/node/with", None)
@@ -69,10 +78,10 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "create sequential node and return it's name" in new Env {
-    val one = zk.create("/queue/node", sequential = true)
+    val one = zk.forceCreate("/queue/node", sequential = true)
     one.child should be ("node0000000000")
 
-    val two = zk.create("/queue/node", sequential = true)
+    val two = zk.forceCreate("/queue/node", sequential = true)
     two.child should be ("node0000000001")
   }
 

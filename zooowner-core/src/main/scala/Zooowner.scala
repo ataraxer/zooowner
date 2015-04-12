@@ -59,7 +59,7 @@ trait Zooowner {
    * @param persistent Specifies whether created node should be persistent.
    * @param sequential Specifies whether created node should be sequential.
    */
-  def create[T: ZKEncoder](
+  def forceCreate[T: ZKEncoder](
     path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,
@@ -74,7 +74,7 @@ trait Zooowner {
    * @param persistent Specifies whether created node should be persistent.
    * @param sequential Specifies whether created node should be sequential.
    */
-  def createChild[T: ZKEncoder](
+  def create[T: ZKEncoder](
     path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,

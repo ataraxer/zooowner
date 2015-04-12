@@ -61,7 +61,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   }
 
 
-  def create[T: ZKEncoder](
+  def forceCreate[T: ZKEncoder](
     path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,
@@ -72,7 +72,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   }
 
 
-  def createChild[T: ZKEncoder](
+  def create[T: ZKEncoder](
     path: ZKPath,
     value: T = NoData,
     persistent: Boolean = false,
