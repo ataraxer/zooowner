@@ -78,7 +78,6 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
     persistent: Boolean = false,
     sequential: Boolean = false) =
   {
-    require(!path.isRoot, "Path should not be root")
     _create(path, encode(value), persistent, sequential)
   }
 
