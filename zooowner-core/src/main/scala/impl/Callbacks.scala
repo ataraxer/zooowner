@@ -102,8 +102,7 @@ private[zooowner] object ZKCallback {
       val result = processCode(code = returnCode, path = path) {
         // wrap in option to guard from null
         val wrappedData = Option(data)
-        val meta = Some(stat.toMeta)
-        ZKNode(path, wrappedData, meta)
+        ZKNode(path, wrappedData, stat.toMeta)
       }
 
       resultPromise.complete(result)

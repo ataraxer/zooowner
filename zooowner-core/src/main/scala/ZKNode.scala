@@ -1,7 +1,7 @@
 package zooowner
 
 
-case class ZKNode(path: ZKPath, data: ZKData, meta: Option[ZKNodeMeta]) {
+case class ZKNode(path: ZKPath, data: ZKData, meta: ZKNodeMeta) {
   def apply[T](implicit decoder: ZKDecoder[T]) = {
     decoder.decode(data)
   }

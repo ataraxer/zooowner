@@ -108,7 +108,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
 
     connection { client =>
       val data = client.getData(path, watcher.orNull, stat)
-      ZKNode(path, Option(data), Some(stat.toMeta))
+      ZKNode(path, Option(data), stat.toMeta)
     }
   }
 
