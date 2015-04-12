@@ -9,10 +9,6 @@ case class ZKNode(path: ZKPath, data: ZKData, meta: Option[ZKNodeMeta]) {
   def extract[T](implicit decoder: ZKDecoder[T]) = {
     decoder.decode(data)
   }
-
-  def get(implicit defaults: DefaultSerializers): defaults.Type = {
-    defaults.decoder.decode(data)
-  }
 }
 
 

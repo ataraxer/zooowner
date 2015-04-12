@@ -3,13 +3,6 @@ package zooowner
 import scala.language.postfixOps
 
 
-trait DefaultSerializers {
-  type Type
-  def encoder: ZKEncoder[Type]
-  def decoder: ZKDecoder[Type]
-}
-
-
 object DefaultSerializers {
   private val Encoding = "UTF-8"
 
@@ -55,15 +48,6 @@ object DefaultSerializers {
       data map { value =>
         valueDecoder.decode(Some(value))
       }
-    }
-  }
-
-
-  implicit val defaults = {
-    new DefaultSerializers {
-      type Type = String
-      def encoder = stringEncoder
-      def decoder = stringDecoder
     }
   }
 }

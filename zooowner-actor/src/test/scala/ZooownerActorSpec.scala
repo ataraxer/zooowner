@@ -144,7 +144,7 @@ class ZooownerActorSpec(_system: ActorSystem)
 
     expectMsgPF(5.seconds) {
       case NodeChanged(zk"/foo", Some(node)) =>
-        node.get should be ("new-value")
+        node.extract[String] should be ("new-value")
     }
   }
 
