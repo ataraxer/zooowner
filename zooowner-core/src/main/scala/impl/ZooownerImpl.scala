@@ -59,10 +59,9 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
     persistent: Boolean = false,
     sequential: Boolean = false): ZKPath =
   {
-    val mode = createMode(persistent, sequential)
-
     this { client =>
-      path / client.create(path, data.orNull, AnyACL, mode)
+      val mode = createMode(persistent, sequential)
+      client.create(path, data.orNull, AnyACL, mode)
     }
   }
 

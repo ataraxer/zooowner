@@ -117,10 +117,10 @@ private[zooowner] case class ZKPathImpl(components: Seq[String])
 private[zooowner] class ZKPathParser(val input: ParserInput) extends Parser {
   import CharPredicate._
 
-  val ForbiddenToken = Set("zookeeper", ".", "..")
+  val ForbiddenToken = Set(".", "..")
 
   def Check(token: String) = rule {
-    test(!ForbiddenToken.contains(token)) ~ push(token)
+    test(!(ForbiddenToken contains token)) ~ push(token)
   }
 
   def Path = rule { (ComponentList | Root) ~ EOI ~> ZKPathImpl }

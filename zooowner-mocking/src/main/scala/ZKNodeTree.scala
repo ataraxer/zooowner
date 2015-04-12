@@ -146,7 +146,8 @@ class ZKNodeTree {
       fireEvent(parent, NodeChildrenChanged)
     }
 
-    node.name
+    if (parent == "/") parent + node.name
+    else parent + "/" + node.name
   }
 
 

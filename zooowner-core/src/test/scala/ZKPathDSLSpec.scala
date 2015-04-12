@@ -79,8 +79,6 @@ class ZKPathDSLSpec extends UnitSpec {
       "//",
       "/foo/",
       "/foo//bar",
-      "/zookeeper",
-      "/foo/zookeeper",
       "/foo/.",
       "/foo/..")
 
@@ -104,7 +102,6 @@ class ZKPathDSLSpec extends UnitSpec {
     }
 
     val invalidComponents = List(
-      Seq("foo", "zookeeper"),
       Seq("foo", "."),
       Seq("foo", ".."),
       Seq("foo", "/"),
@@ -135,7 +132,6 @@ class ZKPathDSLSpec extends UnitSpec {
     }
 
     val path = ZKPath("/foo/bar")
-    isInvalid { path / "zookeeper" }
     isInvalid { path / "." }
     isInvalid { path / ".." }
     isInvalid { path / "/" }

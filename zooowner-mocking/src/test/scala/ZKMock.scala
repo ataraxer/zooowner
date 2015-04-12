@@ -48,13 +48,13 @@ class ZKMockSpec extends UnitSpec {
     val data = "some-data".getBytes
 
     val pathA = zk.create("/queue", data, AnyACL, PERSISTENT_SEQUENTIAL)
-    pathA should be ("queue0000000000")
+    pathA should be ("/queue0000000000")
 
     zk.exists("/queue0000000000", null) should not be (null)
     zk.getData("/queue0000000000", null, null) should be (data)
 
     val pathB = zk.create("/queue", data, AnyACL, PERSISTENT_SEQUENTIAL)
-    pathB should be ("queue0000000001")
+    pathB should be ("/queue0000000001")
 
     zk.exists("/queue0000000001", null) should not be (null)
     zk.getData("/queue0000000001", null, null) should be (data)

@@ -114,7 +114,7 @@ trait ZKMock {
       val (result, code) = catchExceptionCode {
         nodeTree.create(path, data, createMode)
       }
-      callback.processResult(code, path, context, result.map( "/" + _ ).orNull)
+      callback.processResult(code, path, context, result.orNull)
     }
 
     /** Generate `setData(String, Int)` stub answer.  */
