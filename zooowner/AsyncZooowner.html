@@ -164,35 +164,35 @@
     </span>
       <p class="shortcomment cmt">Asynchronous version of <a href="Zooowner.html#get(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Option[zooowner.ZKNode]" class="extmbr" name="zooowner.Zooowner#get">Zooowner.get</a>.</p>
     </li><li name="zooowner.AsyncZooowner#meta" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="meta(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):scala.concurrent.Future[Option[zooowner.ZKNodeMeta]]"></a>
-      <a id="meta(ZKPath,Option[ZKEventWatcher]):Future[Option[ZKNodeMeta]]"></a>
+      <a id="meta(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):scala.concurrent.Future[Option[zooowner.ZKMeta]]"></a>
+      <a id="meta(ZKPath,Option[ZKEventWatcher]):Future[Option[ZKMeta]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">meta</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<a href="ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a>]]</span>
+        <span class="name">meta</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<a href="ZKMeta.html" class="extype" name="zooowner.ZKMeta">ZKMeta</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.AsyncZooowner@meta(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):scala.concurrent.Future[Option[zooowner.ZKNodeMeta]]" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@meta(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):scala.concurrent.Future[Option[zooowner.ZKMeta]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Asynchronous version of <code>stat</code>.</p>
     </li><li name="zooowner.AsyncZooowner#set" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="set[T](path:zooowner.ZKPath,value:T,version:Int)(implicitevidence$2:zooowner.ZKEncoder[T]):scala.concurrent.Future[Option[zooowner.ZKNodeMeta]]"></a>
-      <a id="set[T](ZKPath,T,Int)(ZKEncoder[T]):Future[Option[ZKNodeMeta]]"></a>
+      <a id="set[T](path:zooowner.ZKPath,value:T,version:Int)(implicitevidence$2:zooowner.ZKEncoder[T]):scala.concurrent.Future[Option[zooowner.ZKMeta]]"></a>
+      <a id="set[T](ZKPath,T,Int)(ZKEncoder[T]):Future[Option[ZKMeta]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.set.T">T</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.set.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<a href="ZKNodeMeta.html" class="extype" name="zooowner.ZKNodeMeta">ZKNodeMeta</a>]]</span>
+        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.AsyncZooowner.set.T">T</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.AsyncZooowner.set.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<a href="ZKMeta.html" class="extype" name="zooowner.ZKMeta">ZKMeta</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.AsyncZooowner@set[T](path:zooowner.ZKPath,value:T,version:Int)(implicitevidence$2:zooowner.ZKEncoder[T]):scala.concurrent.Future[Option[zooowner.ZKNodeMeta]]" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.AsyncZooowner@set[T](path:zooowner.ZKPath,value:T,version:Int)(implicitevidence$2:zooowner.ZKEncoder[T]):scala.concurrent.Future[Option[zooowner.ZKMeta]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
