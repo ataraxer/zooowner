@@ -9,8 +9,9 @@ trait Zooowner {
   import Zooowner._
 
   /**
-   * Takes a function to be called on client taking care of ensuring that it's
-   * called with active instance of ZooKeeper client.
+   * Returns a node associated with given path.
+   *
+   * @throws NoNodeException if node doesn't exist
    */
   def apply(path: ZKPath, watcher: Option[ZKEventWatcher] = None): ZKNode
 
