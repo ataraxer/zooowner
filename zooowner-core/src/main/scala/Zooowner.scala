@@ -158,6 +158,16 @@ trait Zooowner {
     version: Int = AnyVersion): Unit
 
   /**
+   * Deletes node's children.
+   */
+  def deleteChildren(path: ZKPath, recursive: Boolean = false): Unit = {
+    require(!path.isRoot, "Not allowed to remove children of root node")
+    val childrenList = children(path)
+    if (recursive) childrenList.foreach( child => deleteChildren(child, true) )
+    children(path).foreach( child => delete(child) )
+  }
+
+  /**
    * Returns list of children of the node.
    */
   def children(

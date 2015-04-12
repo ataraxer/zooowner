@@ -121,20 +121,63 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "delete nodes" in new Env {
-    zk.create("/node", "first value")
-    zk.delete("/node")
+    zk.create("/node")
+    zk.exists("/node") should be (true)
 
+    zk.delete("/node")
     zk.exists("/node") should be (false)
   }
 
 
   it should "delete nodes recursively" in new Env {
-    zk.create("/node", "first value", persistent = true)
-    zk.create("/node/child", "child value", persistent = true)
+    zk.create("/node", persistent = true)
+    zk.create("/node/child", persistent = true)
+
+    zk.exists("/node") should be (true)
+    zk.exists("/node/child") should be (true)
+
     zk.delete("/node", recursive = true)
 
     zk.exists("/node") should be (false)
     zk.exists("/node/child") should be (false)
+  }
+
+
+  it should "delete node's children" in new Env {
+    zk.create("/node", persistent = true)
+    zk.exists("/node") should be (true)
+
+    zk.create("/node/foo", persistent = true)
+    zk.create("/node/bar", persistent = true)
+
+    zk.children("/node") should contain theSameElementsAs Seq(
+      zk"/node/foo",
+      zk"/node/bar")
+
+    zk.deleteChildren("/node")
+
+    zk.exists("/node") should be (true)
+    zk.children("/node") should be (empty)
+  }
+
+
+  it should "delete node's children recursively" in new Env {
+    zk.create("/node", persistent = true)
+    zk.exists("/node") should be (true)
+
+    zk.create("/node/foo", persistent = true)
+    zk.create("/node/foo/foo", persistent = true)
+    zk.create("/node/bar", persistent = true)
+    zk.create("/node/bar/bar", persistent = true)
+
+    zk.children("/node") should contain theSameElementsAs Seq(
+      zk"/node/foo",
+      zk"/node/bar")
+
+    zk.deleteChildren("/node", recursive = true)
+
+    zk.exists("/node") should be (true)
+    zk.children("/node") should be (empty)
   }
 
 
