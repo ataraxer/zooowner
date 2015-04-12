@@ -87,7 +87,9 @@ trait Zooowner {
   /**
    * Gets node state and optionally sets watcher.
    */
-  def meta(path: ZKPath, watcher: Option[ZKEventWatcher] = None): Option[ZKNodeMeta]
+  def meta(
+    path: ZKPath,
+    watcher: Option[ZKEventWatcher] = None): Option[ZKNodeMeta]
 
   /**
    * Tests whether the node exists.
@@ -174,9 +176,7 @@ trait Zooowner {
   /**
    * Sets up a callback for node events.
    */
-  def watch
-    (path: ZKPath, persistent: Boolean = true)
-    (reaction: Reaction[ZKEvent]): ZKEventWatcher
+  def watch(path: ZKPath)(reaction: Reaction[ZKEvent]): ZKEventWatcher
 
   /**
    * Sets up a watcher on node events.

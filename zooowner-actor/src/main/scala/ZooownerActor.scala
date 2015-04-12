@@ -157,7 +157,7 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      * @param persistent Whether watch should be persistent.
      */
     case WatchNode(path, persistent) => {
-      zk.watch(path, persistent) { passTo(sender) }
+      zk.watch(path) { passTo(sender) }
     }
   }
 }

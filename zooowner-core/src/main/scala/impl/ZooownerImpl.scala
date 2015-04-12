@@ -160,12 +160,9 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   }
 
 
-  def watch
-    (path: ZKPath, persistent: Boolean = true)
-    (reaction: Reaction[ZKEvent]): ZKEventWatcher =
-  {
+  def watch(path: ZKPath)(reaction: Reaction[ZKEvent]): ZKEventWatcher = {
     val callback = reaction orElse Reaction.empty[ZKEvent]
-    val watcher = new DefaultNodeWatcher(this, path, callback, persistent)
+    val watcher = new DefaultNodeWatcher(this, path, callback)
     watch(path, watcher)
   }
 

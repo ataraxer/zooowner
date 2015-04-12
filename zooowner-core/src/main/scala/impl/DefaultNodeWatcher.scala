@@ -8,13 +8,10 @@ import org.apache.zookeeper.Watcher.Event.EventType
 private[zooowner] class DefaultNodeWatcher(
     client: Zooowner,
     path: String,
-    callback: Reaction[ZKEvent],
-    persistent: Boolean)
+    callback: Reaction[ZKEvent])
   extends ZKEventWatcher
 {
-  def self: Option[ZKEventWatcher] = {
-    if (persistent) Some(this) else None
-  }
+  def self = Some(this)
 
 
   def reactOn(action: => ZKEvent) = {
@@ -34,27 +31,24 @@ private[zooowner] class DefaultNodeWatcher(
 
   def reaction = {
     case EventType.NodeCreated => reactOn {
-      if (persistent) {
-        watchChildren()
-        watchData()
-      }
-      NodeCreated(path, client.get(path))
+      watchChildren()
+      NodeCreated(path, client.get(path, watcher = self))
     }
 
     case EventType.NodeDataChanged => reactOn {
-      if (persistent) watchChildren()
+      watchChildren()
       NodeChanged(path, client.get(path, watcher = self))
     }
 
     case EventType.NodeChildrenChanged => reactOn {
-      if (persistent) watchData()
+      watchData()
       NodeChildrenChanged(path, client.children(path, watcher = self))
     }
 
     case EventType.NodeDeleted => reactOn {
       // after node deletion we still may be interested
       // in watching it, in that case -- reset watcher
-      if (persistent) client.watch(path, watcher = this)
+      client.watch(path, watcher = this)
       NodeDeleted(path)
     }
   }
