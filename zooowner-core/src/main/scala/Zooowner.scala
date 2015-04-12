@@ -56,13 +56,13 @@ trait Zooowner {
    *
    * @param path Path of node to be created.
    * @param value Optional data that should be stored in created node.
-   * @param persistent Specifies whether created node should be persistent.
+   * @param ephemeral Specifies whether created node should be ephemeral.
    * @param sequential Specifies whether created node should be sequential.
    */
   def forceCreate[T: ZKEncoder](
     path: ZKPath,
     value: T = NoData,
-    persistent: Boolean = false,
+    ephemeral: Boolean = false,
     sequential: Boolean = false): ZKPath
 
   /**
@@ -71,13 +71,13 @@ trait Zooowner {
    * @param path Path of parent node.
    * @param child Name of a child to be created.
    * @param value Optional data that should be stored in created node.
-   * @param persistent Specifies whether created node should be persistent.
+   * @param ephemeral Specifies whether created node should be ephemeral.
    * @param sequential Specifies whether created node should be sequential.
    */
   def create[T: ZKEncoder](
     path: ZKPath,
     value: T = NoData,
-    persistent: Boolean = false,
+    ephemeral: Boolean = false,
     sequential: Boolean = false): ZKPath
 
   /**
@@ -124,16 +124,16 @@ trait Zooowner {
    *
    * @param path Path of a node to be updated.
    * @param value Value to be saved into node.
-   * @param persistent Specifies whether created node should be persistent.
+   * @param ephemeral Specifies whether created node should be ephemeral.
    */
   def forceSet[T: ZKEncoder](
     path: ZKPath,
     value: T,
-    persistent: Boolean = true) =
+    ephemeral: Boolean = false) =
   {
     if (exists(path)) {
-      val bothPersistent = persistent && isPersistent(path)
-      val bothEphemeral = !persistent && isEphemeral(path)
+      val bothPersistent = !ephemeral && isPersistent(path)
+      val bothEphemeral = ephemeral && isEphemeral(path)
 
       require(
         bothPersistent || bothEphemeral,
@@ -141,7 +141,7 @@ trait Zooowner {
 
       set(path, value)
     } else {
-      create(path, value, persistent = persistent)
+      create(path, value, ephemeral = ephemeral)
     }
   }
 

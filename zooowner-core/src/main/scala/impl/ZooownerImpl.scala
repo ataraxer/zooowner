@@ -51,11 +51,11 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   private def _create(
     path: ZKPath,
     data: ZKData,
-    persistent: Boolean = false,
+    ephemeral: Boolean = false,
     sequential: Boolean = false): ZKPath =
   {
     connection { client =>
-      val mode = createMode(persistent, sequential)
+      val mode = createMode(ephemeral, sequential)
       client.create(path, data.orNull, AnyACL, mode)
     }
   }
@@ -64,21 +64,21 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   def forceCreate[T: ZKEncoder](
     path: ZKPath,
     value: T = NoData,
-    persistent: Boolean = false,
+    ephemeral: Boolean = false,
     sequential: Boolean = false) =
   {
     if (!path.isRoot) createPathTo(path)
-    _create(path, encode(value), persistent, sequential)
+    _create(path, encode(value), ephemeral, sequential)
   }
 
 
   def create[T: ZKEncoder](
     path: ZKPath,
     value: T = NoData,
-    persistent: Boolean = false,
+    ephemeral: Boolean = false,
     sequential: Boolean = false) =
   {
-    _create(path, encode(value), persistent, sequential)
+    _create(path, encode(value), ephemeral, sequential)
   }
 
 
@@ -90,7 +90,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
 
     if (!exists(parent)) {
       createPathTo(parent)
-      _create(parent, None, persistent = true)
+      _create(parent, None)
     }
   }
 

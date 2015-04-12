@@ -121,7 +121,7 @@ class ZooownerActorSpec(_system: ActorSystem)
 
 
   it should "get node's children asynchronously" in {
-    zk.underlyingActor.zk.create("/foo", "value", persistent = true)
+    zk.underlyingActor.zk.create("/foo", "value")
     zk.underlyingActor.zk.create("/foo/a", "value")
     zk.underlyingActor.zk.create("/foo/b", "value")
 
@@ -136,7 +136,7 @@ class ZooownerActorSpec(_system: ActorSystem)
 
 
   it should "watch node events and report them back to watcher" in {
-    zk.underlyingActor.zk.create("/foo", Some("value"), persistent = true)
+    zk.underlyingActor.zk.create("/foo", "value")
 
     zk ! WatchNode("/foo")
 

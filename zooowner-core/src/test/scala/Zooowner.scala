@@ -58,7 +58,7 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "create nodes" in new Env {
-    zk.create("/node", persistent = true).child should be ("node")
+    zk.create("/node").child should be ("node")
     zk.exists("/node") should be (true)
 
     zk.create("/node/child").child should be ("child")
@@ -110,7 +110,7 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "return a list of nodes children" in new Env {
-    zk.create("/node", "value", persistent = true)
+    zk.create("/node", "value")
     zk.create("/node/foo", "foo-value")
     zk.create("/node/bar", "bar-value")
 
@@ -130,8 +130,8 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "delete nodes recursively" in new Env {
-    zk.create("/node", persistent = true)
-    zk.create("/node/child", persistent = true)
+    zk.create("/node")
+    zk.create("/node/child")
 
     zk.exists("/node") should be (true)
     zk.exists("/node/child") should be (true)
@@ -144,11 +144,11 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "delete node's children" in new Env {
-    zk.create("/node", persistent = true)
+    zk.create("/node")
     zk.exists("/node") should be (true)
 
-    zk.create("/node/foo", persistent = true)
-    zk.create("/node/bar", persistent = true)
+    zk.create("/node/foo")
+    zk.create("/node/bar")
 
     zk.children("/node") should contain theSameElementsAs Seq(
       zk"/node/foo",
@@ -162,13 +162,13 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "delete node's children recursively" in new Env {
-    zk.create("/node", persistent = true)
+    zk.create("/node")
     zk.exists("/node") should be (true)
 
-    zk.create("/node/foo", persistent = true)
-    zk.create("/node/foo/foo", persistent = true)
-    zk.create("/node/bar", persistent = true)
-    zk.create("/node/bar/bar", persistent = true)
+    zk.create("/node/foo")
+    zk.create("/node/foo/foo")
+    zk.create("/node/bar")
+    zk.create("/node/bar/bar")
 
     zk.children("/node") should contain theSameElementsAs Seq(
       zk"/node/foo",
@@ -182,8 +182,8 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "test if node is ephemeral" in new Env {
-    zk.create("/persistent-node", persistent = true)
-    zk.create("/ephemeral-node", persistent = false)
+    zk.create("/persistent-node")
+    zk.create("/ephemeral-node", ephemeral = true)
 
     zk.isEphemeral("/persistent-node") should be (false)
     zk.isEphemeral("/ephemeral-node") should be (true)
@@ -209,7 +209,7 @@ class ZooownerSpec extends UnitSpec {
         childCreated.success({})
     }
 
-    zk.create("/some-node", Some("value"), persistent = true)
+    zk.create("/some-node", Some("value"))
     created.future.futureValue
 
     zk.create("/some-node/child", Some("value"))
@@ -244,7 +244,7 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "set one-time watchers on node children" in new Env {
-    zk.create("/parent", persistent = true)
+    zk.create("/parent")
 
     val childrenEvent = zk.watchChildren("/parent")
     zk.create("/parent/foo")

@@ -54,7 +54,7 @@ class AsyncZooownerSpec extends UnitSpec {
 
 
   it should "get node's children asynchronously" in new Env {
-    zk.create("/parent", persistent = true)
+    zk.create("/parent")
     zk.create("/parent/child-a")
     zk.create("/parent/child-b")
 
@@ -106,7 +106,7 @@ class AsyncZooownerSpec extends UnitSpec {
 
 
   it should "set one-time watchers on node children" in new Env {
-    zk.create("/parent", persistent = true)
+    zk.create("/parent")
 
     val childrenEvent = zk.async.watchChildren("/parent")
     zk.create("/parent/foo")

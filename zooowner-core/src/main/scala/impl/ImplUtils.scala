@@ -6,12 +6,12 @@ import ZKPathDSL._
 
 
 private[zooowner] object ImplUtils extends ZKPathDSL with StatConverter {
-  def createMode(persistent: Boolean, sequential: Boolean) = {
-    (persistent, sequential) match {
-      case (true, true)   => PERSISTENT_SEQUENTIAL
-      case (true, false)  => PERSISTENT
-      case (false, true)  => EPHEMERAL_SEQUENTIAL
-      case (false, false) => EPHEMERAL
+  def createMode(ephemeral: Boolean, sequential: Boolean) = {
+    (ephemeral, sequential) match {
+      case (true,  true)  => EPHEMERAL_SEQUENTIAL
+      case (true,  false) => EPHEMERAL
+      case (false, true)  => PERSISTENT_SEQUENTIAL
+      case (false, false) => PERSISTENT
     }
   }
 }

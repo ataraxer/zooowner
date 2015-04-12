@@ -19,7 +19,7 @@ trait AsyncZooowner {
   def create[T: ZKEncoder](
     path: ZKPath,
     value: T = NoData,
-    persistent: Boolean = false,
+    ephemeral: Boolean = false,
     sequential: Boolean = false): Future[ZKPath]
 
   /**
