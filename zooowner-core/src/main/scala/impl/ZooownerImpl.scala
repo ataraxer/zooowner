@@ -5,8 +5,10 @@ import zooowner.message._
 
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.ZooKeeper
+import org.apache.zookeeper.Watcher.Event.EventType
 
 import scala.concurrent.duration._
+import scala.concurrent.{Future, Promise, ExecutionContext}
 import scala.collection.JavaConversions._
 import scala.util.control.Exception.catching
 
@@ -180,6 +182,59 @@ private[zooowner] class ZooownerImpl(connection: ZKConnection)
     val nodeExists = exists(path, Some(watcher))
     if (nodeExists) children(path, watcher = Some(watcher))
     watcher
+  }
+
+
+  def watchData
+    (path: ZKPath)
+    (implicit executor: ExecutionContext): Future[ZKDataEvent] =
+  {
+    val (eventWatcher, futureEvent) = _watch(path)
+    exists(path, watcher = Some(eventWatcher))
+    _processEvent(path, futureEvent).mapTo[ZKDataEvent]
+  }
+
+
+  def watchChildren
+    (path: ZKPath)
+    (implicit executor: ExecutionContext): Future[ZKChildrenEvent] =
+  {
+    val (eventWatcher, futureEvent) = _watch(path)
+    children(path, watcher = Some(eventWatcher))
+    _processEvent(path, futureEvent).mapTo[ZKChildrenEvent]
+  }
+
+
+  private def _processEvent
+    (path: ZKPath, futureEvent: Future[EventType])
+    (implicit executor: ExecutionContext): Future[ZKEvent] =
+  {
+    futureEvent map {
+      case EventType.NodeCreated =>
+        NodeCreated(path, getNode(path))
+
+      case EventType.NodeDataChanged =>
+        NodeChanged(path, getNode(path))
+
+      case EventType.NodeDeleted =>
+        NodeDeleted(path)
+
+      case EventType.NodeChildrenChanged =>
+        NodeChildrenChanged(path, children(path))
+
+      case event =>
+        throw new Exception("Unexpected event encountered: " + event)
+    }
+  }
+
+
+  private[zooowner] def _watch
+    (path: ZKPath)
+    (implicit executor: ExecutionContext): (ZKEventWatcher, Future[EventType]) =
+  {
+    val eventPromise = Promise[EventType]()
+    val eventWatcher = ZKEventWatcher { case event => eventPromise.success(event) }
+    (eventWatcher, eventPromise.future)
   }
 }
 

@@ -1,7 +1,7 @@
 package zooowner
 
 import zooowner.message._
-import scala.concurrent.Future
+import scala.concurrent.{Future, ExecutionContext}
 import scala.concurrent.duration._
 
 
@@ -11,7 +11,7 @@ trait AsyncZooowner {
    */
   def meta(
     path: ZKPath,
-    watcher: Option[ZKEventWatcher] = None): Future[ZKNodeMeta]
+    watcher: Option[ZKEventWatcher] = None): Future[Option[ZKNodeMeta]]
 
   /**
    * Asynchronous version of [[Zooowner.create]].
@@ -34,7 +34,7 @@ trait AsyncZooowner {
    */
   def set[T: ZKEncoder](
     path: ZKPath,
-    value: T, version: Int = AnyVersion): Future[ZKNodeMeta]
+    value: T, version: Int = AnyVersion): Future[Option[ZKNodeMeta]]
 
   /**
    * Asynchronous version of [[Zooowner.get]].
@@ -49,10 +49,24 @@ trait AsyncZooowner {
   def children(
     path: ZKPath,
     watcher: Option[ZKEventWatcher] = None): Future[Seq[ZKPath]]
+
+  /**
+   * Sets up a one-time watcher on a node, and returns a future change.
+   */
+  def watchData
+    (path: ZKPath)
+    (implicit executor: ExecutionContext): Future[ZKDataEvent]
+
+  /**
+   * Sets up a one-time watcher on a node children, and returns a future change.
+   */
+  def watchChildren
+    (path: ZKPath)
+    (implicit executor: ExecutionContext): Future[ZKChildrenEvent]
 }
 
 
-trait AsyncAPI { this: Zooowner =>
+trait AsyncAPI { this: impl.ZooownerImpl =>
   val async: AsyncZooowner = new impl.AsyncZooownerImpl(this)
 }
 

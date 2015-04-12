@@ -70,7 +70,7 @@ private[zooowner] object ZKCallback {
   /**
    * Fires up on node stat retreival.
    */
-  case class OnStat(resultPromise: Promise[ZKNodeMeta])
+  case class OnStat(resultPromise: Promise[Option[ZKNodeMeta]])
     extends ZKCallback with StatCallback
   {
     def processResult(
@@ -79,7 +79,8 @@ private[zooowner] object ZKCallback {
       context: Any,
       stat: Stat): Unit =
     {
-      val result = processCode(code = returnCode, path = path)(stat.toMeta)
+      val maybeStat = Option(stat).map( _.toMeta )
+      val result = processCode(code = returnCode, path = path)(maybeStat)
       resultPromise.complete(result)
     }
   }

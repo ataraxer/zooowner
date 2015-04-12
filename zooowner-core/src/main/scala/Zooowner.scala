@@ -1,6 +1,7 @@
 package zooowner
 
 import zooowner.message._
+import scala.concurrent.{Future, ExecutionContext}
 import scala.concurrent.duration._
 
 
@@ -188,6 +189,20 @@ trait Zooowner {
    * Sets up a watcher on node events.
    */
   def watch(path: ZKPath, watcher: ZKEventWatcher): ZKEventWatcher
+
+  /**
+   * Sets up a one-time watcher on a node, and returns a future change.
+   */
+  def watchData
+    (path: ZKPath)
+    (implicit executor: ExecutionContext): Future[ZKDataEvent]
+
+  /**
+   * Sets up a one-time watcher on a node children, and returns a future change.
+   */
+  def watchChildren
+    (path: ZKPath)
+    (implicit executor: ExecutionContext): Future[ZKChildrenEvent]
 }
 
 

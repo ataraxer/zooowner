@@ -1,12 +1,13 @@
 package zooowner
 package impl
 
-import zooowner.message.ZKResponse
+import zooowner.message._
 import org.apache.zookeeper.data.Stat
-import scala.concurrent.{Promise, Future}
+import org.apache.zookeeper.Watcher.Event.EventType
+import scala.concurrent.{Promise, Future, ExecutionContext}
 
 
-private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
+private[zooowner] class AsyncZooownerImpl(zooowner: ZooownerImpl)
   extends AsyncZooowner
 {
   import ImplUtils._
@@ -17,9 +18,9 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
 
   def meta(
     path: ZKPath,
-    watcher: Option[ZKEventWatcher] = None): Future[ZKNodeMeta] =
+    watcher: Option[ZKEventWatcher] = None): Future[Option[ZKNodeMeta]] =
   {
-    val result = Promise[ZKNodeMeta]()
+    val result = Promise[Option[ZKNodeMeta]]()
     client.exists(path, watcher.orNull, OnStat(result), null)
     result.future
   }
@@ -49,9 +50,9 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
   def set[T: ZKEncoder](
     path: ZKPath,
     value: T,
-    version: Int = AnyVersion): Future[ZKNodeMeta] =
+    version: Int = AnyVersion): Future[Option[ZKNodeMeta]] =
   {
-    val result = Promise[ZKNodeMeta]()
+    val result = Promise[Option[ZKNodeMeta]]()
     val data = encode(value).orNull
     client.setData(path, data, version, OnStat(result), null)
     result.future
@@ -75,6 +76,49 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
     val result = Promise[Seq[ZKPath]]()
     client.getChildren(path, watcher.orNull, OnChildren(result), null)
     result.future
+  }
+
+
+  def watchData
+    (path: ZKPath)
+    (implicit executor: ExecutionContext): Future[ZKDataEvent] =
+  {
+    val (eventWatcher, futureEvent) = zooowner._watch(path)
+    meta(path, watcher = Some(eventWatcher))
+    _processEvent(path, futureEvent).mapTo[ZKDataEvent]
+  }
+
+
+  def watchChildren
+    (path: ZKPath)
+    (implicit executor: ExecutionContext): Future[ZKChildrenEvent] =
+  {
+    val (eventWatcher, futureEvent) = zooowner._watch(path)
+    children(path, watcher = Some(eventWatcher))
+    _processEvent(path, futureEvent).mapTo[ZKChildrenEvent]
+  }
+
+
+  private def _processEvent
+    (path: ZKPath, futureEvent: Future[EventType])
+    (implicit executor: ExecutionContext): Future[ZKEvent] =
+  {
+    futureEvent flatMap {
+      case EventType.NodeCreated =>
+        get(path) map { node => NodeCreated(path, Some(node)) }
+
+      case EventType.NodeDataChanged =>
+        get(path) map { node => NodeChanged(path, Some(node)) }
+
+      case EventType.NodeDeleted =>
+        Future.successful(NodeDeleted(path))
+
+      case EventType.NodeChildrenChanged =>
+        children(path) map { children => NodeChildrenChanged(path, children) }
+
+      case event =>
+        Future.failed(new Exception("Unexpected event encountered: " + event))
+    }
   }
 }
 

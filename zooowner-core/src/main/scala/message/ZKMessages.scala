@@ -15,6 +15,9 @@ sealed trait ZKFailure extends ZKResponse
 
 sealed trait ZKEvent extends ZKResponse
 
+sealed trait ZKDataEvent extends ZKEvent
+sealed trait ZKChildrenEvent extends ZKEvent
+
 sealed trait ZKConnectionEvent extends ZKEvent
 
 case object Connected extends ZKConnectionEvent with ZKSuccess
@@ -24,14 +27,16 @@ case object Expired extends ZKConnectionEvent with ZKFailure
 case object ReadOnly extends ZKFailure
 case object BadVersion extends ZKFailure
 
-case class NodeMeta(path: ZKPath, meta: ZKNodeMeta) extends ZKSuccess
+case class NodeMeta(path: ZKPath, meta: Option[ZKNodeMeta]) extends ZKSuccess
 case class Node(path: ZKPath, node: ZKNode) extends ZKSuccess
 case class NodeChildren(path: ZKPath, children: Seq[ZKPath]) extends ZKSuccess
 
-case class NodeCreated(path: ZKPath, node: Option[ZKNode]) extends ZKEvent
-case class NodeChanged(path: ZKPath, data: Option[ZKNode]) extends ZKEvent
-case class NodeChildrenChanged(path: ZKPath, children: Seq[ZKPath]) extends ZKEvent
-case class NodeDeleted(path: ZKPath) extends ZKEvent
+case class NodeCreated(path: ZKPath, node: Option[ZKNode]) extends ZKDataEvent
+case class NodeChanged(path: ZKPath, data: Option[ZKNode]) extends ZKDataEvent
+case class NodeDeleted(path: ZKPath) extends ZKDataEvent
+
+case class NodeChildrenChanged(path: ZKPath, children: Seq[ZKPath])
+  extends ZKChildrenEvent
 
 case class NoNode(path: ZKPath) extends ZKFailure
 case class NotEmpty(path: ZKPath) extends ZKFailure

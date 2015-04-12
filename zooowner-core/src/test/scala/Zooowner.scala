@@ -202,6 +202,37 @@ class ZooownerSpec extends UnitSpec with Eventually {
   }
 
 
+  it should "set one-time watchers on node data" in new Env {
+    val createEvent = zk.watchData("/some-node")
+    zk.create("/some-node", "initial-value")
+
+    val NodeCreated(zk"/some-node", Some(createdNode)) = createEvent.futureValue
+    createdNode.extract[String] should be ("initial-value")
+
+    val changeEvent = zk.watchData("/some-node")
+    zk.set("/some-node", "new-value")
+
+    val NodeChanged(zk"/some-node", Some(changedNode)) = changeEvent.futureValue
+    changedNode.extract[String] should be ("new-value")
+
+    val deleteEvent = zk.watchData("/some-node")
+    zk.delete("/some-node")
+
+    val NodeDeleted(zk"/some-node") = deleteEvent.futureValue
+  }
+
+
+  it should "set one-time watchers on node children" in new Env {
+    zk.create("/parent", persistent = true)
+
+    val childrenEvent = zk.watchChildren("/parent")
+    zk.create("/parent/foo")
+
+    val NodeChildrenChanged(zk"/parent", children) = childrenEvent.futureValue
+    children should contain theSameElementsAs Seq(zk"/parent/foo")
+  }
+
+
   it should "return cancellable watcher" in new Env {
     var created = false
     var deleted = false
