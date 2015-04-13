@@ -66,7 +66,58 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="zooowner.message.CreateNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="zooowner.message.BadVersion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BadVersionextendsZKFailurewithProductwithSerializable"></a>
+      <a id="BadVersion:BadVersion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BadVersion.html"><span class="name">BadVersion</span></a><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.message.package@BadVersionextendsZKFailurewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.message.ChildrenNotAllowed" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ChildrenNotAllowedextendsZKFailurewithProductwithSerializable"></a>
+      <a id="ChildrenNotAllowed:ChildrenNotAllowed"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChildrenNotAllowed.html"><span class="name">ChildrenNotAllowed</span></a><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.message.package@ChildrenNotAllowedextendsZKFailurewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.message.ConnectionLost" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConnectionLostextendsZKFailurewithProductwithSerializable"></a>
+      <a id="ConnectionLost:ConnectionLost"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ConnectionLost.html"><span class="name">ConnectionLost</span></a><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="status">status: <a href="ZKConnectionFailure.html" class="extype" name="zooowner.message.ZKConnectionFailure">ZKConnectionFailure</a></span>)</span><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.message.package@ConnectionLostextendsZKFailurewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.message.CreateNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="CreateNodeextendsZKMessagewithProductwithSerializable"></a>
       <a id="CreateNode:CreateNode"></a>
       <h4 class="signature">
@@ -96,23 +147,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.package@DeleteNodeextendsZKRequestwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="zooowner.message.Error" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ErrorextendsZKFailurewithProductwithSerializable"></a>
-      <a id="Error:Error"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Error.html"><span class="name">Error</span></a><span class="params">(<span name="code">code: <span class="extype" name="org.apache.zookeeper.KeeperException.Code">Code</span></span>)</span><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.package@ErrorextendsZKFailurewithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -147,23 +181,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.package@GetNodeValueextendsZKRequestwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="zooowner.message.NoNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NoNodeextendsZKFailurewithProductwithSerializable"></a>
-      <a id="NoNode:NoNode"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="NoNode.html"><span class="name">NoNode</span></a><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.package@NoNodeextendsZKFailurewithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -287,23 +304,6 @@
       </a>
     </span>
       
-    </li><li name="zooowner.message.NodeIsEphemeral" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NodeIsEphemeralextendsZKFailurewithProductwithSerializable"></a>
-      <a id="NodeIsEphemeral:NodeIsEphemeral"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="NodeIsEphemeral.html"><span class="name">NodeIsEphemeral</span></a><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.package@NodeIsEphemeralextendsZKFailurewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="zooowner.message.NodeMeta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NodeMetaextendsZKSuccesswithProductwithSerializable"></a>
       <a id="NodeMeta:NodeMeta"></a>
@@ -321,19 +321,36 @@
       </a>
     </span>
       
-    </li><li name="zooowner.message.NotEmpty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NotEmptyextendsZKFailurewithProductwithSerializable"></a>
-      <a id="NotEmpty:NotEmpty"></a>
+    </li><li name="zooowner.message.NodeNotEmpty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeNotEmptyextendsZKFailurewithProductwithSerializable"></a>
+      <a id="NodeNotEmpty:NodeNotEmpty"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="NotEmpty.html"><span class="name">NotEmpty</span></a><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="NodeNotEmpty.html"><span class="name">NodeNotEmpty</span></a><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.package@NotEmptyextendsZKFailurewithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.message.package@NodeNotEmptyextendsZKFailurewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.message.NodeNotExists" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeNotExistsextendsZKFailurewithProductwithSerializable"></a>
+      <a id="NodeNotExists:NodeNotExists"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeNotExists.html"><span class="name">NodeNotExists</span></a><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.message.package@NodeNotExistsextendsZKFailurewithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -351,6 +368,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.package@SetNodeValueextendsZKRequestwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.message.UnexpectedFailure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnexpectedFailureextendsZKFailurewithProductwithSerializable"></a>
+      <a id="UnexpectedFailure:UnexpectedFailure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UnexpectedFailure.html"><span class="name">UnexpectedFailure</span></a><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="failure">failure: <span class="extype" name="scala.util.Failure">Failure</span>[<a href="../package.html#ZKException=org.apache.zookeeper.KeeperException" class="extmbr" name="zooowner.ZKException">ZKException</a>]</span>)</span><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.message.package@UnexpectedFailureextendsZKFailurewithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -402,6 +436,40 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.package@ZKConnectionEventextendsZKEvent" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.message.ZKConnectionFailure" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ZKConnectionFailureextendsZKConnectionEventwithZKFailure"></a>
+      <a id="ZKConnectionFailure:ZKConnectionFailure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ZKConnectionFailure.html"><span class="name">ZKConnectionFailure</span></a><span class="result"> extends <a href="ZKConnectionEvent.html" class="extype" name="zooowner.message.ZKConnectionEvent">ZKConnectionEvent</a> with <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.message.package@ZKConnectionFailureextendsZKConnectionEventwithZKFailure" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="zooowner.message.ZKConnectionSuccess" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ZKConnectionSuccessextendsZKConnectionEventwithZKSuccess"></a>
+      <a id="ZKConnectionSuccess:ZKConnectionSuccess"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ZKConnectionSuccess.html"><span class="name">ZKConnectionSuccess</span></a><span class="result"> extends <a href="ZKConnectionEvent.html" class="extype" name="zooowner.message.ZKConnectionEvent">ZKConnectionEvent</a> with <a href="ZKSuccess.html" class="extype" name="zooowner.message.ZKSuccess">ZKSuccess</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#zooowner.message.package@ZKConnectionSuccessextendsZKConnectionEventwithZKSuccess" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -532,24 +600,7 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="zooowner.message.BadVersion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="BadVersion"></a>
-      <a id="BadVersion:BadVersion"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="BadVersion$.html"><span class="name">BadVersion</span></a><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.package@BadVersion" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="zooowner.message.Connected" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="zooowner.message.Connected" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Connected"></a>
       <a id="Connected:Connected"></a>
       <h4 class="signature">
@@ -558,7 +609,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Connected$.html"><span class="name">Connected</span></a><span class="result"> extends <a href="ZKConnectionEvent.html" class="extype" name="zooowner.message.ZKConnectionEvent">ZKConnectionEvent</a> with <a href="ZKSuccess.html" class="extype" name="zooowner.message.ZKSuccess">ZKSuccess</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Connected$.html"><span class="name">Connected</span></a><span class="result"> extends <a href="ZKConnectionSuccess.html" class="extype" name="zooowner.message.ZKConnectionSuccess">ZKConnectionSuccess</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.package@Connected" title="Permalink" target="_top">
@@ -592,7 +643,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Disconnected$.html"><span class="name">Disconnected</span></a><span class="result"> extends <a href="ZKConnectionEvent.html" class="extype" name="zooowner.message.ZKConnectionEvent">ZKConnectionEvent</a> with <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Disconnected$.html"><span class="name">Disconnected</span></a><span class="result"> extends <a href="ZKConnectionFailure.html" class="extype" name="zooowner.message.ZKConnectionFailure">ZKConnectionFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.package@Disconnected" title="Permalink" target="_top">
@@ -609,27 +660,10 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Expired$.html"><span class="name">Expired</span></a><span class="result"> extends <a href="ZKConnectionEvent.html" class="extype" name="zooowner.message.ZKConnectionEvent">ZKConnectionEvent</a> with <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Expired$.html"><span class="name">Expired</span></a><span class="result"> extends <a href="ZKConnectionFailure.html" class="extype" name="zooowner.message.ZKConnectionFailure">ZKConnectionFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#zooowner.message.package@Expired" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="zooowner.message.ReadOnly" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ReadOnly"></a>
-      <a id="ReadOnly:ReadOnly"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="ReadOnly$.html"><span class="name">ReadOnly</span></a><span class="result"> extends <a href="ZKFailure.html" class="extype" name="zooowner.message.ZKFailure">ZKFailure</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#zooowner.message.package@ReadOnly" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>

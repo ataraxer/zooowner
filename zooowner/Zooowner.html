@@ -167,8 +167,25 @@
       </a>
     </span>
       
+    </li><li name="zooowner.Zooowner#connection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="connection:zooowner.ZKConnection"></a>
+      <a id="connection:ZKConnection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">connection</span><span class="result">: <a href="ZKConnection.html" class="extype" name="zooowner.ZKConnection">ZKConnection</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.Zooowner@connection:zooowner.ZKConnection" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns active instance of connection.</p>
     </li><li name="zooowner.Zooowner#create" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="create[T](path:zooowner.ZKPath,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$2:zooowner.ZKEncoder[T]):zooowner.ZKPath"></a>
+      <a id="create[T](path:zooowner.ZKPath,value:T,ephemeral:Boolean,sequential:Boolean)(implicitevidence$3:zooowner.ZKEncoder[T]):zooowner.ZKPath"></a>
       <a id="create[T](ZKPath,T,Boolean,Boolean)(ZKEncoder[T]):ZKPath"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -176,36 +193,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.create.T">T</span> = <span class="symbol">NoData</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.create.T">T</span>]</span>)</span><span class="result">: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>
+        <span class="name">create</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.create.T">T</span> = <span class="symbol">NoData</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.create.T">T</span>]</span>)</span><span class="result">: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner@create[T](path:zooowner.ZKPath,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$2:zooowner.ZKEncoder[T]):zooowner.ZKPath" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Creates new node, ensuring that persisten path to it exists,
-by filling missing nodes with null's, and returns it's name.</p><div class="fullcomment"><div class="comment cmt"><p>Creates new node, ensuring that persisten path to it exists,
-by filling missing nodes with null's, and returns it's name.
-</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of node to be created.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Optional data that should be stored in created node.</p></dd><dt class="param">persistent</dt><dd class="cmt"><p>Specifies whether created node should be persistent.</p></dd><dt class="param">sequential</dt><dd class="cmt"><p>Specifies whether created node should be sequential.
-</p></dd></dl></div>
-    </li><li name="zooowner.Zooowner#createChild" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="createChild[T](path:zooowner.ZKPath,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$3:zooowner.ZKEncoder[T]):zooowner.ZKPath"></a>
-      <a id="createChild[T](ZKPath,T,Boolean,Boolean)(ZKEncoder[T]):ZKPath"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">createChild</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.createChild.T">T</span> = <span class="symbol">NoData</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.createChild.T">T</span>]</span>)</span><span class="result">: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner@createChild[T](path:zooowner.ZKPath,value:T,persistent:Boolean,sequential:Boolean)(implicitevidence$3:zooowner.ZKEncoder[T]):zooowner.ZKPath" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.Zooowner@create[T](path:zooowner.ZKPath,value:T,ephemeral:Boolean,sequential:Boolean)(implicitevidence$3:zooowner.ZKEncoder[T]):zooowner.ZKPath" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Creates a new node under existing persistent one and returns it's name.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new node under existing persistent one and returns it's name.
-</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of parent node.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Optional data that should be stored in created node.</p></dd><dt class="param">persistent</dt><dd class="cmt"><p>Specifies whether created node should be persistent.</p></dd><dt class="param">sequential</dt><dd class="cmt"><p>Specifies whether created node should be sequential.
+</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of parent node.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Optional data that should be stored in created node.</p></dd><dt class="param">ephemeral</dt><dd class="cmt"><p>Specifies whether created node should be ephemeral.</p></dd><dt class="param">sequential</dt><dd class="cmt"><p>Specifies whether created node should be sequential.
 </p></dd></dl></div>
     </li><li name="zooowner.Zooowner#createPath" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="createPath(path:zooowner.ZKPath):Unit"></a>
@@ -260,6 +256,27 @@ by filling missing nodes with null's, and returns it's name.
       </a>
     </span>
       <p class="shortcomment cmt">Disconnects from ZooKeeper server.</p>
+    </li><li name="zooowner.Zooowner#forceCreate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="forceCreate[T](path:zooowner.ZKPath,value:T,ephemeral:Boolean,sequential:Boolean)(implicitevidence$2:zooowner.ZKEncoder[T]):zooowner.ZKPath"></a>
+      <a id="forceCreate[T](ZKPath,T,Boolean,Boolean)(ZKEncoder[T]):ZKPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forceCreate</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.forceCreate.T">T</span> = <span class="symbol">NoData</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="sequential">sequential: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.forceCreate.T">T</span>]</span>)</span><span class="result">: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.Zooowner@forceCreate[T](path:zooowner.ZKPath,value:T,ephemeral:Boolean,sequential:Boolean)(implicitevidence$2:zooowner.ZKEncoder[T]):zooowner.ZKPath" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Creates new node, ensuring that persisten path to it exists,
+by filling missing nodes with null's, and returns it's name.</p><div class="fullcomment"><div class="comment cmt"><p>Creates new node, ensuring that persisten path to it exists,
+by filling missing nodes with null's, and returns it's name.
+</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of node to be created.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Optional data that should be stored in created node.</p></dd><dt class="param">ephemeral</dt><dd class="cmt"><p>Specifies whether created node should be ephemeral.</p></dd><dt class="param">sequential</dt><dd class="cmt"><p>Specifies whether created node should be sequential.
+</p></dd></dl></div>
     </li><li name="zooowner.Zooowner#get" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="get(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Option[zooowner.ZKNode]"></a>
       <a id="get(ZKPath,Option[ZKEventWatcher]):Option[ZKNode]"></a>
@@ -529,6 +546,23 @@ by filling missing nodes with null's, and returns it's name.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="zooowner.Zooowner#deleteChildren" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deleteChildren(path:zooowner.ZKPath,recursive:Boolean):Unit"></a>
+      <a id="deleteChildren(ZKPath,Boolean):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deleteChildren</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="recursive">recursive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#zooowner.Zooowner@deleteChildren(path:zooowner.ZKPath,recursive:Boolean):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Deletes node's children.</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -604,7 +638,7 @@ by filling missing nodes with null's, and returns it's name.
               
         </dd></dl></div>
     </li><li name="zooowner.Zooowner#forceSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="forceSet[T](path:zooowner.ZKPath,value:T,persistent:Boolean)(implicitevidence$5:zooowner.ZKEncoder[T]):Any"></a>
+      <a id="forceSet[T](path:zooowner.ZKPath,value:T,ephemeral:Boolean)(implicitevidence$5:zooowner.ZKEncoder[T]):Any"></a>
       <a id="forceSet[T](ZKPath,T,Boolean)(ZKEncoder[T]):Any"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -612,15 +646,15 @@ by filling missing nodes with null's, and returns it's name.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">forceSet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.forceSet.T">T</span></span>, <span name="persistent">persistent: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.forceSet.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Any">Any</span></span>
+        <span class="name">forceSet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.forceSet.T">T</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.forceSet.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Any">Any</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner@forceSet[T](path:zooowner.ZKPath,value:T,persistent:Boolean)(implicitevidence$5:zooowner.ZKEncoder[T]):Any" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.Zooowner@forceSet[T](path:zooowner.ZKPath,value:T,ephemeral:Boolean)(implicitevidence$5:zooowner.ZKEncoder[T]):Any" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Sets a new value if node exists, creates it otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Sets a new value if node exists, creates it otherwise.
-</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of a node to be updated.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Value to be saved into node.</p></dd><dt class="param">persistent</dt><dd class="cmt"><p>Specifies whether created node should be persistent.
+</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of a node to be updated.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Value to be saved into node.</p></dd><dt class="param">ephemeral</dt><dd class="cmt"><p>Specifies whether created node should be ephemeral.
 </p></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
