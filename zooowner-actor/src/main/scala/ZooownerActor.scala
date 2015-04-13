@@ -17,9 +17,16 @@ object ZooownerActor {
   val StashTimeout = 3.seconds
   case object StashTimedOut
 
-  def props(server: String, timeout: FiniteDuration) = {
+  def props(
+    watcher: ActorRef,
+    server: String,
+    timeout: FiniteDuration) =
+  {
     Props {
-      new ZooownerActor(server, timeout)
+      new ZooownerActor(
+        watcher,
+        server,
+        timeout)
     }
   }
 
@@ -36,22 +43,33 @@ object ZooownerActor {
 }
 
 
-class ZooownerActor(server: String, timeout: FiniteDuration)
-  extends Actor with Stash
+class ZooownerActor(
+    watcher: ActorRef,
+    server: String,
+    timeout: FiniteDuration)
+  extends Actor
+  with Stash
+  with ZKPathDSL
+  with DefaultSerializers
 {
   import ZooownerActor._
-  import ZKPathDSL._
-  import DefaultSerializers._
+  import context.dispatcher
+  import context.system
 
-  implicit val executor = context.dispatcher
+
+  val connectionWatcher = ZKConnectionWatcher {
+    // forward all connection events to current actor's
+    // mailbox in order to preserve absolute order of events
+    case event =>
+      self ! event
+      watcher ! event
+  }
 
 
   val connection = ZKConnection(
     connectionString = server,
     sessionTimeout = timeout,
-    // forward all connection events to current actor's
-    // mailbox in order to preserve absolute order of events
-    connectionWatcher = { case event => self ! event })
+    connectionWatcher = connectionWatcher)
 
   val zk = AsyncZooowner(connection)
 
@@ -99,7 +117,7 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
       // make sure that connection is still down
       if (!zk.isConnected) {
         stashActive = true
-        context.system.scheduler.scheduleOnce(StashTimeout, self, StashTimedOut)
+        system.scheduler.scheduleOnce(StashTimeout, self, StashTimedOut)
         context become connecting
       }
     }

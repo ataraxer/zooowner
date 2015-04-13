@@ -3,7 +3,10 @@ package zooowner
 import scala.language.postfixOps
 
 
-object DefaultSerializers {
+object DefaultSerializers extends DefaultSerializers
+
+
+trait DefaultSerializers {
   private val Encoding = "UTF-8"
 
 

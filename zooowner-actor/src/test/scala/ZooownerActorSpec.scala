@@ -55,7 +55,7 @@ class ZooownerActorSpec
     with ImplicitSender
   {
     val zk = TestActorRef {
-      new ZooownerActor("", 1.second) {
+      new ZooownerActor(null, "", 1.second) {
         override val zk = {
           val watcher = ZKConnectionWatcher { case event => self ! event }
           new ZooownerMock(zkMock.createMock _, watcher) with AsyncAPI
