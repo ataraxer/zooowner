@@ -1,49 +1,5 @@
 package zooowner
 
-import scala.language.postfixOps
-
-
-object DefaultSerializers extends DefaultSerializers
-
-
-trait DefaultSerializers {
-  private val Encoding = "UTF-8"
-
-
-  implicit val rawEncoder = {
-    ZKEncoder[RawZKData] { data => data }
-  }
-
-
-  implicit val rawDecoder = {
-    ZKDecoder[RawZKData] { data => data }
-  }
-
-
-  implicit val stringEncoder = {
-    ZKEncoder[String] { _.getBytes(Encoding) }
-  }
-
-
-  implicit val stringDecoder = {
-    ZKDecoder[String] { data => new String(data, Encoding) }
-  }
-
-
-  implicit def optionEncoder[T](implicit valueEncoder: ZKEncoder[T]) = {
-    ZKEncoder[Option[T]] { data =>
-      data.map(valueEncoder.encode).orNull
-    }
-  }
-
-
-  implicit def optionDecoder[T](implicit valueDecoder: ZKDecoder[T]) = {
-    ZKDecoder[Option[T]] { data =>
-      Option(data).map(valueDecoder.decode)
-    }
-  }
-}
-
 
 sealed trait ZKSerializer
 
@@ -65,10 +21,45 @@ object ZKDecoder {
 }
 
 
-
 object ZKEncoder {
   def apply[T](encoder: T => RawZKData) = {
     new ZKEncoder[T] { def encode(data: T) = encoder(data) }
+  }
+}
+
+
+object DefaultSerializers extends DefaultSerializers
+
+
+trait DefaultSerializers {
+  private[this] val Encoding = "UTF-8"
+
+  implicit val rawEncoder = {
+    ZKEncoder[RawZKData] { data => data }
+  }
+
+  implicit val rawDecoder = {
+    ZKDecoder[RawZKData] { data => data }
+  }
+
+  implicit val stringEncoder = {
+    ZKEncoder[String] { _.getBytes(Encoding) }
+  }
+
+  implicit val stringDecoder = {
+    ZKDecoder[String] { data => new String(data, Encoding) }
+  }
+
+  implicit def optionEncoder[T: ZKEncoder] = {
+    ZKEncoder[Option[T]] { data =>
+      data.map(implicitly[ZKEncoder[T]].encode).orNull
+    }
+  }
+
+  implicit def optionDecoder[T: ZKDecoder] = {
+    ZKDecoder[Option[T]] { data =>
+      Option(data).map(implicitly[ZKDecoder[T]].decode)
+    }
   }
 }
 
