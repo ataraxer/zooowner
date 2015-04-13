@@ -47,10 +47,6 @@ package object zooowner {
 
   private[zooowner] val NoWatcher = Reaction.empty[ZKConnectionEvent]
   private[zooowner] val NoData = Option.empty[RawZKData]
-
-  private[zooowner] def encode[T](data: T)(implicit encoder: ZKEncoder[T]) = {
-    encoder.encode(data)
-  }
 }
 
 

@@ -68,7 +68,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
     sequential: Boolean = false) =
   {
     if (!path.isRoot) createPathTo(path)
-    _create(path, encode(value), ephemeral, sequential)
+    _create(path, implicitly[ZKEncoder[T]].encode(value), ephemeral, sequential)
   }
 
 
@@ -78,7 +78,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
     ephemeral: Boolean = false,
     sequential: Boolean = false) =
   {
-    _create(path, encode(value), ephemeral, sequential)
+    _create(path, implicitly[ZKEncoder[T]].encode(value), ephemeral, sequential)
   }
 
 

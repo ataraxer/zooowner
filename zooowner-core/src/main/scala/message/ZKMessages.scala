@@ -60,7 +60,7 @@ object CreateNode {
     persistent: Boolean = false,
     sequential: Boolean = false): CreateNode =
   {
-    val data = encode(value).orNull
+    val data = implicitly[ZKEncoder[T]].encode(value).orNull
     new CreateNode(path, data, persistent, sequential)
   }
 }
@@ -79,7 +79,7 @@ object SetNodeValue {
     value: T,
     version: Int = AnyVersion): SetNodeValue =
   {
-    val data = encode(value).orNull
+    val data = implicitly[ZKEncoder[T]].encode(value).orNull
     new SetNodeValue(path, data, version)
   }
 }

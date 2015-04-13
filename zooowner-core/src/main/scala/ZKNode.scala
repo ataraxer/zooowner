@@ -2,13 +2,8 @@ package zooowner
 
 
 case class ZKNode(path: ZKPath, data: ZKData, meta: ZKMeta) {
-  def apply[T](implicit decoder: ZKDecoder[T]) = {
-    decoder.decode(data)
-  }
-
-  def extract[T](implicit decoder: ZKDecoder[T]) = {
-    decoder.decode(data)
-  }
+  def apply[T: ZKDecoder] = extract
+  def extract[T: ZKDecoder] = implicitly[ZKDecoder[T]].decode(data)
 }
 
 
