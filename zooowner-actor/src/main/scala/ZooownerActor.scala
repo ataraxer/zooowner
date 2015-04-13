@@ -8,6 +8,7 @@ import akka.actor.Actor.Receive
 import akka.util.Timeout
 import akka.pattern.{ask, pipe}
 
+import scala.util.Failure
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
 
@@ -21,6 +22,17 @@ object ZooownerActor {
       new ZooownerActor(server, timeout)
     }
   }
+
+
+  private type Recovery = PartialFunction[Throwable, ZKFailure]
+
+  private def failureFor(path: ZKPath)(recover: Recovery): Recovery = {
+    recover orElse {
+      case _: ConnectionLossException => ConnectionLost(path, Disconnected)
+      case _: SessionExpiredException => ConnectionLost(path, Expired)
+      case other: ZKException => UnexpectedFailure(path, Failure(other))
+    }
+  }
 }
 
 
@@ -31,8 +43,8 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
   import ZKPathDSL._
   import DefaultSerializers._
 
-  implicit val futureTimeout = Timeout(5.seconds)
-  implicit val ec = context.dispatcher
+  implicit val executor = context.dispatcher
+
 
   val connection = ZKConnection(
     connectionString = server,
@@ -77,6 +89,7 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
     }
   }
 
+
   /**
    * Implements ZooownerActor primary API.
    */
@@ -91,10 +104,6 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
       }
     }
 
-    case Expired => {
-      throw new Exception("ZK Session has expired")
-    }
-
     /*
      * Creates new node.
      *
@@ -105,7 +114,13 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      */
     case CreateNode(path, data, persistent, sequential) => {
       val result = zk.async.create[RawZKData](path, data, persistent, sequential)
-      result.map( name => NodeCreated(name, None) ) pipeTo sender
+
+      result map { name =>
+        NodeCreated(name, None)
+      } recover failureFor(path) {
+        case _: NodeExistsException => NodeExists(path)
+        case _: ChildrenNotAllowedException => ChildrenNotAllowed(path)
+      } pipeTo sender
     }
 
     /*
@@ -116,7 +131,14 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      */
     case DeleteNode(path, version) => {
       val result = zk.async.delete(path, version = version)
-      result.map( _ => NodeDeleted(path) ) pipeTo sender
+
+      result map { _ =>
+        NodeDeleted(path)
+      } recover failureFor(path) {
+        case _: NoNodeException => NodeNotExists(path)
+        case _: NodeNotEmptyException => NodeNotEmpty(path)
+        case _: BadVersionException => BadVersion(path, version)
+      } pipeTo sender
     }
 
     /*
@@ -127,7 +149,13 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      */
     case SetNodeValue(path, data, version) => {
       val result = zk.async.set(path, data, version)
-      result.map( meta => NodeMeta(path, meta) ) pipeTo sender
+
+      result map { meta =>
+        NodeMeta(path, meta)
+      } recover failureFor(path) {
+        case _: NoNodeException => NodeNotExists(path)
+        case _: BadVersionException => BadVersion(path, version)
+      } pipeTo sender
     }
 
     /*
@@ -137,7 +165,12 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      */
     case GetNodeValue(path) => {
       val result = zk.async.get(path)
-      result.map( node => Node(path, node) ) pipeTo sender
+
+      result map { node =>
+        Node(path, node)
+      } recover failureFor(path) {
+        case _: NoNodeException => NodeNotExists(path)
+      } pipeTo sender
     }
 
     /*
@@ -147,7 +180,12 @@ class ZooownerActor(server: String, timeout: FiniteDuration)
      */
     case GetNodeChildren(path) => {
       val result = zk.async.children(path)
-      result.map( children => NodeChildren(path, children) ) pipeTo sender
+
+      result map { children =>
+        NodeChildren(path, children)
+      } recover failureFor(path) {
+        case _: NoNodeException => NodeNotExists(path)
+      } pipeTo sender
     }
 
     /*

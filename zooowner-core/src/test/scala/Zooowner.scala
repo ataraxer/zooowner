@@ -8,7 +8,6 @@ import zooowner.ZKPathDSL._
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.Watcher.Event.KeeperState
 
-import scala.util.Try
 import scala.concurrent.{Promise, Await, TimeoutException}
 import scala.concurrent.duration._
 
@@ -251,6 +250,22 @@ class ZooownerSpec extends UnitSpec {
 
     val NodeChildrenChanged(zk"/parent", children) = childrenEvent.futureValue
     children should contain theSameElementsAs Seq(zk"/parent/foo")
+  }
+
+
+  it should "return failure on any exception in one-time watcher" in new Env {
+    zk.create("/some-node")
+
+    val futureEvent = zk.watchData("/some-node")
+    zkMock.expireSession()
+    // cause expiration event to fire internally
+    intercept[SessionExpiredException] { zk.exists("/some-node") }
+
+    val result = futureEvent recover {
+      case _: SessionExpiredException => "failed"
+    }
+
+    result.futureValue should be ("failed")
   }
 
 

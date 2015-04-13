@@ -34,6 +34,11 @@ trait Zooowner {
   def awaitConnection(timeout: FiniteDuration = 5.seconds): Unit
 
   /**
+   * Returns active instance of connection.
+   */
+  def connection: ZKConnection
+
+  /**
    * Tests whether the connection to ZooKeeper server is established.
    */
   def isConnected: Boolean

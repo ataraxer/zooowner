@@ -27,7 +27,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   /**
    * Internal active connection to ZooKeeper.
    */
-  private[zooowner] var connection = initialConnection
+  var connection = initialConnection
 
   def client = connection.client
 
@@ -122,7 +122,7 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
     value: T,
     version: Int = AnyVersion) =
   {
-    val data = encode(value)
+    val data = implicitly[ZKEncoder[T]].encode(value)
     connection { _.setData(path, data.orNull, version) }
   }
 

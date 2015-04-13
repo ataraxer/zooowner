@@ -9,7 +9,7 @@ import zooowner.mocking.ZKMock
 import zooowner.message._
 import zooowner.ZKPathDSL._
 
-import org.scalatest.concurrent.Eventually
+import org.scalatest._
 
 import scala.concurrent.duration._
 
@@ -41,129 +41,164 @@ object ZooownerActorSpec {
 }
 
 
-class ZooownerActorSpec(_system: ActorSystem)
-  extends TestKit(_system)
-  with ImplicitSender
-  with Eventually
+class ZooownerActorSpec
+  extends TestKit(ActorSystem("zooowner-actor-spec"))
   with UnitSpec
 {
   import ZooownerActorSpec._
   import DefaultSerializers._
 
-  def this() = this { ActorSystem("zooowner-actor-spec") }
 
-  var zk: TestActorRef[ZooownerActor] = null
-
-
-  before {
-    zk = TestActorRef {
-      new ZooownerActor("", 1.second) with ZKMock {
+  class Env(implicit system: ActorSystem)
+    extends TestKit(system)
+    with ZKMock
+    with ImplicitSender
+  {
+    val zk = TestActorRef {
+      new ZooownerActor("", 1.second) {
         override val zk = {
-          val watcher: ZKConnectionWatcher = {
-            case event => self ! event
-          }
-
+          val watcher = ZKConnectionWatcher { case event => self ! event }
           new ZooownerMock(zkMock.createMock _, watcher) with AsyncAPI
         }
       }
     }
 
-    eventually { zk.underlyingActor.zk.isConnected should be (true) }
-  }
+    def zkClient = zk.underlyingActor.zk
 
+    def cleanup(): Unit = {
+      val probe = TestProbe()
+      probe.watch(zk)
+      system.stop(zk)
+      probe.expectTerminated(zk)
+    }
 
-  after {
-    val probe = TestProbe()
-    probe watch zk
-    system stop zk
-    probe expectTerminated zk
-  }
-
-
-  "ZooownerActor" should "create nodes asynchronously" in {
-    zk ! CreateNode("/foo", Some("value"))
-    val response = expectMsgType[NodeCreated]
-    response.path should be (zk"/foo")
-  }
-
-
-  it should "delete nodes asynchronously" in {
-    zk.underlyingActor.zk.create("/foo", Some("value"))
-    zk.underlyingActor.zk.exists("/foo") should be (true)
-
-    zk ! DeleteNode("/foo")
-    expectMsg { NodeDeleted(zk"/foo") }
-
-    zk.underlyingActor.zk.exists("/foo") should be (false)
-  }
-
-
-  it should "change values of created nodes asynchronously" in {
-    zk.underlyingActor.zk.create("/foo", Some("value"))
-
-    zk ! SetNodeValue("/foo", "new-value")
-
-    val result = expectMsgType[NodeMeta]
-    result.path should be (zk"/foo")
-    zk.underlyingActor.zk("/foo")[String] should be ("new-value")
-  }
-
-
-  it should "get values of existing nodes asynchronously" in {
-    zk.underlyingActor.zk.create("/foo", Some("value"))
-
-    zk ! GetNodeValue("/foo")
-
-    val Node(zk"/foo", node) = expectMsgType[Node]
-    node.path should be (zk"/foo")
-    node.extract[String] should be ("value")
-  }
-
-
-  it should "get node's children asynchronously" in {
-    zk.underlyingActor.zk.create("/foo", "value")
-    zk.underlyingActor.zk.create("/foo/a", "value")
-    zk.underlyingActor.zk.create("/foo/b", "value")
-
-    zk ! GetNodeChildren("/foo")
-
-    val result = expectMsgType[NodeChildren]
-    result.path should be (zk"/foo")
-    result.children should contain theSameElementsAs Seq(
-      zk"/foo/a",
-      zk"/foo/b")
-  }
-
-
-  it should "watch node events and report them back to watcher" in {
-    zk.underlyingActor.zk.create("/foo", "value")
-
-    zk ! WatchNode("/foo")
-
-    zk.underlyingActor.zk.set("/foo", "new-value")
-
-    expectMsgPF(5.seconds) {
-      case NodeChanged(zk"/foo", Some(node)) =>
-        node.extract[String] should be ("new-value")
+    def withCleanup(body: => Any) = {
+      try body finally cleanup()
     }
   }
 
 
-  it should "support custom serializer" in {
-    val alice = Person("Alice", 21)
-    val bob = Person("Bob", 42)
+  "ZooownerActor" should "create nodes asynchronously" in new Env {
+    withCleanup {
+      zk ! CreateNode("/foo", "value")
+      val response = expectMsgType[NodeCreated]
+      response.path should be (zk"/foo")
+      response.node should be (None)
+    }
+  }
 
-    zk ! CreateNode("/bob", bob)
-    val NodeCreated(zk"/bob", None) = expectMsgType[NodeCreated]
-    //node.extract[Person] should be (bob)
 
-    zk ! SetNodeValue("/bob", alice)
-    expectMsgType[NodeMeta]
+  it should "return error messages with cause of failure for path" in new Env {
+    withCleanup {
+      zkClient.create("/foo")
 
-    zk ! GetNodeValue("/bob")
-    val Node(zk"/bob", newNode) = expectMsgType[Node]
-    newNode.path should be (zk"/bob")
-    newNode.extract[Person] should be (alice)
+      zk ! CreateNode("/foo")
+      val response = expectMsgType[ZKFailure]
+      response should be (NodeExists("/foo"))
+    }
+  }
+
+
+  it should "delete nodes asynchronously" in new Env {
+    withCleanup {
+      zkClient.create("/foo")
+      zkClient.exists("/foo") should be (true)
+
+      zk ! DeleteNode("/foo")
+      expectMsg { NodeDeleted(zk"/foo") }
+
+      zkClient.exists("/foo") should be (false)
+    }
+  }
+
+
+  it should "change values of created nodes asynchronously" in new Env {
+    withCleanup {
+      zkClient.create("/foo", "value")
+      zkClient("/foo")[String] should be ("value")
+
+      zk ! SetNodeValue("/foo", "new-value")
+
+      val result = expectMsgType[NodeMeta]
+      result.path should be (zk"/foo")
+      zkClient("/foo")[String] should be ("new-value")
+    }
+  }
+
+
+  it should "get values of existing nodes asynchronously" in new Env {
+    withCleanup {
+      zkClient.create("/foo", "value")
+
+      zk ! GetNodeValue("/foo")
+
+      val Node(zk"/foo", node) = expectMsgType[Node]
+      node.path should be (zk"/foo")
+      node.extract[String] should be ("value")
+    }
+  }
+
+
+  it should "get node's children asynchronously" in new Env {
+    withCleanup {
+      zkClient.create("/foo", "value")
+      zkClient.create("/foo/a", "value")
+      zkClient.create("/foo/b", "value")
+
+      zk ! GetNodeChildren("/foo")
+
+      val result = expectMsgType[NodeChildren]
+      result.path should be (zk"/foo")
+      result.children should contain theSameElementsAs Seq(
+        zk"/foo/a",
+        zk"/foo/b")
+    }
+  }
+
+
+  it should "return message on connection loss" in new Env {
+    withCleanup {
+      zkMock.expireSession()
+
+      zk ! GetNodeValue("/foo")
+      val response = expectMsgType[ZKFailure]
+      response should be (ConnectionLost("/foo", Expired))
+    }
+  }
+
+
+  it should "watch node events and report them back to watcher" in new Env {
+    withCleanup {
+      zkClient.create("/foo", "value")
+      zkClient("/foo")[String] should be ("value")
+
+      zk ! WatchNode("/foo")
+
+      zkClient.set("/foo", "new-value")
+
+      val NodeChanged(zk"/foo", Some(node)) = expectMsgType[NodeChanged]
+      node.extract[String] should be ("new-value")
+    }
+  }
+
+
+  it should "support custom serializer" in new Env {
+    withCleanup {
+      val alice = Person("Alice", 21)
+      val bob = Person("Bob", 42)
+
+      zk ! CreateNode("/bob", bob)
+      val NodeCreated(zk"/bob", None) = expectMsgType[NodeCreated]
+      //node.extract[Person] should be (bob)
+
+      zk ! SetNodeValue("/bob", alice)
+      expectMsgType[NodeMeta]
+
+      zk ! GetNodeValue("/bob")
+      val Node(zk"/bob", newNode) = expectMsgType[Node]
+      newNode.path should be (zk"/bob")
+      newNode.extract[Person] should be (alice)
+    }
   }
 }
 

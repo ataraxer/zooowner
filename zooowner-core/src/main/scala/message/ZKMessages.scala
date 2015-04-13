@@ -4,6 +4,8 @@ package message
 import org.apache.zookeeper.data.Stat
 import org.apache.zookeeper.KeeperException.Code
 
+import scala.util.Failure
+
 
 sealed trait ZKMessage
 
@@ -20,12 +22,12 @@ sealed trait ZKChildrenEvent extends ZKEvent
 
 sealed trait ZKConnectionEvent extends ZKEvent
 
-case object Connected extends ZKConnectionEvent with ZKSuccess
-case object Disconnected extends ZKConnectionEvent with ZKFailure
-case object Expired extends ZKConnectionEvent with ZKFailure
+sealed trait ZKConnectionSuccess extends ZKConnectionEvent with ZKSuccess
+sealed trait ZKConnectionFailure extends ZKConnectionEvent with ZKFailure
 
-case object ReadOnly extends ZKFailure
-case object BadVersion extends ZKFailure
+case object Connected extends ZKConnectionSuccess
+case object Disconnected extends ZKConnectionFailure
+case object Expired extends ZKConnectionFailure
 
 case class NodeMeta(path: ZKPath, meta: Option[ZKMeta]) extends ZKSuccess
 case class Node(path: ZKPath, node: ZKNode) extends ZKSuccess
@@ -38,11 +40,17 @@ case class NodeDeleted(path: ZKPath) extends ZKDataEvent
 case class NodeChildrenChanged(path: ZKPath, children: Seq[ZKPath])
   extends ZKChildrenEvent
 
-case class NoNode(path: ZKPath) extends ZKFailure
-case class NotEmpty(path: ZKPath) extends ZKFailure
 case class NodeExists(path: ZKPath) extends ZKFailure
-case class NodeIsEphemeral(path: ZKPath) extends ZKFailure
-case class Error(code: Code) extends ZKFailure
+case class NodeNotExists(path: ZKPath) extends ZKFailure
+case class NodeNotEmpty(path: ZKPath) extends ZKFailure
+case class ChildrenNotAllowed(path: ZKPath) extends ZKFailure
+case class BadVersion(path: ZKPath, version: Int) extends ZKFailure
+
+case class ConnectionLost(path: ZKPath, status: ZKConnectionFailure)
+  extends ZKFailure
+
+case class UnexpectedFailure(path: ZKPath, failure: Failure[ZKException])
+  extends ZKFailure
 
 
 object CreateNode {

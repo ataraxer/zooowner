@@ -66,7 +66,7 @@ trait AsyncZooowner {
 }
 
 
-trait AsyncAPI { this: impl.ZooownerImpl =>
+trait AsyncAPI { this: Zooowner =>
   val async: AsyncZooowner = new impl.AsyncZooownerImpl(this)
 }
 

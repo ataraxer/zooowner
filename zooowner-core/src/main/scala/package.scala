@@ -24,17 +24,20 @@ package object zooowner {
   implicit def stringToPath(path: String): ZKPath = ZKPath(path)
 
   /* === Exceptions === */
+  type ZKException = KE
+
   type APIErrorException = KE.APIErrorException
   type AuthFailedException = KE.AuthFailedException
   type AuthRequiredException = KE.NoAuthException
   type BadArgumentsException = KE.BadArgumentsException
   type BadVersionException = KE.BadVersionException
   type ChildrenNotAllowedException = KE.NoChildrenForEphemeralsException
-  type ConnectionLossException = KE.ConnectionLossException
   type DataInconsistencyException = KE.DataInconsistencyException
   type NoNodeException = KE.NoNodeException
   type NodeExistsException = KE.NodeExistsException
   type NodeNotEmptyException = KE.NotEmptyException
+
+  type ConnectionLossException = KE.ConnectionLossException
   type SessionExpiredException = KE.SessionExpiredException
 
   /* === Internal utils === */

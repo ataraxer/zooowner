@@ -7,7 +7,7 @@ import org.apache.zookeeper.Watcher.Event.EventType
 import scala.concurrent.{Promise, Future, ExecutionContext}
 
 
-private[zooowner] class AsyncZooownerImpl(zooowner: ZooownerImpl)
+private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
   extends AsyncZooowner
 {
   import ImplUtils._
