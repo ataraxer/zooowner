@@ -33,7 +33,7 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
     sequential: Boolean = false): Future[ZKPath] =
   {
     val result = Promise[ZKPath]()
-    val data = implicitly[ZKEncoder[T]].encode(value).orNull
+    val data = implicitly[ZKEncoder[T]].encode(value)
     val mode = createMode(persistent, sequential)
     client.create(path, data, AnyACL, mode, OnCreated(result), null)
     result.future
@@ -53,7 +53,7 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
     version: Int = AnyVersion): Future[Option[ZKMeta]] =
   {
     val result = Promise[Option[ZKMeta]]()
-    val data = implicitly[ZKEncoder[T]].encode(value).orNull
+    val data = implicitly[ZKEncoder[T]].encode(value)
     client.setData(path, data, version, OnStat(result), null)
     result.future
   }

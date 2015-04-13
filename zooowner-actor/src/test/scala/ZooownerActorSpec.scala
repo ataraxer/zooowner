@@ -26,11 +26,11 @@ object ZooownerActorSpec {
     buffer.put(person.name.getBytes)
     buffer.putInt(person.age)
     buffer.rewind()
-    Some(buffer.array())
+    buffer.array()
   }
 
   implicit val customDecoder = ZKDecoder[Person] { data =>
-    val buffer = ByteBuffer.wrap(data getOrElse Array.empty[Byte])
+    val buffer = ByteBuffer.wrap(data)
     val nameSize = buffer.getInt
     val nameBytes = new Array[Byte](nameSize)
     buffer.get(nameBytes)
