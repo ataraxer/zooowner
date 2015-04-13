@@ -27,7 +27,7 @@ trait ZKConnection {
   /**
    * Session credentials of connection.
    */
-  def session: ZKSession
+  def session: Option[ZKSession]
 
   /**
    * Future which is resolved with active connection

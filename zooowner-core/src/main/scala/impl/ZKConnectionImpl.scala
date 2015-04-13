@@ -65,7 +65,7 @@ private[zooowner] class ZKConnectionImpl(
       case KeeperState.Expired => {
         watcherCallback(Expired)
         if (!expirationPromise.isCompleted) {
-          expirationPromise.success(session)
+          expirationPromise.success(session.get)
         }
       }
     }
@@ -83,7 +83,10 @@ private[zooowner] class ZKConnectionImpl(
   }
 
 
-  val session = ZKSession(client.getSessionId, client.getSessionPasswd)
+  def session = {
+    if (!isConnected) None
+    else Some(ZKSession(client.getSessionId, client.getSessionPasswd))
+  }
 
 
   def apply[T](call: ZKClient => T): T = {
@@ -110,7 +113,7 @@ private[zooowner] class ZKConnectionImpl(
       connectionString,
       sessionTimeout,
       connectionWatcher,
-      Some(session))
+      session)
   }
 
 
