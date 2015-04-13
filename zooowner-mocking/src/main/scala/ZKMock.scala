@@ -23,6 +23,7 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable
 import scala.concurrent.duration.FiniteDuration
 import scala.util.control.Exception.catching
+import scala.util.Try
 
 import java.util.{List => JavaList}
 
@@ -80,7 +81,8 @@ trait ZKMock {
   import EventType.{NodeCreated, NodeDataChanged, NodeDeleted}
   import EventType.NodeChildrenChanged
 
-  private val nodeTree = new ZKNodeTree
+  private var nodeTree: ZKNodeTree = new ZKNodeTree()
+
 
   object zkMock {
 
@@ -128,8 +130,8 @@ trait ZKMock {
       val newData = rawData.asInstanceOf[Array[Byte]]
       val callback = rawCallback.asInstanceOf[StatCallback]
       val (_, code) = catchExceptionCode { nodeTree.set(path, newData) }
-      callback.processResult(
-        code, path, context, nodeTree.exists(path, null))
+      val stat = Try(nodeTree.exists(path, null)).toOption.orNull
+      callback.processResult(code, path, context, stat)
     }
 
     /** Generate `getData(String, Watcher, Stat)` stub answer.  */
@@ -144,8 +146,8 @@ trait ZKMock {
       val watcher = rawWatcher.asInstanceOf[ZKWatcher]
       val callback = rawCallback.asInstanceOf[DataCallback]
       val (result, code) = catchExceptionCode { nodeTree.get(path, watcher) }
-      callback.processResult(
-        code, path, context, result.orNull, nodeTree.exists(path, null))
+      val stat = Try(nodeTree.exists(path, null)).toOption.orNull
+      callback.processResult(code, path, context, result.orNull, stat)
     }
 
     /** `delete(String, Int)` stub answer.  */
@@ -175,8 +177,8 @@ trait ZKMock {
       val (result, code) = catchExceptionCode {
         nodeTree.children(path, watcher)
       }
-      callback.processResult(
-        code, path, context, result.getOrElse(Nil), nodeTree.exists(path, null))
+      val stat = Try(nodeTree.exists(path, null)).toOption.orNull
+      callback.processResult(code, path, context, result.getOrElse(Nil), stat)
     }
 
 
@@ -265,13 +267,16 @@ trait ZKMock {
      * Simulate session expiration.
      */
     def expireSession() = {
-      val fail = doThrow(new SessionExpiredException)
-      fail.when(client).exists(anyString, anyWatcher)
-      fail.when(client).create(anyString, anyData, anyACL, anyCreateMode)
-      fail.when(client).getData(anyString, anyWatcher, anyStat)
-      fail.when(client).setData(anyString, anyData, anyVersion)
-      fail.when(client).getChildren(anyString, anyWatcher)
-      fail.when(client).delete(anyString, anyVersion)
+      def fail = throw new SessionExpiredException
+
+      nodeTree = new ZKNodeTree {
+        override def exists(path: String, watcher: ZKWatcher) = fail
+        override def create(path: String, data: Array[Byte], mode: CreateMode) = fail
+        override def set(path: String, newData: Array[Byte]) = fail
+        override def get(path: String, watcher: ZKWatcher) = fail
+        override def delete(path: String) = fail
+        override def children(path: String, watcher: ZKWatcher) = fail
+      }
     }
 
 
