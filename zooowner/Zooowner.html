@@ -133,23 +133,25 @@
       <p class="shortcomment cmt">Waits for connection to esablish within given timeout.</p><div class="fullcomment"><div class="comment cmt"><p>Waits for connection to esablish within given timeout.
 </p></div><dl class="paramcmts block"><dt class="param">timeout</dt><dd class="cmt"><p>Amount of time to wait for connection
 </p></dd></dl></div>
-    </li><li name="zooowner.Zooowner#children" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="children(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Seq[zooowner.ZKPath]"></a>
-      <a id="children(ZKPath,Option[ZKEventWatcher]):Seq[ZKPath]"></a>
+    </li><li name="zooowner.Zooowner#children" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="children(path:zooowner.ZKPath,recursive:Boolean,watcher:Option[zooowner.ZKEventWatcher]):Seq[zooowner.ZKPath]"></a>
+      <a id="children(ZKPath,Boolean,Option[ZKEventWatcher]):Seq[ZKPath]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">children</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a>]</span>
+        <span class="name">children</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="recursive">recursive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="watcher">watcher: <span class="extype" name="scala.Option">Option</span>[<a href="ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner@children(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Seq[zooowner.ZKPath]" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.Zooowner@children(path:zooowner.ZKPath,recursive:Boolean,watcher:Option[zooowner.ZKEventWatcher]):Seq[zooowner.ZKPath]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Returns list of children of the node.</p>
+      <p class="shortcomment cmt">Returns list of children of the node.</p><div class="fullcomment"><div class="comment cmt"><p>Returns list of children of the node.
+</p></div><dl class="paramcmts block"><dt class="param">recursive</dt><dd class="cmt"><p>Return a flat list of all children under given node.
+</p></dd></dl></div>
     </li><li name="zooowner.Zooowner#client" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="client:zooowner.ZKClient"></a>
       <a id="client:ZKClient"></a>
