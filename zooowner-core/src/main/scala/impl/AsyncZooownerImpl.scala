@@ -84,8 +84,14 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
     (implicit executor: ExecutionContext): Future[ZKDataEvent] =
   {
     val eventWatcher = new OneTimeWatcher(zooowner.connection)
-    meta(path, watcher = Some(eventWatcher))
-    _processEvent(path, eventWatcher.futureEvent).mapTo[ZKDataEvent]
+
+    val result = for {
+      _ <- meta(path, watcher = Some(eventWatcher))
+      event <- eventWatcher.futureEvent
+      result <- _processEvent(path, event)
+    } yield result
+
+    result.mapTo[ZKDataEvent]
   }
 
 
@@ -94,16 +100,22 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
     (implicit executor: ExecutionContext): Future[ZKChildrenEvent] =
   {
     val eventWatcher = new OneTimeWatcher(zooowner.connection)
-    children(path, watcher = Some(eventWatcher))
-    _processEvent(path, eventWatcher.futureEvent).mapTo[ZKChildrenEvent]
+
+    val result = for {
+      _ <- children(path, watcher = Some(eventWatcher))
+      event <- eventWatcher.futureEvent
+      result <- _processEvent(path, event)
+    } yield result
+
+    result.mapTo[ZKChildrenEvent]
   }
 
 
   private def _processEvent
-    (path: ZKPath, futureEvent: Future[EventType])
+    (path: ZKPath, event: EventType)
     (implicit executor: ExecutionContext): Future[ZKEvent] =
   {
-    futureEvent flatMap {
+    event match {
       case EventType.NodeCreated =>
         get(path) map { node => NodeCreated(path, Some(node)) }
 
