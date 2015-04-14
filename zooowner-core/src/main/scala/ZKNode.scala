@@ -1,13 +1,21 @@
 package zooowner
 
+import scala.util.Try
+
 
 case class ZKNode(path: ZKPath, data: ZKData, meta: ZKMeta) {
-  def apply[T: ZKDecoder] = extract
+  def apply[T: ZKDecoder] = extract[T]
 
   def extract[T: ZKDecoder] = {
-    if (data.isEmpty) throw new ZKNodeValueIsNull("Node value is null: " + path)
-    implicitly[ZKDecoder[T]].decode(data.get)
+    try implicitly[ZKDecoder[T]].decode(data.orNull) catch {
+      case _: NullPointerException =>
+        val message = "Node data is null: " + path.asString
+        throw new ZKNodeDataIsNullException(message)
+    }
   }
+
+  def tryExtract[T: ZKDecoder] = Try(extract[T])
+
 
   def isPersistent = meta.ephemeral
   def isEphemeral = !isPersistent
