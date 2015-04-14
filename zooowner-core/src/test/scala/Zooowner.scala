@@ -258,7 +258,7 @@ class ZooownerSpec extends UnitSpec {
     zk.forceCreate("/some-node/child")
 
     val futureEvent = zk.watchChildren("/some-node")
-    zk.delete("/some-node", recursive = true)
+    zk.delete("/some-node/child")
     zkMock.throwNoNodeOnChildren()
 
     val result = futureEvent recover {

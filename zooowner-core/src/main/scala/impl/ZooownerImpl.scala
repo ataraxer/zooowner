@@ -199,21 +199,21 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
     (path: ZKPath, futureEvent: Future[EventType])
     (implicit executor: ExecutionContext): Future[ZKEvent] =
   {
-    futureEvent flatMap {
+    futureEvent map {
       case EventType.NodeCreated =>
-        Future { NodeCreated(path, get(path)) }
+        NodeCreated(path, get(path))
 
       case EventType.NodeDataChanged =>
-        Future { NodeChanged(path, get(path)) }
+        NodeChanged(path, get(path))
 
       case EventType.NodeDeleted =>
-        Future { NodeDeleted(path) }
+        NodeDeleted(path)
 
       case EventType.NodeChildrenChanged =>
-        Future { NodeChildrenChanged(path, children(path)) }
+        NodeChildrenChanged(path, children(path))
 
       case event =>
-        Future.failed(new Exception("Unexpected event encountered: " + event))
+        throw new Exception("Unexpected event encountered: " + event)
     }
   }
 }
