@@ -335,42 +335,42 @@
       <p class="shortcomment cmt">Creates persistent path, creating each missing node with null value.</p><div class="fullcomment"><div class="comment cmt"><p>Creates persistent path, creating each missing node with null value.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="zooowner.impl.ZooownerImpl#delete" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="delete(path:zooowner.ZKPath,recursive:Boolean,version:Int):Unit"></a>
-      <a id="delete(ZKPath,Boolean,Int):Unit"></a>
+      <a id="delete(path:zooowner.ZKPath,recursive:Boolean,version:Int):Seq[zooowner.ZKPath]"></a>
+      <a id="delete(ZKPath,Boolean,Int):Seq[ZKPath]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="recursive">recursive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="../package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">delete</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="recursive">recursive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="version">version: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="../package.html#AnyVersion:Int">AnyVersion</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@delete(path:zooowner.ZKPath,recursive:Boolean,version:Int):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@delete(path:zooowner.ZKPath,recursive:Boolean,version:Int):Seq[zooowner.ZKPath]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Deletes node.</p><div class="fullcomment"><div class="comment cmt"><p>Deletes node.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of the node to be deleted.</p></dd><dt class="param">recursive</dt><dd class="cmt"><p>Specifies whether all sub-nodes should be deleted.</p></dd><dt class="param">version</dt><dd class="cmt"><p>Version of a node to be deleted.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#deleteChildren" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="deleteChildren(path:zooowner.ZKPath,recursive:Boolean):Unit"></a>
-      <a id="deleteChildren(ZKPath,Boolean):Unit"></a>
+    </li><li name="zooowner.impl.ZooownerImpl#deleteChildren" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="deleteChildren(path:zooowner.ZKPath):Seq[zooowner.ZKPath]"></a>
+      <a id="deleteChildren(ZKPath):Seq[ZKPath]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteChildren</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="recursive">recursive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">deleteChildren</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@deleteChildren(path:zooowner.ZKPath,recursive:Boolean):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@deleteChildren(path:zooowner.ZKPath):Seq[zooowner.ZKPath]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Deletes node's children.</p><div class="fullcomment"><div class="comment cmt"><p>Deletes node's children.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="zooowner.impl.ZooownerImpl#disconnect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="disconnect():Unit"></a>
       <a id="disconnect():Unit"></a>
@@ -423,7 +423,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="zooowner.Zooowner#exists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZooownerImpl#exists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exists(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Boolean"></a>
       <a id="exists(ZKPath,Option[ZKEventWatcher]):Boolean"></a>
       <h4 class="signature">
@@ -440,7 +440,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Tests whether the node exists.</p><div class="fullcomment"><div class="comment cmt"><p>Tests whether the node exists.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -485,25 +485,25 @@ by filling missing nodes with null's, and returns it's name.</p><div class="full
 by filling missing nodes with null's, and returns it's name.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of node to be created.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Optional data that should be stored in created node.</p></dd><dt class="param">ephemeral</dt><dd class="cmt"><p>Specifies whether created node should be ephemeral.</p></dd><dt class="param">sequential</dt><dd class="cmt"><p>Specifies whether created node should be sequential.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
-    </li><li name="zooowner.Zooowner#forceSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="forceSet[T](path:zooowner.ZKPath,value:T,ephemeral:Boolean)(implicitevidence$5:zooowner.ZKEncoder[T]):Any"></a>
-      <a id="forceSet[T](ZKPath,T,Boolean)(ZKEncoder[T]):Any"></a>
+    </li><li name="zooowner.impl.ZooownerImpl#forceSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forceSet[T](path:zooowner.ZKPath,value:T,ephemeral:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):zooowner.ZKPath"></a>
+      <a id="forceSet[T](ZKPath,T,Boolean)(ZKEncoder[T]):ZKPath"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">forceSet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.Zooowner.forceSet.T">T</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.Zooowner.forceSet.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Any">Any</span></span>
+        <span class="name">forceSet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="path">path: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>, <span name="value">value: <span class="extype" name="zooowner.impl.ZooownerImpl.forceSet.T">T</span></span>, <span name="ephemeral">ephemeral: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../ZKEncoder.html" class="extype" name="zooowner.ZKEncoder">ZKEncoder</a>[<span class="extype" name="zooowner.impl.ZooownerImpl.forceSet.T">T</span>]</span>)</span><span class="result">: <a href="../ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#zooowner.test.ZooownerMock@forceSet[T](path:zooowner.ZKPath,value:T,ephemeral:Boolean)(implicitevidence$5:zooowner.ZKEncoder[T]):Any" title="Permalink" target="_top">
+      <a href="../../index.html#zooowner.test.ZooownerMock@forceSet[T](path:zooowner.ZKPath,value:T,ephemeral:Boolean)(implicitevidence$4:zooowner.ZKEncoder[T]):zooowner.ZKPath" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Sets a new value if node exists, creates it otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Sets a new value if node exists, creates it otherwise.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path of a node to be updated.</p></dd><dt class="param">value</dt><dd class="cmt"><p>Value to be saved into node.</p></dd><dt class="param">ephemeral</dt><dd class="cmt"><p>Specifies whether created node should be ephemeral.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="zooowner.impl.ZooownerImpl#get" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="get(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Option[zooowner.ZKNode]"></a>
       <a id="get(ZKPath,Option[ZKEventWatcher]):Option[ZKNode]"></a>
@@ -609,7 +609,7 @@ by filling missing nodes with null's, and returns it's name.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="zooowner.Zooowner#isPersistent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="zooowner.impl.ZooownerImpl#isPersistent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isPersistent(path:zooowner.ZKPath):Boolean"></a>
       <a id="isPersistent(ZKPath):Boolean"></a>
       <h4 class="signature">
@@ -626,7 +626,7 @@ by filling missing nodes with null's, and returns it's name.
       </a>
     </span>
       <p class="shortcomment cmt">Tests whether the node is persistent.</p><div class="fullcomment"><div class="comment cmt"><p>Tests whether the node is persistent.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ZooownerImpl → <a href="../Zooowner.html" class="extype" name="zooowner.Zooowner">Zooowner</a></dd></dl></div>
     </li><li name="zooowner.impl.ZooownerImpl#meta" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="meta(path:zooowner.ZKPath,watcher:Option[zooowner.ZKEventWatcher]):Option[zooowner.ZKMeta]"></a>
       <a id="meta(ZKPath,Option[ZKEventWatcher]):Option[ZKMeta]"></a>
