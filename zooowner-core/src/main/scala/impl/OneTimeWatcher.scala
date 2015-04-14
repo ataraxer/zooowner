@@ -15,12 +15,6 @@ private[zooowner] class OneTimeWatcher
   def futureEvent = eventPromise.future
 
   def reaction = { case event => eventPromise.success(event) }
-
-  connection.whenExpired.onComplete { _ =>
-    if (!eventPromise.isCompleted) {
-      eventPromise.failure(new SessionExpiredException)
-    }
-  }
 }
 
 

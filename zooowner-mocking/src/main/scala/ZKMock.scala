@@ -280,6 +280,18 @@ trait ZKMock {
     }
 
 
+    /**
+     * Used to simulate exception during a callback execution at one time watcher.
+     */
+    private[zooowner] def throwNoNodeOnChildren() = {
+      nodeTree = new ZKNodeTree {
+        override def children(path: String, watcher: ZKWatcher) = {
+          throw new NoNodeException
+        }
+      }
+    }
+
+
     object check {
       /**
        * Check that ZooKeeper has been requested to create node with

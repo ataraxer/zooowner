@@ -255,15 +255,14 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "return failure on any exception in one-time watcher" in new Env {
-    zk.create("/some-node")
+    zk.forceCreate("/some-node/child")
 
-    val futureEvent = zk.watchData("/some-node")
-    zkMock.expireSession()
-    // cause expiration event to fire internally
-    intercept[SessionExpiredException] { zk.exists("/some-node") }
+    val futureEvent = zk.watchChildren("/some-node")
+    zk.delete("/some-node", recursive = true)
+    zkMock.throwNoNodeOnChildren()
 
     val result = futureEvent recover {
-      case _: SessionExpiredException => "failed"
+      case _: NoNodeException => "failed"
     }
 
     result.futureValue should be ("failed")
