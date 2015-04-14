@@ -8,6 +8,7 @@ import zooowner.ZKPathDSL._
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.Watcher.Event.KeeperState
 
+import scala.util.Failure
 import scala.concurrent.{Promise, Await, TimeoutException}
 import scala.concurrent.duration._
 
@@ -288,6 +289,20 @@ class ZooownerSpec extends UnitSpec {
 
     zk.delete("/some-node")
     intercept[TimeoutException] { Await.ready(deleted.future, 1.second) }
+  }
+
+
+  it should "safely handle null node data" in new Env {
+    zk.create("/foo")
+
+    intercept[ZKNodeDataIsNullException] { zk("/foo")[String] }
+    val Failure(exception) = zk("/foo").tryExtract[String]
+    exception shouldBe a [ZKNodeDataIsNullException]
+    zk("/foo")[Option[String]] should be (None)
+
+    zk("/foo") = "bar"
+
+    zk("/foo")[String] should be ("bar")
   }
 }
 
