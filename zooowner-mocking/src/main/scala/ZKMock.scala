@@ -286,7 +286,7 @@ trait ZKMock {
     private[zooowner] def throwNoNodeOnChildren() = {
       nodeTree = new ZKNodeTree {
         override def children(path: String, watcher: ZKWatcher) = {
-          throw new NoNodeException
+          throw new NoNodeException(path)
         }
       }
     }

@@ -184,11 +184,20 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
 
   def children(
     path: ZKPath,
+    recursive: Boolean = false,
     watcher: Option[ZKEventWatcher] = None) =
   {
-    connection { client =>
+    val childrenResult = connection { client =>
       client.getChildren(path, watcher.orNull).toList
     } map { child => ZKPath(path) / child }
+
+    if (!recursive) childrenResult else {
+      val subChildrenResult = childrenResult flatMap {
+        path => children(path, recursive = true)
+      }
+
+      childrenResult ++ subChildrenResult
+    }
   }
 
 

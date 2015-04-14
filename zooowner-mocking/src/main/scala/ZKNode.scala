@@ -84,7 +84,7 @@ abstract class ZKNode(initialData: ZKData) {
   def child(name: String): ZKNode = {
     State.children.get(name) match {
       case Some(childNode) => childNode
-      case None => throw new NoNodeException
+      case None => throw new NoNodeException(name)
     }
   }
 

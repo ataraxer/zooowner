@@ -153,9 +153,12 @@ trait Zooowner {
 
   /**
    * Returns list of children of the node.
+   *
+   * @param recursive Return a flat list of all children under given node.
    */
   def children(
     path: ZKPath,
+    recursive: Boolean = false,
     watcher: Option[ZKEventWatcher] = None): Seq[ZKPath]
 
   /**

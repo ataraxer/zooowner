@@ -110,13 +110,31 @@ class ZooownerSpec extends UnitSpec {
 
 
   it should "return a list of nodes children" in new Env {
-    zk.create("/node", "value")
-    zk.create("/node/foo", "foo-value")
-    zk.create("/node/bar", "bar-value")
+    zk.create("/node")
+    val children = Set(zk"/node/foo", zk"/node/bar")
+    children foreach { path => zk.create(path) }
+    // create additional sub child to check
+    // that only immediate children are listed
+    zk.create("/node/foo/error")
 
-    zk.children("/node") should contain theSameElementsAs Seq(
+    zk.children("/node") should contain theSameElementsAs children
+  }
+
+
+  it should "return a list of all nodes under given path" in new Env {
+    zk.create("/node")
+
+    val children = Seq(
       zk"/node/foo",
-      zk"/node/bar")
+      zk"/node/foo/foo",
+      zk"/node/bar",
+      zk"/node/bar/one",
+      zk"/node/bar/one/two")
+
+    children foreach { path => zk.create(path) }
+
+    val listedChildren = zk.children("/node", recursive = true)
+    listedChildren should contain theSameElementsAs children
   }
 
 
