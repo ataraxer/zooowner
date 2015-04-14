@@ -57,11 +57,11 @@ private[zooowner] object ZKCallback {
   /**
    * Fires up on node deletion.
    */
-  case class OnDeleted(resultPromise: Promise[Unit])
+  case class OnDeleted(resultPromise: Promise[ZKPath])
     extends ZKCallback with VoidCallback
   {
     def processResult(returnCode: Int, path: String, context: Any) = {
-      val result = processCode(code = returnCode, path = path)({})
+      val result = processCode(code = returnCode, path = path)(ZKPath(path))
       resultPromise.complete(result)
     }
   }

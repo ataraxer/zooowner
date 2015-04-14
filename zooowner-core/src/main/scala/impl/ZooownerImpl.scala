@@ -102,6 +102,11 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   }
 
 
+  def exists(path: ZKPath, watcher: Option[ZKEventWatcher] = None) = {
+    meta(path, watcher).isDefined
+  }
+
+
   def apply(path: ZKPath, watcher: Option[ZKEventWatcher] = None) = {
     val stat = new Stat
 
@@ -127,20 +132,53 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   }
 
 
+  def forceSet[T: ZKEncoder](
+    path: ZKPath,
+    value: T,
+    ephemeral: Boolean = false) =
+  {
+    if (exists(path)) {
+      val bothPersistent = !ephemeral && isPersistent(path)
+      val bothEphemeral = ephemeral && isEphemeral(path)
+
+      require(
+        bothPersistent || bothEphemeral,
+        "Exising node should have the same creation mode as requested")
+
+      set(path, value)
+      path
+    } else {
+      create(path, value, ephemeral = ephemeral)
+    }
+  }
+
+
+  private def _delete(path: ZKPath, version: Int = AnyVersion) = {
+    connection { client => client.delete(path, version) }
+    path
+  }
+
+
   def delete(
     path: ZKPath,
     recursive: Boolean = false,
-    version: Int = AnyVersion): Unit =
+    version: Int = AnyVersion): Seq[ZKPath] =
   {
-    if (recursive) {
-      children(path) foreach { child =>
-        delete(child, recursive = true)
+    val deletedChildren = {
+      if (!recursive) Seq.empty else {
+        children(path) flatMap {
+          child => delete(child, recursive = true)
+        }
       }
     }
 
-    connection { client =>
-      client.delete(path, version)
-    }
+    _delete(path, version) +: deletedChildren
+  }
+
+
+  def deleteChildren(path: ZKPath): Seq[ZKPath] = {
+    require(!path.isRoot, "Not allowed to remove children of root node")
+    children(path).flatMap( child => delete(child, recursive = true) )
   }
 
 
@@ -157,6 +195,8 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   def isEphemeral(path: ZKPath) = {
     meta(path).map(_.ephemeral).getOrElse(false)
   }
+
+  def isPersistent(path: ZKPath) = !isEphemeral(path)
 
 
   def watch(path: ZKPath)(reaction: Reaction[ZKEvent]): ZKEventWatcher = {

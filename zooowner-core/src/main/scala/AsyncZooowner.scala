@@ -27,7 +27,7 @@ trait AsyncZooowner {
    */
   def delete(
     path: ZKPath,
-    version: Int = AnyVersion): Future[Unit]
+    version: Int = AnyVersion): Future[ZKPath]
 
   /**
    * Asynchronous version of [[Zooowner.set]].

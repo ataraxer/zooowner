@@ -100,9 +100,7 @@ trait Zooowner {
   /**
    * Tests whether the node exists.
    */
-  def exists(path: ZKPath, watcher: Option[ZKEventWatcher] = None) = {
-    meta(path, watcher).isDefined
-  }
+  def exists(path: ZKPath, watcher: Option[ZKEventWatcher] = None): Boolean
 
   /**
    * Optionally returns a node.
@@ -134,21 +132,7 @@ trait Zooowner {
   def forceSet[T: ZKEncoder](
     path: ZKPath,
     value: T,
-    ephemeral: Boolean = false) =
-  {
-    if (exists(path)) {
-      val bothPersistent = !ephemeral && isPersistent(path)
-      val bothEphemeral = ephemeral && isEphemeral(path)
-
-      require(
-        bothPersistent || bothEphemeral,
-        "Exising node should have the same creation mode as requested")
-
-      set(path, value)
-    } else {
-      create(path, value, ephemeral = ephemeral)
-    }
-  }
+    ephemeral: Boolean = false): ZKPath
 
   /**
    * Deletes node.
@@ -160,17 +144,12 @@ trait Zooowner {
   def delete(
     path: ZKPath,
     recursive: Boolean = false,
-    version: Int = AnyVersion): Unit
+    version: Int = AnyVersion): Seq[ZKPath]
 
   /**
    * Deletes node's children.
    */
-  def deleteChildren(path: ZKPath, recursive: Boolean = false): Unit = {
-    require(!path.isRoot, "Not allowed to remove children of root node")
-    val childrenList = children(path)
-    if (recursive) childrenList.foreach( child => deleteChildren(child, true) )
-    children(path).foreach( child => delete(child) )
-  }
+  def deleteChildren(path: ZKPath): Seq[ZKPath]
 
   /**
    * Returns list of children of the node.
@@ -187,7 +166,7 @@ trait Zooowner {
   /**
    * Tests whether the node is persistent.
    */
-  def isPersistent(path: ZKPath) = !isEphemeral(path)
+  def isPersistent(path: ZKPath): Boolean
 
   /**
    * Sets up a callback for node events.

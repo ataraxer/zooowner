@@ -40,8 +40,8 @@ private[zooowner] class AsyncZooownerImpl(zooowner: Zooowner)
   }
 
 
-  def delete(path: ZKPath, version: Int = AnyVersion): Future[Unit] = {
-    val result = Promise[Unit]()
+  def delete(path: ZKPath, version: Int = AnyVersion): Future[ZKPath] = {
+    val result = Promise[ZKPath]()
     client.delete(path, version, OnDeleted(result), null)
     result.future
   }

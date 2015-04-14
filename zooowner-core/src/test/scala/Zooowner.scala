@@ -124,7 +124,7 @@ class ZooownerSpec extends UnitSpec {
     zk.create("/node")
     zk.exists("/node") should be (true)
 
-    zk.delete("/node")
+    zk.delete("/node") should be (Seq(zk"/node"))
     zk.exists("/node") should be (false)
   }
 
@@ -136,28 +136,12 @@ class ZooownerSpec extends UnitSpec {
     zk.exists("/node") should be (true)
     zk.exists("/node/child") should be (true)
 
-    zk.delete("/node", recursive = true)
+    zk.delete("/node", recursive = true) should contain theSameElementsAs Seq(
+      zk"/node",
+      zk"/node/child")
 
     zk.exists("/node") should be (false)
     zk.exists("/node/child") should be (false)
-  }
-
-
-  it should "delete node's children" in new Env {
-    zk.create("/node")
-    zk.exists("/node") should be (true)
-
-    zk.create("/node/foo")
-    zk.create("/node/bar")
-
-    zk.children("/node") should contain theSameElementsAs Seq(
-      zk"/node/foo",
-      zk"/node/bar")
-
-    zk.deleteChildren("/node")
-
-    zk.exists("/node") should be (true)
-    zk.children("/node") should be (empty)
   }
 
 
@@ -165,16 +149,20 @@ class ZooownerSpec extends UnitSpec {
     zk.create("/node")
     zk.exists("/node") should be (true)
 
-    zk.create("/node/foo")
-    zk.create("/node/foo/foo")
-    zk.create("/node/bar")
-    zk.create("/node/bar/bar")
+    val children = Seq(
+      zk"/node/foo",
+      zk"/node/bar",
+      zk"/node/bar/one",
+      zk"/node/bar/two",
+      zk"/node/bar/three")
+
+    children foreach { path => zk.create(path) }
 
     zk.children("/node") should contain theSameElementsAs Seq(
       zk"/node/foo",
       zk"/node/bar")
 
-    zk.deleteChildren("/node", recursive = true)
+    zk.deleteChildren("/node") should contain theSameElementsAs children
 
     zk.exists("/node") should be (true)
     zk.children("/node") should be (empty)

@@ -80,7 +80,7 @@ class AsyncZooownerSpec extends UnitSpec {
     zk.create("/node", "first value")
 
     val result = zk.async.delete("/node")
-    result.isReadyWithin(3.seconds)
+    result.futureValue should be (zk"/node")
     zk.exists("/node") should be (false)
   }
 
