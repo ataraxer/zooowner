@@ -11,6 +11,7 @@ import zooowner.ZKPathDSL._
 
 import org.scalatest._
 
+import scala.util.Failure
 import scala.concurrent.duration._
 
 import java.nio.ByteBuffer
@@ -178,6 +179,20 @@ class ZooownerActorSpec
 
       val NodeChanged(zk"/foo", Some(node)) = expectMsgType[NodeChanged]
       node.extract[String] should be ("new-value")
+    }
+  }
+
+
+  it should "report failure to watcher" in new Env {
+    withCleanup {
+      zkClient.create("/foo")
+
+      zk ! WatchNode("/foo")
+      zkMock.expireSession()
+      zkMock.fireChildrenChangedEvent("/foo")
+
+      val response = expectMsgType[ZKFailure]
+      response should be (ConnectionLost("/foo", Expired))
     }
   }
 

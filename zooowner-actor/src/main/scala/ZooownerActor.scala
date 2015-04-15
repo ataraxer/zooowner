@@ -8,7 +8,7 @@ import akka.actor.Actor.Receive
 import akka.util.Timeout
 import akka.pattern.{ask, pipe}
 
-import scala.util.Failure
+import scala.util.{Success, Failure}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
 
@@ -76,15 +76,8 @@ class ZooownerActor(
   private var stashActive = true
 
 
-  /**
-   * Generates a partial function which will pass messages to specified actor.
-   */
-  def passTo(client: ActorRef): Reaction[ZKResponse] = {
-    case message => client ! message
-  }
-
-
   def receive = connecting
+
 
   /**
    * Waits for connection to ZooKeeper ensamble.
@@ -213,7 +206,16 @@ class ZooownerActor(
      * @param persistent Whether watch should be persistent.
      */
     case WatchNode(path, persistent) => {
-      zk.watch(path) { passTo(sender) }
+      val client = sender
+
+      val wrapFailure = failureFor(path) {
+        case _: NoNodeException => NodeNotExists(path)
+      }
+
+      zk.watch(path) {
+        case Success(message) => client ! message
+        case Failure(failure) => client ! wrapFailure(failure)
+      }
     }
   }
 }

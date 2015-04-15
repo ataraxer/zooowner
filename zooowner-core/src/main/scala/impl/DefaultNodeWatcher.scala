@@ -3,27 +3,20 @@ package impl
 
 import zooowner.message._
 import org.apache.zookeeper.Watcher.Event.EventType
+import scala.util.Try
+import scala.concurrent.{Future, ExecutionContext}
 
 
 private[zooowner] class DefaultNodeWatcher(
     client: Zooowner,
     path: String,
-    callback: Reaction[ZKEvent])
+    callback: Reaction[Try[ZKEvent]])
+    (implicit executor: ExecutionContext)
   extends ZKEventWatcher
 {
   def self = Some(this)
 
-
-  def reactOn(action: => ZKEvent) = {
-    val event = try action catch {
-      case _: SessionExpiredException => Expired
-      case _: ConnectionLossException => Disconnected
-    }
-
-    if (event == Expired) stop()
-    if (event != Disconnected) callback(event)
-  }
-
+  def reactOn(action: => ZKEvent) = Future(action).onComplete(callback)
 
   def watchData() = client.exists(path, watcher = Some(this))
   def watchChildren() = client.children(path, watcher = Some(this))

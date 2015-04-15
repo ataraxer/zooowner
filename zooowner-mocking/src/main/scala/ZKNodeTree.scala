@@ -30,7 +30,16 @@ class ZKNodeTree {
   import EventType.{NodeCreated, NodeDataChanged, NodeDeleted}
   import EventType.NodeChildrenChanged
 
-  val rootNode = ZKNode("", persistent = true)
+  private var expired = false
+
+  def expire() = expired = true
+
+  private def checkExpiration() = {
+    if (expired) throw new SessionExpiredException
+  }
+
+  private val rootNode = ZKNode("", persistent = true)
+
 
   def fetchNode(path: String) = {
     val components = pathComponents(path)
@@ -114,6 +123,7 @@ class ZKNodeTree {
 
   def exists(path: String, watcher: ZKWatcher) = {
     PathUtils.validatePath(path)
+    checkExpiration()
 
     addDataWatcher(path, watcher)
 
@@ -127,6 +137,7 @@ class ZKNodeTree {
 
   def create(path: String, data: Array[Byte], createMode: CreateMode) = {
     PathUtils.validatePath(path)
+    checkExpiration()
 
     val persistent = persistentModes contains createMode
     val sequential = sequentialModes contains createMode
@@ -153,6 +164,7 @@ class ZKNodeTree {
 
   def set(path: String, newData: Array[Byte]) = {
     PathUtils.validatePath(path)
+    checkExpiration()
 
     val node = fetchNode(path)
     node.data = Option(newData)
@@ -164,6 +176,7 @@ class ZKNodeTree {
 
   def get(path: String, watcher: ZKWatcher) = {
     PathUtils.validatePath(path)
+    checkExpiration()
 
     addDataWatcher(path, watcher)
     fetchNode(path).data.orNull
@@ -172,6 +185,7 @@ class ZKNodeTree {
 
   def delete(path: String) = {
     PathUtils.validatePath(path)
+    checkExpiration()
 
     val parent = nodeParent(path)
     val name = nodeName(path)
@@ -188,6 +202,7 @@ class ZKNodeTree {
 
   def children(path: String, watcher: ZKWatcher) = {
     PathUtils.validatePath(path)
+    checkExpiration()
 
     addChildrenWatcher(path, watcher)
     fetchNode(path).children.toList: JavaList[String]

@@ -266,29 +266,25 @@ trait ZKMock {
     /**
      * Simulate session expiration.
      */
-    def expireSession() = {
-      def fail = throw new SessionExpiredException
-
-      nodeTree = new ZKNodeTree {
-        override def exists(path: String, watcher: ZKWatcher) = fail
-        override def create(path: String, data: Array[Byte], mode: CreateMode) = fail
-        override def set(path: String, newData: Array[Byte]) = fail
-        override def get(path: String, watcher: ZKWatcher) = fail
-        override def delete(path: String) = fail
-        override def children(path: String, watcher: ZKWatcher) = fail
-      }
-    }
-
+    def expireSession() = nodeTree.expire()
 
     /**
-     * Used to simulate exception during a callback execution at one time watcher.
+     * Dispatch event to be passed to watchers associated with a path.
      */
-    private[zooowner] def throwNoNodeOnChildren() = {
-      nodeTree = new ZKNodeTree {
-        override def children(path: String, watcher: ZKWatcher) = {
-          throw new NoNodeException(path)
-        }
-      }
+    def fireEvent(path: String, event: EventType) = {
+      nodeTree.fireEvent(path, event)
+    }
+
+    def fireNodeChangedEvent(path: String) = {
+      fireEvent(path, EventType.NodeDataChanged)
+    }
+
+    def fireNodeDeletedEvent(path: String) = {
+      fireEvent(path, EventType.NodeDeleted)
+    }
+
+    def fireChildrenChangedEvent(path: String) = {
+      fireEvent(path, EventType.NodeChildrenChanged)
     }
 
 

@@ -11,6 +11,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{Future, Promise, ExecutionContext}
 import scala.collection.JavaConversions._
 import scala.util.control.Exception.catching
+import scala.util.Try
 
 
 /**
@@ -208,15 +209,17 @@ private[zooowner] class ZooownerImpl(initialConnection: ZKConnection)
   def isPersistent(path: ZKPath) = !isEphemeral(path)
 
 
-  def watch(path: ZKPath)(reaction: Reaction[ZKEvent]): ZKEventWatcher = {
-    val callback = reaction orElse Reaction.empty[ZKEvent]
+  def watch
+    (path: ZKPath)
+    (reaction: Reaction[Try[ZKEvent]])
+    (implicit executor: ExecutionContext): ZKEventWatcher =
+  {
+    val callback = reaction orElse Reaction.empty[Try[ZKEvent]]
     val watcher = new DefaultNodeWatcher(this, path, callback)
     watch(path, watcher)
   }
 
-  /**
-   * Sets up a watcher on node events.
-   */
+
   def watch(path: ZKPath, watcher: ZKEventWatcher): ZKEventWatcher = {
     val nodeExists = exists(path, Some(watcher))
     if (nodeExists) children(path, watcher = Some(watcher))

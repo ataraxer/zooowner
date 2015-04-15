@@ -8,7 +8,7 @@ import zooowner.ZKPathDSL._
 import org.apache.zookeeper.KeeperException._
 import org.apache.zookeeper.Watcher.Event.KeeperState
 
-import scala.util.Failure
+import scala.util.{Success, Failure}
 import scala.concurrent.{Promise, Await, TimeoutException}
 import scala.concurrent.duration._
 
@@ -203,15 +203,16 @@ class ZooownerSpec extends UnitSpec {
     val childCreated = Promise[Unit]()
 
     zk.watch("/some-node") {
-      case NodeCreated(zk"/some-node", Some(node)) =>
+      case Success(NodeCreated(zk"/some-node", Some(node))) =>
         node.extract[String] should be ("value")
         created.success({})
-      case NodeChanged(zk"/some-node", Some(node)) =>
+      case Success(NodeChanged(zk"/some-node", Some(node))) =>
         node.extract[String] should be ("new-value")
         changed.success({})
-      case NodeDeleted(zk"/some-node") =>
+      case Success(NodeDeleted(zk"/some-node")) =>
         deleted.success({})
-      case NodeChildrenChanged(zk"/some-node", Seq(zk"/some-node/child")) =>
+      case Success(NodeChildrenChanged(zk"/some-node", children)) =>
+        children should be (Seq(zk"/some-node/child"))
         childCreated.success({})
     }
 
@@ -264,11 +265,11 @@ class ZooownerSpec extends UnitSpec {
     zk.forceCreate("/some-node/child")
 
     val futureEvent = zk.watchChildren("/some-node")
-    zk.delete("/some-node/child")
-    zkMock.throwNoNodeOnChildren()
+    zkMock.expireSession()
+    zkMock.fireChildrenChangedEvent("/some-node")
 
     val result = futureEvent recover {
-      case _: NoNodeException => "failed"
+      case _: SessionExpiredException => "failed"
     }
 
     result.futureValue should be ("failed")
@@ -280,10 +281,10 @@ class ZooownerSpec extends UnitSpec {
     val deleted = Promise[Unit]()
 
     val watcher = zk.watch("/some-node") {
-      case NodeCreated(zk"/some-node", Some(node)) =>
+      case Success(NodeCreated(zk"/some-node", Some(node))) =>
         node.extract[String] should be ("value")
         created.success({})
-      case NodeDeleted(zk"/some-node") =>
+      case Success(NodeDeleted(zk"/some-node")) =>
         deleted.success({})
     }
 
