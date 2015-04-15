@@ -472,18 +472,18 @@ by filling missing nodes with null's, and returns it's name.
     </span>
       <p class="shortcomment cmt">Sets up a watcher on node events.</p>
     </li><li name="zooowner.Zooowner#watch" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="watch(path:zooowner.ZKPath)(reaction:zooowner.Reaction[zooowner.message.ZKEvent]):zooowner.ZKEventWatcher"></a>
-      <a id="watch(ZKPath)(Reaction[ZKEvent]):ZKEventWatcher"></a>
+      <a id="watch(path:zooowner.ZKPath)(reaction:zooowner.Reaction[scala.util.Try[zooowner.message.ZKEvent]])(implicitexecutor:scala.concurrent.ExecutionContext):zooowner.ZKEventWatcher"></a>
+      <a id="watch(ZKPath)(Reaction[Try[ZKEvent]])(ExecutionContext):ZKEventWatcher"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">watch</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="params">(<span name="reaction">reaction: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<a href="message/ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a>]</span>)</span><span class="result">: <a href="ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a></span>
+        <span class="name">watch</span><span class="params">(<span name="path">path: <a href="ZKPath.html" class="extype" name="zooowner.ZKPath">ZKPath</a></span>)</span><span class="params">(<span name="reaction">reaction: <a href="package.html#Reaction[T]=PartialFunction[T,Unit]" class="extmbr" name="zooowner.Reaction">Reaction</a>[<span class="extype" name="scala.util.Try">Try</span>[<a href="message/ZKEvent.html" class="extype" name="zooowner.message.ZKEvent">ZKEvent</a>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="executor">executor: <span class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</span></span>)</span><span class="result">: <a href="ZKEventWatcher.html" class="extype" name="zooowner.ZKEventWatcher">ZKEventWatcher</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#zooowner.Zooowner@watch(path:zooowner.ZKPath)(reaction:zooowner.Reaction[zooowner.message.ZKEvent]):zooowner.ZKEventWatcher" title="Permalink" target="_top">
+      <a href="../index.html#zooowner.Zooowner@watch(path:zooowner.ZKPath)(reaction:zooowner.Reaction[scala.util.Try[zooowner.message.ZKEvent]])(implicitexecutor:scala.concurrent.ExecutionContext):zooowner.ZKEventWatcher" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
